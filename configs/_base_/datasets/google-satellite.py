@@ -1,6 +1,6 @@
 # dataset settings
 dataset_type = 'WHUMixVectorDataset'
-data_root = 'data/kostanai'
+data_root = 'data/google-satellite-test'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True
 )
@@ -114,9 +114,9 @@ test_dataloader = dict(
         # data_prefix=dict(img='val/image'),
         # ann_file='val/val.json',
 
-        data_prefix=dict(img='test/images'),
+        data_prefix=dict(img='/images'),
         # ann_file='test1/test-small.json',
-        ann_file='test/test.json',
+        ann_file='test.json',
         # data_prefix=dict(img='test2/image'),
         # ann_file='test2/test-small.json',
         # ann_file='test2/test.json',

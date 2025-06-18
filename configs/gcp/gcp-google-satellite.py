@@ -1,5 +1,5 @@
 _base_ = [
-    '../_base_/datasets/kazgisa_kostanai.py', '../_base_/default_runtime.py',
+    '../_base_/datasets/google-satellite.py', '../_base_/default_runtime.py',
 ]
 data_preprocessor = dict(
     type='DetDataPreprocessor',
@@ -14,7 +14,7 @@ data_preprocessor = dict(
 )
 
 # Load from the fine-tuned mask2former model
-load_from = 'work_dirs/mask2former_r50_kazgisa-kostanai/epoch_10.pth'
+load_from = 'work_dirs/mask2former_r50_kazgisa-kostanai/epoch_20.pth'
 
 num_things_classes = 1
 num_stuff_classes = 0
@@ -231,7 +231,7 @@ model = dict(
 val_evaluator = [
     dict(
         type='CocoMetric',
-        ann_file='data/kostanai/val/val.json',
+        ann_file='data/google-satellite-test/test.json',
         metric=['segm'],
         mask_type='polygon',
         backend_args={{_base_.backend_args}},
@@ -240,18 +240,8 @@ val_evaluator = [
         score_thre=0.5
     )
 ]
-test_evaluator = [
-    dict(
-        type='CocoMetric',
-        ann_file='data/kostanai/test/test.json',
-        metric=['segm'],
-        mask_type='polygon',
-        backend_args={{_base_.backend_args}},
-        calculate_mta=True,
-        calculate_iou_ciou=True,
-        score_thre=0.5
-    )
-]
+test_evaluator = val_evaluator
+
 # optimizer - adjust learning rate for fine-tuning
 embed_multi = dict(lr_mult=1.0, decay_mult=0.0)
 optim_wrapper = dict(
@@ -279,7 +269,7 @@ param_scheduler = [
         begin=0,
         end=max_epochs,
         by_epoch=True,
-        milestones=[9],  # Adjusted milestone for shorter training
+        milestones=[6],  # Adjusted milestone for shorter training
         gamma=0.1)
 ]
 
@@ -317,13 +307,13 @@ visualizer = dict(
     type='TanmlhVisualizer', vis_backends=vis_backends, name='visualizer'
 )
 
-auto_scale_lr = dict(enable=False, base_batch_size=1)
+auto_scale_lr = dict(enable=False, base_batch_size=2)
 
 # switch the test split between split1 and split2 if needed
 test_dataloader = dict(
     dataset=dict(
-        data_prefix=dict(img='test/images'),
-        ann_file='test/test.json',
+        data_prefix=dict(img='images'),
+        ann_file='test.json',
         # data_prefix=dict(img='test2/image'),
         # ann_file='test2/test.json',
     )

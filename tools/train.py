@@ -1,3 +1,9 @@
+"""
+$env:PYTHONPATH = "D:\Sagi\GCP\GCP"
+python tools/train.py configs/gcp/gcp_r50_kazgisa-kostanai.py  
+"""
+
+
 # Copyright (c) OpenMMLab. All rights reserved.
 import argparse
 import os

@@ -178,7 +178,7 @@ optim_wrapper = dict(
         norm_decay_mult=0.0),
     clip_grad=dict(max_norm=0.01, norm_type=2))
 
-max_epochs = 20  # Reduced epochs for fine-tuning
+max_epochs = 10  # Reduced epochs for fine-tuning
 param_scheduler = [
     dict(
         type='LinearLR', start_factor=0.001, by_epoch=False, begin=0,
@@ -231,4 +231,4 @@ visualizer = dict(
 #   - `enable` means enable scaling LR automatically
 #       or not by default.
 #   - `base_batch_size` = (8 GPUs) x (2 samples per GPU).
-auto_scale_lr = dict(enable=True, base_batch_size=8)
+auto_scale_lr = dict(enable=True, base_batch_size=2)
