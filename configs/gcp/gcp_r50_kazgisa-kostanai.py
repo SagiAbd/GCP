@@ -317,7 +317,7 @@ visualizer = dict(
     type='TanmlhVisualizer', vis_backends=vis_backends, name='visualizer'
 )
 
-auto_scale_lr = dict(enable=False, base_batch_size=1)
+auto_scale_lr = dict(enable=False, base_batch_size=2)
 
 # switch the test split between split1 and split2 if needed
 test_dataloader = dict(

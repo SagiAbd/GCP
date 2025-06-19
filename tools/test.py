@@ -1,8 +1,7 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 
 """
-python tools/test.py configs/gcp/gcp-google-satellite.py work_dirs/gcp_r50_query-300_12e_whu-mix-vector/epoch_12.pth  --show-dir results
-
+python tools/test.py configs/gcp/gcp_r50_kazgisa-kostanai.py work_dirs/gcp_r50_query-300_12e_whu-mix-vector/epoch_12.pth  --show-dir results
 """
 import argparse
 import os

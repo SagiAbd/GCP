@@ -1,10 +1,8 @@
-"""
-$env:PYTHONPATH = "D:\Sagi\GCP\GCP"
-python tools/train.py configs/gcp/gcp_r50_kazgisa-kostanai.py  
-"""
-
-
 # Copyright (c) OpenMMLab. All rights reserved.
+""" 
+python tools/train.py configs/gcp/mask2former_r50_kazgisa-kostanai.py
+"""
+
 import argparse
 import os
 import os.path as osp
@@ -125,3 +123,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
