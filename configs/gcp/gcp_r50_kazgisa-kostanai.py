@@ -299,23 +299,23 @@ default_hooks = dict(
     # visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=1000)
 )
 
-vis_backends = [
-    dict(
-        type='WandbVisBackend', save_dir='./wandb/',
-        init_kwargs=dict(
-            project = 'mmdetection',
-            entity = 'sagi_kazgisa',
-            name = 'gcp_r50_query-300_12e_kazgisa-kostanai',
-            resume = 'never',
-            dir = './work_dirs/',
-            allow_val_change=True
-        ),
-    )
-]
-vis_backends = [dict(type='LocalVisBackend')]
-visualizer = dict(
-    type='TanmlhVisualizer', vis_backends=vis_backends, name='visualizer'
-)
+# vis_backends = [
+#     dict(
+#         type='WandbVisBackend', save_dir='./wandb/',
+#         init_kwargs=dict(
+#             project = 'mmdetection',
+#             entity = 'sagi_kazgisa',
+#             name = 'gcp_r50_query-300_12e_kazgisa-kostanai',
+#             resume = 'never',
+#             dir = './work_dirs/',
+#             allow_val_change=True
+#         ),
+#     )
+# ]
+# vis_backends = [dict(type='LocalVisBackend')]
+# visualizer = dict(
+#     type='TanmlhVisualizer', vis_backends=vis_backends, name='visualizer'
+# )
 
 auto_scale_lr = dict(enable=False, base_batch_size=2)
 

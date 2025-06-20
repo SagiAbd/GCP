@@ -14,7 +14,6 @@ data_preprocessor = dict(
     # batch_augments=batch_augments
 )
 
-load_from = 'work_dirs/mask2former_r50_kazgisa-kostanai/epoch_10.pth'
 
 num_things_classes = 1
 num_stuff_classes = 0
@@ -167,13 +166,13 @@ optim_wrapper = dict(
     type='OptimWrapper',
     optimizer=dict(
         type='AdamW',
-        lr=0.0001,
+        lr=0.00001,
         weight_decay=0.05,
         eps=1e-8,
         betas=(0.9, 0.999)),
     paramwise_cfg=dict(
         custom_keys={
-            'backbone': dict(lr_mult=0.1, decay_mult=1.0),
+            'backbone': dict(lr_mult=0.01, decay_mult=1.0),
             'query_embed': embed_multi,
             'query_feat': embed_multi,
             'level_embed': embed_multi,
@@ -181,7 +180,7 @@ optim_wrapper = dict(
         norm_decay_mult=0.0),
     clip_grad=dict(max_norm=0.01, norm_type=2))
 
-max_epochs=10
+max_epochs=20
 param_scheduler = [
     dict(
         type='LinearLR', start_factor=0.001, by_epoch=False, begin=0,
@@ -230,32 +229,30 @@ test_cfg = dict(type='TestLoop')
 # )
 
 
+
 # Default setting for scaling LR automatically
 #   - `enable` means enable scaling LR automatically
 #       or not by default.
 #   - `base_batch_size` = (8 GPUs) x (2 samples per GPU).
 auto_scale_lr = dict(enable=True, base_batch_size=2)
 
-vis_backends = [
-    dict(
-        type='WandbVisBackend',
-        init_kwargs=dict(
-            project='building-segmentaton-gcp',
-            entity='sagi_abd-nu',
-            name='mask2former_r50_run',
-            group='mask2former',
-            resume='never',
-            allow_val_change=True
-        ),
-        save_dir='./wandb/'
-    )
-]
-
-visualizer = dict(
-    type='TanmlhVisualizer',  # or 'DetLocalVisualizer' if using MMDet >= 3.0
-    vis_backends=vis_backends,
-    name='visualizer'
-)
+# vis_backends = [
+#     dict(
+#         type='WandbVisBackend',
+#         init_kwargs=dict(
+#             project = 'building-segmentaton-gcp',
+#             entity = 'kasgisa-kostanai',
+#             name = 'mask2former_r50_query-300_50e_whu-mix-vector',
+#             resume = 'never',
+#             dir = './work_dirs/',
+#             allow_val_change=True
+#         ),
+#         save_dir='./wandb/'
+#     )
+# ]
+# visualizer = dict(
+#     type='TanmlhVisualizer', vis_backends=vis_backends, name='visualizer'
+# )
 
 log_processor = dict(type='LogProcessor', window_size=50, by_epoch=True)
 
@@ -273,20 +270,20 @@ default_hooks = dict(
 log_config = dict(
     hooks=[
         dict(type='TextLoggerHook'),
-        dict(
-            type='MMDetWandbHook',
-            init_kwargs=dict(
-                project='building-segmentaton-gcp',
-                entity='sagi',
-                name='mask2former_r50_run',
-                group='mask2former',
-                resume='never',
-                allow_val_change=True
-            ),
-            interval=10,
-            log_checkpoint=True,
-            log_checkpoint_metadata=True,
-            num_eval_images=10
-        )
+        # dict(
+        #     type='MMDetWandbHook',
+        #     init_kwargs=dict(
+        #         project='building-segmentaton-gcp',
+        #         entity='sagi',
+        #         name='mask2former_r50_run',
+        #         group='mask2former',
+        #         resume='never',
+        #         allow_val_change=True
+        #     ),
+        #     interval=10,
+        #     log_checkpoint=True,
+        #     log_checkpoint_metadata=True,
+        #     num_eval_images=10
+        # )
     ]
 )
