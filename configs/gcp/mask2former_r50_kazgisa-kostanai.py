@@ -14,6 +14,8 @@ data_preprocessor = dict(
     # batch_augments=batch_augments
 )
 
+load_from = 'work_dirs/mask2former_r50_kazgisa-kostanai/epoch_10.pth'
+
 num_things_classes = 1
 num_stuff_classes = 0
 num_classes = num_things_classes + num_stuff_classes

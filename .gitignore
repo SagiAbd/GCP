@@ -54,6 +54,7 @@ work_dirs/
 *.mlmodel
 *.h5
 *.hdf5
+*.whl
 wandb/
 runs/
 logs/
@@ -77,6 +78,8 @@ data/
 *.db
 *.sqlite
 *.sqlite3
+*.png
+*.gpkg
 
 # OS
 .DS_Store
