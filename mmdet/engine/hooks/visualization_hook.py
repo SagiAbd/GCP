@@ -125,11 +125,17 @@ class DetVisualizationHook(Hook):
             return
 
         if self.test_out_dir is not None:
-            self.test_out_dir = osp.join(runner.work_dir, runner.timestamp,
-                                         self.test_out_dir)
-            mkdir_or_exist(self.test_out_dir)
+            if osp.isabs(self.test_out_dir):
+                mkdir_or_exist(self.test_out_dir)
+            else:
+                self.test_out_dir = osp.join(runner.work_dir, self.test_out_dir)
+                mkdir_or_exist(self.test_out_dir)
 
-        for data_sample in outputs:
+        # Limit the number of images saved to show_dir
+        max_vis_images = 15
+        for i, data_sample in enumerate(outputs):
+            if i >= max_vis_images:
+                break
             self._test_index += 1
 
             img_path = data_sample.img_path
@@ -265,9 +271,11 @@ class TrackVisualizationHook(Hook):
             'only batch_size=1 is supported while testing.'
 
         if self.test_out_dir is not None:
-            self.test_out_dir = osp.join(runner.work_dir, runner.timestamp,
-                                         self.test_out_dir)
-            mkdir_or_exist(self.test_out_dir)
+            if osp.isabs(self.test_out_dir):
+                mkdir_or_exist(self.test_out_dir)
+            else:
+                self.test_out_dir = osp.join(runner.work_dir, self.test_out_dir)
+                mkdir_or_exist(self.test_out_dir)
 
         sampler = runner.test_dataloader.sampler
         if isinstance(sampler, TrackImgSampler):
@@ -361,9 +369,11 @@ class GroundingVisualizationHook(DetVisualizationHook):
             return
 
         if self.test_out_dir is not None:
-            self.test_out_dir = osp.join(runner.work_dir, runner.timestamp,
-                                         self.test_out_dir)
-            mkdir_or_exist(self.test_out_dir)
+            if osp.isabs(self.test_out_dir):
+                mkdir_or_exist(self.test_out_dir)
+            else:
+                self.test_out_dir = osp.join(runner.work_dir, self.test_out_dir)
+                mkdir_or_exist(self.test_out_dir)
 
         for data_sample in outputs:
             data_sample = data_sample.cpu()

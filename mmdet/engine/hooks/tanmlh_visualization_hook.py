@@ -137,9 +137,11 @@ class TanmlhVisualizationHook(Hook):
             return
 
         if self.test_out_dir is not None:
-            self.test_out_dir = osp.join(runner.work_dir, runner.timestamp,
-                                         self.test_out_dir)
-            mkdir_or_exist(self.test_out_dir)
+            if osp.isabs(self.test_out_dir):
+                mkdir_or_exist(self.test_out_dir)
+            else:
+                self.test_out_dir = osp.join(runner.work_dir, self.test_out_dir)
+                mkdir_or_exist(self.test_out_dir)
 
         for i, data_sample in enumerate(outputs):
             self._test_index += 1

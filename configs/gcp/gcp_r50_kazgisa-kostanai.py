@@ -286,7 +286,7 @@ param_scheduler = [
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=max_epochs, val_interval=1)
 val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
-log_processor = dict(type='LogProcessor', window_size=50, by_epoch=True)
+log_processor = dict(type='LogProcessor', window_size=10, by_epoch=True)
 
 default_hooks = dict(
     checkpoint=dict(
@@ -296,7 +296,7 @@ default_hooks = dict(
         max_keep_ckpts=3,
         interval=1),
     # visualizer=dict(type='WandbVisualizer', wandb_cfg=wandb_cfg, name='wandb_vis')
-    # visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=1000)
+    visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=10)
 )
 
 # vis_backends = [

@@ -200,7 +200,7 @@ class ProcessKostanaiBuildings:
         
         return connected_components
     
-    def create_multipolygons_from_groups(self, gdf, groups):
+    def create_multipolygons_from_groups(self, gdf, groups, use_union_for_overlapping=True):
         """Create multipolygons from groups of close geometries."""
         multipolygon_rows = []
         grouped_indices = set()
@@ -220,7 +220,19 @@ class ProcessKostanaiBuildings:
                     polygon_list.extend(list(geom.geoms))
             
             if len(polygon_list) > 1:
-                multipolygon_geom = MultiPolygon(polygon_list)
+                if use_union_for_overlapping:
+                    # Check if polygons overlap significantly
+                    total_individual_area = sum(p.area for p in polygon_list)
+                    union_geom = unary_union(polygon_list)
+                    union_area = union_geom.area
+                    
+                    # If there's significant overlap (>10% area difference), use union
+                    if (total_individual_area - union_area) / total_individual_area > 0.1:
+                        multipolygon_geom = union_geom
+                    else:
+                        multipolygon_geom = MultiPolygon(polygon_list)
+                else:
+                    multipolygon_geom = MultiPolygon(polygon_list)
             elif len(polygon_list) == 1:
                 multipolygon_geom = polygon_list[0]
             else:
@@ -232,7 +244,7 @@ class ProcessKostanaiBuildings:
             multipolygon_row['name_usl'] = 'multipolygon_group'
             multipolygon_row['shape_Area'] = multipolygon_geom.area
             
-            # Sum area_build if available
+            # Sum area_build if available (but use actual geometry area for shape_Area)
             if 'area_build' in multipolygon_row.index:
                 multipolygon_row['area_build'] = group_df['area_build'].sum()
             
@@ -250,19 +262,23 @@ class ProcessKostanaiBuildings:
             result = ungrouped_gdf
         
         return result
-    
     def expand_merge_shrink_to_original(self, geom, linear_expand_dist=0.15):
         """Expand geometry by fixed distance, merge parts, then shrink back to original area."""
         if geom.is_empty or geom.area == 0:
             return geom
 
-        original_area = geom.area
-        original_centroid = geom.centroid
-
-        # Split into polygon parts
+        # CRITICAL FIX: Calculate the actual union area (removing overlaps)
+        # instead of summing individual polygon areas
         if isinstance(geom, MultiPolygon):
-            polygons = list(geom.geoms)
+            # For MultiPolygon, first create union to get true area without overlaps
+            union_geom = unary_union(geom)
+            original_area = union_geom.area
+            original_centroid = union_geom.centroid
+            # Work with the union geometry to avoid overlap issues
+            polygons = [union_geom] if isinstance(union_geom, Polygon) else list(union_geom.geoms)
         elif isinstance(geom, Polygon):
+            original_area = geom.area
+            original_centroid = geom.centroid
             polygons = [geom]
         else:
             return geom  # Skip non-polygon geometries
@@ -305,11 +321,21 @@ class ProcessKostanaiBuildings:
         if geom.is_empty or geom.area == 0:
             return geom
 
-        original_area = geom.area
-        original_centroid = geom.centroid
+        # CRITICAL FIX: Calculate the actual union area (removing overlaps)
+        if isinstance(geom, MultiPolygon):
+            # For MultiPolygon, first create union to get true area without overlaps
+            union_geom = unary_union(geom)
+            original_area = union_geom.area
+            original_centroid = union_geom.centroid
+            # Work with the union geometry
+            working_geom = union_geom
+        else:
+            original_area = geom.area
+            original_centroid = geom.centroid
+            working_geom = geom
 
         # Apply buffer expansion
-        buffered = geom.buffer(buffer_distance)
+        buffered = working_geom.buffer(buffer_distance)
         
         # Merge any overlapping parts
         merged = unary_union([buffered]) if isinstance(buffered, MultiPolygon) else buffered

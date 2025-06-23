@@ -93,7 +93,7 @@ def run_stage2():
             distance_threshold=0.15,      # 15cm grouping distance
             min_intersection_length=2.0,  # 2m minimum intersection
             max_group_size=100,           # Max 100 buildings per group
-            min_area_threshold=5.0        # 5m² minimum area
+            min_area_threshold=10        # 5m² minimum area
         )
         
         # Process the merged data
@@ -144,7 +144,7 @@ def run_stage3():
         # Configuration for the data split
         config = {
             'tiff_dir': r"D:\Sagi\GCP\GCP\data\raw\images\kostanai\Images\ortho kostanay",
-            'region_shapefile_path': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\region_bbox\region_bbox_20250619.shp",
+            'region_shapefile_path': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\region_bbox\region_bbox.shp",
             'labels_gdf': processed_gdf,  # Pass the processed GeoDataFrame directly
             'output_dir': r"D:\Sagi\GCP\GCP\data\kostanai",
             'chunk_size': (512, 512, 3),

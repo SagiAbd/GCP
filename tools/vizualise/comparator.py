@@ -6,7 +6,6 @@ from pathlib import Path
 import logging
 from typing import Optional, Tuple, List
 import warnings
-from tools.vizualise.comparator import run_comparison_from_config
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -170,7 +169,8 @@ class ImageComparator:
             plt.savefig(save_file, dpi=150, bbox_inches='tight')
             logger.info(f"Saved comparison to {save_file}")
         
-        plt.show()
+        # Comment out or remove image display
+        # plt.show()
         return True
     
     def run_comparison(self, limit: Optional[int] = None, 
@@ -259,30 +259,3 @@ def main():
 
 if __name__ == "__main__":
     exit(main())
-
-CONFIG = {
-    "wandb_group": "mygroup",
-    "wandb_name": "myrun",
-    "wandb_project": "default-project",
-    "train_config": "configs/gcp/mask2former_r50_kazgisa-kostanai.py",
-    "test1_config": "configs/gcp/test1.py",
-    "test1_checkpoint": "work_dir/.../epoch_10.pth",
-    "test2_config": "configs/gcp/test2.py",
-    "test2_checkpoint": "work_dir/.../epoch_20.pth",
-    "gpus": 1,
-    "comparison_limit": 30,
-    "show_image_width": 10
-}
-
-# ... after test1 and test2 ...
-directories = {
-    "Test1": os.path.join(test1_out_dir, "visualizations"),
-    "Test2": os.path.join(test2_out_dir, "visualizations"),
-}
-run_comparison_from_config(
-    directories=directories,
-    output_dir=comparison_dir,
-    show_image_width=CONFIG["show_image_width"],
-    limit=CONFIG["comparison_limit"],
-    save_comparisons=True
-)

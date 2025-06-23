@@ -150,7 +150,7 @@ val_evaluator = [
         metric=['segm'],
         backend_args={{_base_.backend_args}})
 ]
-test_evaluator = val_evaluator
+
 test_evaluator = [
     dict(
         type='CocoMetric',
@@ -166,13 +166,13 @@ optim_wrapper = dict(
     type='OptimWrapper',
     optimizer=dict(
         type='AdamW',
-        lr=0.00001,
+        lr=0.0001,
         weight_decay=0.05,
         eps=1e-8,
         betas=(0.9, 0.999)),
     paramwise_cfg=dict(
         custom_keys={
-            'backbone': dict(lr_mult=0.01, decay_mult=1.0),
+            'backbone': dict(lr_mult=0.1, decay_mult=1.0),
             'query_embed': embed_multi,
             'query_feat': embed_multi,
             'level_embed': embed_multi,
@@ -180,7 +180,7 @@ optim_wrapper = dict(
         norm_decay_mult=0.0),
     clip_grad=dict(max_norm=0.01, norm_type=2))
 
-max_epochs=20
+max_epochs=10
 param_scheduler = [
     dict(
         type='LinearLR', start_factor=0.001, by_epoch=False, begin=0,
@@ -197,7 +197,7 @@ param_scheduler = [
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=max_epochs, val_interval=1)
 val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
-# log_processor = dict(type='LogProcessor', window_size=50, by_epoch=True)
+log_processor = dict(type='LogProcessor', window_size=10, by_epoch=True)
 
 # default_hooks = dict(
 #     checkpoint=dict(
@@ -254,7 +254,6 @@ auto_scale_lr = dict(enable=True, base_batch_size=2)
 #     type='TanmlhVisualizer', vis_backends=vis_backends, name='visualizer'
 # )
 
-log_processor = dict(type='LogProcessor', window_size=50, by_epoch=True)
 
 default_hooks = dict(
     checkpoint=dict(
@@ -264,7 +263,8 @@ default_hooks = dict(
         max_keep_ckpts=1,
         interval=1
     ),
-    logger=dict(type='LoggerHook', interval=10)
+    logger=dict(type='LoggerHook', interval=10),
+    visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=10)
 )
 
 log_config = dict(

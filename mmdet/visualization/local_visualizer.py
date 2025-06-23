@@ -208,7 +208,11 @@ class DetLocalVisualizer(Visualizer):
                         largest_id = np.argmax(stats[1:, -1]) + 1
                         positions.append(centroids[largest_id])
                         areas.append(stats[largest_id, -1])
-                areas = np.stack(areas, axis=0)
+                # Patch for empty areas
+                if len(areas) > 0:
+                    areas = np.stack(areas, axis=0)
+                else:
+                    areas = np.array([])
                 scales = _get_adaptive_scales(areas)
 
                 for i, (pos, label) in enumerate(zip(positions, labels)):
@@ -296,7 +300,11 @@ class DetLocalVisualizer(Visualizer):
             max_id = np.argmax(stats[1:, -1]) + 1
             positions.append(centroids[max_id])
             areas.append(stats[max_id, -1])
-        areas = np.stack(areas, axis=0)
+        # Patch for empty areas
+        if len(areas) > 0:
+            areas = np.stack(areas, axis=0)
+        else:
+            areas = np.array([])
         scales = _get_adaptive_scales(areas)
 
         text_palette = get_palette(self.text_color, max_label + 1)

@@ -32,13 +32,17 @@ class MergeKostanaiBuildings:
             raise FileNotFoundError(f"No .gdb files found in {self.gdb_dir}")
 
         gdfs = []
+        target_crs = "EPSG:32641"
         for gdb in tqdm(gdb_files, desc="Merging GDB files"):
             layers = fiona.listlayers(gdb)
             gdf = gpd.read_file(gdb, layer=layer_name)
+            if gdf.crs is None or str(gdf.crs) != target_crs:
+                print(f"Reprojecting {gdb} to {target_crs}")
+                gdf = gdf.to_crs(target_crs)
             gdfs.append(gdf)
 
-        self.gdf = gpd.GeoDataFrame(pd.concat(gdfs, ignore_index=True), crs=gdfs[0].crs)
-        print("Finished merging.")
+        self.gdf = gpd.GeoDataFrame(pd.concat(gdfs, ignore_index=True), crs=target_crs)
+        print(f"Merged GeoDataFrame CRS: {self.gdf.crs}")
 
     def save_to_shapefile(self):
         if self.gdf is None:

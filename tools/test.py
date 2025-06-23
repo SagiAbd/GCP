@@ -81,6 +81,13 @@ def main():
     cfg.launcher = args.launcher
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)
+    
+    cfg.vis_backends = [dict(type='LocalVisBackend')]
+    cfg.visualizer = dict(
+        type='TanmlhVisualizer',
+        vis_backends=cfg.vis_backends,
+        name='visualizer'
+    )
 
     # work_dir is determined in this priority: CLI > segment in file > filename
     if args.work_dir is not None:
@@ -142,8 +149,8 @@ def main():
 
     # add `DumpResults` dummy metric
     if args.out is not None:
-        assert args.out.endswith(('.pkl', '.pickle')), \
-            'The dump file must be a pkl file.'
+        assert args.out.endswith(('.pkl', '.pickle', '.json')), \
+            'The dump file must be a pkl, pickle, or json file.'
         runner.test_evaluator.metrics.append(
             DumpDetResults(out_file_path=args.out))
 
