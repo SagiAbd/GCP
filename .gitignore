@@ -80,6 +80,23 @@ data/
 *.sqlite3
 *.png
 *.gpkg
+*.tif
+*.tiff
+*.bmp
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.svg
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.mp3
+*.wav
+*.flac
+*.ogg
+*.mkv
 
 # OS
 .DS_Store

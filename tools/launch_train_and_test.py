@@ -15,12 +15,12 @@ CONFIG = {
     "load_from": "checkpoints/mask2former_r50_pretrained_50e_whu-mix-vector.pth",
     "test1_config": "configs/gcp/mask2former_r50_kazgisa-kostanai.py",
     "test1_checkpoint": None,
-    "test2_config": "configs/gcp/gcp-google-satellite.py",
+    "test2_config": "configs/gcp/gcp_r50_query-300_12e_whu-mix-vector.py",
     "test2_checkpoint": "checkpoints/gcp_r50_pretrained_12e_whu-mix-vector.pth",
     "gpus": 1,
     "comparison_limit": 30,
     "show_image_width": 10,
-    "max_epochs": 15
+    "max_epochs": 3
 }
 
 def run_command(cmd):
@@ -47,27 +47,27 @@ def main():
     #     train_cmd += ['--cfg-options', f'load_from={CONFIG["load_from"]}']
     # run_command(train_cmd)
 
-    # # 2. Dynamically set test1_checkpoint to the last epoch checkpoint
-    # max_epochs = CONFIG.get("max_epochs", 10)
-    # checkpoint_name = f"epoch_{max_epochs}.pth"
-    # checkpoint_path = os.path.join(run_dir, checkpoint_name)
-    # CONFIG["test1_checkpoint"] = checkpoint_path
+    # 2. Dynamically set test1_checkpoint to the last epoch checkpoint
+    max_epochs = CONFIG.get("max_epochs", 10)
+    checkpoint_name = f"epoch_{max_epochs}.pth"
+    checkpoint_path = os.path.join(run_dir, checkpoint_name)
+    CONFIG["test1_checkpoint"] = checkpoint_path
 
-    # # 3. Test 1 (output dir: <wandb_name>_test)
-    # test1_out_dir = os.path.join(run_dir, 'test1')
-    # os.makedirs(test1_out_dir, exist_ok=True)
-    # test1_vis_dir = os.path.join(test1_out_dir, 'visualizations')
-    # os.makedirs(test1_vis_dir, exist_ok=True)
-    # test1_metrics = os.path.join(test1_out_dir, 'metrics.pkl')
-    # test1_cmd = [
-    #     'python', 'tools/test.py',
-    #     CONFIG["test1_config"],
-    #     CONFIG["test1_checkpoint"],
-    #     '--work-dir', test1_out_dir,
-    #     '--show-dir', "visualizations",
-    #     '--out', test1_metrics
-    # ]
-    # run_command(test1_cmd + ['--launcher', 'none'])
+    # 3. Test 1 (output dir: <wandb_name>_test)
+    test1_out_dir = os.path.join(run_dir, 'test1')
+    os.makedirs(test1_out_dir, exist_ok=True)
+    test1_vis_dir = os.path.join(test1_out_dir, 'visualizations')
+    os.makedirs(test1_vis_dir, exist_ok=True)
+    test1_metrics = os.path.join(test1_out_dir, 'metrics.pkl')
+    test1_cmd = [
+        'python', 'tools/test.py',
+        CONFIG["test1_config"],
+        CONFIG["test1_checkpoint"],
+        '--work-dir', test1_out_dir,
+        '--show-dir', "visualizations",
+        '--out', test1_metrics
+    ]
+    run_command(test1_cmd + ['--launcher', 'none'])
 
     # 4. Test 2
     test2_out_dir = os.path.join(run_dir, 'test2')
@@ -85,18 +85,18 @@ def main():
     ]
     run_command(test2_cmd + ['--launcher', 'none'])
 
-    # # 5. Comparison visualization
-    # directories = {
-    #     "Test1": test1_vis_dir,
-    #     "Test2": test2_vis_dir,
-    # }
-    # run_comparison_from_config(
-    #     directories=directories,
-    #     output_dir=comparison_dir,
-    #     show_image_width=CONFIG["show_image_width"],
-    #     limit=CONFIG["comparison_limit"],
-    #     save_comparisons=True
-    # )
+    # 5. Comparison visualization
+    directories = {
+        "Test1": test1_vis_dir,
+        "Test2": test2_vis_dir,
+    }
+    run_comparison_from_config(
+        directories=directories,
+        output_dir=comparison_dir,
+        show_image_width=CONFIG["show_image_width"],
+        limit=CONFIG["comparison_limit"],
+        save_comparisons=True
+    )
 
 if __name__ == '__main__':
     main()
