@@ -98,8 +98,7 @@ def run_stage2():
         
         # Process the merged data
         processed_gdf = processor.process_geodataframe_optimized(
-            merged_gdf, 
-            apply_geometry_processing=True
+            merged_gdf
         )
         
         end_time = time.time()

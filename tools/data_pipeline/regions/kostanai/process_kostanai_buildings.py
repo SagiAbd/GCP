@@ -67,8 +67,8 @@ class ProcessKostanaiBuildings:
             buffer_distance = self.distance_threshold
             
         try:
-            buffered1 = geom1.buffer(buffer_distance)
-            buffered2 = geom2.buffer(buffer_distance)
+            buffered1 = geom1.buffer(buffer_distance, join_style='mitre')
+            buffered2 = geom2.buffer(buffer_distance, join_style='mitre')
             intersection = buffered1.intersection(buffered2)
             
             if intersection.is_empty:
@@ -148,7 +148,7 @@ class ProcessKostanaiBuildings:
             geom_i = gdf.geometry.iloc[i]
             
             # Find all geometries within distance using spatial index
-            buffered = geom_i.buffer(self.distance_threshold)
+            buffered = geom_i.buffer(self.distance_threshold, join_style='mitre')
             candidates = tree.query(buffered, predicate='intersects')
             
             for j in candidates:
@@ -335,7 +335,7 @@ class ProcessKostanaiBuildings:
             working_geom = geom
 
         # Apply buffer expansion
-        buffered = working_geom.buffer(buffer_distance)
+        buffered = working_geom.buffer(buffer_distance, join_style='mitre')
         
         # Merge any overlapping parts
         merged = unary_union([buffered]) if isinstance(buffered, MultiPolygon) else buffered
@@ -366,11 +366,11 @@ class ProcessKostanaiBuildings:
         
         try:
             # Method 1: Aggressive negative-positive buffering
-            sharpened = geom.buffer(-buffer_size).buffer(buffer_size)
+            sharpened = geom.buffer(-buffer_size, join_style='mitre').buffer(buffer_size, join_style='mitre')
             
             if sharpened.is_empty or sharpened.area < original_area * 0.7:
                 # If too much area lost, try smaller buffer
-                sharpened = geom.buffer(-buffer_size/2).buffer(buffer_size/2)
+                sharpened = geom.buffer(-buffer_size/2, join_style='mitre').buffer(buffer_size/2, join_style='mitre')
             
             if sharpened.is_empty:
                 # Fallback to original if buffering failed
@@ -386,7 +386,7 @@ class ProcessKostanaiBuildings:
             if not sharpened.is_empty:
                 for i in range(3):
                     small_buffer = buffer_size / 10
-                    temp = sharpened.buffer(-small_buffer).buffer(small_buffer)
+                    temp = sharpened.buffer(-small_buffer, join_style='mitre').buffer(small_buffer, join_style='mitre')
                     if not temp.is_empty and temp.area > original_area * 0.75:
                         sharpened = temp
                     else:
@@ -470,7 +470,7 @@ class ProcessKostanaiBuildings:
         
         return gdf_filtered
     
-    def process_geodataframe_optimized(self, gdf, apply_geometry_processing=True, save_to_shapefile=True):
+    def process_geodataframe_optimized(self, gdf, save_to_shapefile=True):
         """Main processing pipeline for Kostanai buildings."""
         print(f"Original GDF shape: {gdf.shape}")
         
@@ -490,13 +490,7 @@ class ProcessKostanaiBuildings:
         print(f"After creating multipolygons: {gdf.shape}")
         print("Multipolygon groups count:", (gdf['name_usl'] == 'multipolygon_group').sum())
         
-        # Step 4: Apply geometry processing if requested
-        if apply_geometry_processing:
-            print(f"Processing {len(gdf)} building polygons with geometry enhancement...")
-            gdf['geometry'] = gdf['geometry'].apply(self.process_building_geometry)
-            print("Geometry processing completed")
-        
-        # Step 5: Apply area filter
+        # Step 4: Apply area filter
         gdf = self.apply_area_filter(gdf)
         
         print("\n=== FINAL RESULTS ===")
@@ -555,6 +549,5 @@ if __name__ == "__main__":
     merger = MergeKostanaiBuildings()
     gdf = merger.process()
     processed_gdf = processor.process_geodataframe_optimized(
-        gdf, 
-        apply_geometry_processing=True  # Set False to skip geometry enhancement
+        gdf
     )
