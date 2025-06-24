@@ -26,7 +26,7 @@ model = dict(
         depth=50,
         num_stages=4,
         out_indices=(0, 1, 2, 3),
-        frozen_stages=-1,
+        frozen_stages=2,
         norm_cfg=dict(type='BN', requires_grad=False),
         norm_eval=True,
         style='pytorch',
@@ -166,13 +166,13 @@ optim_wrapper = dict(
     type='OptimWrapper',
     optimizer=dict(
         type='AdamW',
-        lr=0.0001,
+        lr=0.00001,
         weight_decay=0.05,
         eps=1e-8,
         betas=(0.9, 0.999)),
     paramwise_cfg=dict(
         custom_keys={
-            'backbone': dict(lr_mult=0.1, decay_mult=1.0),
+            'backbone': dict(lr_mult=0.01, decay_mult=1.0),
             'query_embed': embed_multi,
             'query_feat': embed_multi,
             'level_embed': embed_multi,
@@ -199,66 +199,10 @@ val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
 log_processor = dict(type='LogProcessor', window_size=10, by_epoch=True)
 
-# default_hooks = dict(
-#     checkpoint=dict(
-#         type='CheckpointHook',
-#         by_epoch=True,
-#         save_last=True,
-#         max_keep_ckpts=1,
-#         interval=1),
-#     # visualizer=dict(type='WandbVisualizer', wandb_cfg=wandb_cfg, name='wandb_vis')
-#     # visualization=dict(type='TanmlhVisualizationHook', draw=True)
-# )
-
-# vis_backends = [
-#     dict(
-#         type='WandbVisBackend', save_dir='./wandb/',
-#         init_kwargs=dict(
-#             project = 'building-segmentaton-gcp',
-#             entity = 'kasgisa-kostanai',
-#             name = 'mask2former_r50_query-300_50e_whu-mix-vector',
-#             resume = 'never',
-#             dir = './work_dirs/',
-#             allow_val_change=True
-#         ),
-#     )
-# ]
-# vis_backends = [dict(type='LocalVisBackend')]
-# visualizer = dict(
-#     type='TanmlhVisualizer', vis_backends=vis_backends, name='visualizer'
-# )
+#
 
 
-
-# Default setting for scaling LR automatically
-#   - `enable` means enable scaling LR automatically
-#       or not by default.
-#   - `base_batch_size` = (8 GPUs) x (2 samples per GPU).
-auto_scale_lr = dict(enable=True, base_batch_size=2)
-
-# vis_backends = [
-#     dict(
-#         type='WandbVisBackend',
-#         init_kwargs=dict(
-#             project = 'building-segmentaton-gcp',
-#             entity = 'kasgisa-kostanai',
-#             name = 'mask2former_r50_query-300_50e_whu-mix-vector',
-#             resume = 'never',
-#             dir = './work_dirs/',
-#             allow_val_change=True
-#         ),
-#         save_dir='./wandb/'
-#     )
-# ]
-# visualizer = dict(
-#     type='TanmlhVisualizer', vis_backends=vis_backends, name='visualizer'
-# )
-
-# Default setting for scaling LR automatically
-#   - `enable` means enable scaling LR automatically
-#       or not by default.
-#   - `base_batch_size` = (8 GPUs) x (2 samples per GPU).
-auto_scale_lr = dict(enable=True, base_batch_size=2)
+auto_scale_lr = dict(enable=True, base_batch_size=4)
 
 default_hooks = dict(
     checkpoint=dict(
@@ -269,31 +213,12 @@ default_hooks = dict(
         interval=1
     ),
     logger=dict(type='LoggerHook', interval=10),
-    visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=10),
-    # Add custom hook to log validation losses to wandb
-    val_loss_wandb=dict(
-        type='ValLossWandbHook',
-        interval=1
-    )
+    visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=10)
 )
 
 log_config = dict(
     hooks=[
         dict(type='TextLoggerHook'),
-        # dict(
-        #     type='MMDetWandbHook',
-        #     init_kwargs=dict(
-        #         project='building-segmentaton-gcp',
-        #         entity='sagi',
-        #         name='mask2former_r50_run',
-        #         group='mask2former',
-        #         resume='never',
-        #         allow_val_change=True
-        #     ),
-        #     interval=10,
-        #     log_checkpoint=True,
-        #     log_checkpoint_metadata=True,
-        #     num_eval_images=10
-        # )
+
     ]
 )

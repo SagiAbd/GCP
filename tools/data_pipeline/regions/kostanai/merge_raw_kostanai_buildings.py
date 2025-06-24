@@ -23,21 +23,26 @@ class MergeKostanaiBuildings:
         self.gdb_dir = Path(r"./data/raw/labels/kostanai/buildings_kostanai_tiles_raw/")
         self.output_dir = Path(r"./data/raw/labels/kostanai/buildings_kostanai_tiles_merged/")
 
-    def _find_gdb_files(self):
-        return list(self.gdb_dir.glob("*.gdb"))
+    def _find_data_files(self):
+        # Find both .gdb and .gpkg files
+        gdb_files = list(self.gdb_dir.glob("*.gdb"))
+        gpkg_files = list(self.gdb_dir.glob("*.gpkg"))
+        return gdb_files + gpkg_files
 
-    def _read_and_merge_gdbs(self, layer_name: str = "invsitibuild"):
-        gdb_files = self._find_gdb_files()
-        if not gdb_files:
-            raise FileNotFoundError(f"No .gdb files found in {self.gdb_dir}")
+    def _read_and_merge_data(self, layer_name: str = "invsitibuild"):
+        data_files = self._find_data_files()
+        if not data_files:
+            raise FileNotFoundError(f"No .gdb or .gpkg files found in {self.gdb_dir}")
 
         gdfs = []
         target_crs = "EPSG:32641"
-        for gdb in tqdm(gdb_files, desc="Merging GDB files"):
-            layers = fiona.listlayers(gdb)
-            gdf = gpd.read_file(gdb, layer=layer_name)
+        for data_file in tqdm(data_files, desc="Merging GDB/GPKG files"):
+            # List layers and pick the provided or first one
+            layers = fiona.listlayers(data_file)
+            chosen_layer = layer_name if layer_name in layers else layers[0]
+            gdf = gpd.read_file(data_file, layer=chosen_layer)
             if gdf.crs is None or str(gdf.crs) != target_crs:
-                print(f"Reprojecting {gdb} to {target_crs}")
+                print(f"Reprojecting {data_file} to {target_crs}")
                 gdf = gdf.to_crs(target_crs)
             gdfs.append(gdf)
 
@@ -68,12 +73,10 @@ class MergeKostanaiBuildings:
         print(f"Saved merged shapefile to {output_path}")
     
     def process(self, layer_name: str = "invsitibuild", save_to_shapefile: bool = True):
-        """Check for existing shapefile and load it if present. Otherwise, merge GDBs."""
-        self._read_and_merge_gdbs(layer_name=layer_name)
-        
+        """Check for existing shapefile and load it if present. Otherwise, merge GDBs and GPKGs."""
+        self._read_and_merge_data(layer_name=layer_name)
         if save_to_shapefile:
             self.save_to_shapefile()
-        
         return self.gdf
 
 

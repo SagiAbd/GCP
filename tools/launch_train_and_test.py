@@ -9,18 +9,19 @@ python tools/launch_train_and_test.py
 
 CONFIG = {
     "wandb_group": "mask2former_training",
-    "wandb_name": "mask2former_e15_lre-4_kostanai_afs",
+    "wandb_name": "mask2former_e10_lre-5_kostanai_afs_frozen2_batch2",
     "wandb_project": "building-segmentation-gcp",
     "train_config": "configs/gcp/mask2former_r50_kazgisa-kostanai.py",
     "load_from": "checkpoints/mask2former_r50_pretrained_50e_whu-mix-vector.pth",
+    "resume_from": None,
     "test1_config": "configs/gcp/mask2former_r50_kazgisa-kostanai.py",
     "test1_checkpoint": None,
-    "test2_config": "configs/gcp/gcp_r50_query-300_12e_whu-mix-vector.py",
+    "test2_config": "configs/gcp/gcp_r50_kazgisa-kostanai.py",
     "test2_checkpoint": "checkpoints/gcp_r50_pretrained_12e_whu-mix-vector.pth",
     "gpus": 1,
     "comparison_limit": 30,
     "show_image_width": 10,
-    "max_epochs": 3
+    "max_epochs": 10
 }
 
 def run_command(cmd):
@@ -43,7 +44,9 @@ def main():
         '--wandb-name', CONFIG["wandb_name"],
         '--wandb-project', CONFIG["wandb_project"]
     ]
-    if CONFIG.get("load_from"):
+    if CONFIG.get("resume_from"):
+        train_cmd += ['--resume', CONFIG["resume_from"]]
+    elif CONFIG.get("load_from"):
         train_cmd += ['--cfg-options', f'load_from={CONFIG["load_from"]}']
     run_command(train_cmd)
 

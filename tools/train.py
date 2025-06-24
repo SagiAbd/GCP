@@ -91,7 +91,7 @@ def main():
                 'project': args.wandb_project or 'default-project',
                 'name': args.wandb_name,
                 'group': args.wandb_group,
-                'resume': 'never',
+                'resume': 'allow',
                 'allow_val_change': True
             },
             'save_dir': wandb_dir
@@ -115,22 +115,8 @@ def main():
                 )
             )
             
-        # Add ValLossWandbHook to default_hooks to log validation losses
-        if hasattr(cfg, 'default_hooks'):
-            # Add to existing default_hooks without overwriting
-            if 'val_loss_wandb' not in cfg.default_hooks:
-                cfg.default_hooks['val_loss_wandb'] = dict(
-                    type='ValLossWandbHook',
-                    interval=1
-                )
-        else:
-            # Create default_hooks if it doesn't exist
-            cfg.default_hooks = dict(
-                val_loss_wandb=dict(
-                    type='ValLossWandbHook',
-                    interval=1
-                )
-            )
+        
+        
 
     # work_dir is determined in this priority: CLI > segment in file > filename
     if args.work_dir is not None:

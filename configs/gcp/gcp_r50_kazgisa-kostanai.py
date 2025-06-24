@@ -14,7 +14,7 @@ data_preprocessor = dict(
 )
 
 # Load from the fine-tuned mask2former model
-load_from = 'work_dirs/mask2former_r50_kazgisa-kostanai/epoch_10.pth'
+# load_from = 'work_dirs/mask2former_r50_kazgisa-kostanai/epoch_10.pth'
 
 num_things_classes = 1
 num_stuff_classes = 0
