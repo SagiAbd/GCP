@@ -254,6 +254,11 @@ auto_scale_lr = dict(enable=True, base_batch_size=2)
 #     type='TanmlhVisualizer', vis_backends=vis_backends, name='visualizer'
 # )
 
+# Default setting for scaling LR automatically
+#   - `enable` means enable scaling LR automatically
+#       or not by default.
+#   - `base_batch_size` = (8 GPUs) x (2 samples per GPU).
+auto_scale_lr = dict(enable=True, base_batch_size=2)
 
 default_hooks = dict(
     checkpoint=dict(
@@ -264,7 +269,12 @@ default_hooks = dict(
         interval=1
     ),
     logger=dict(type='LoggerHook', interval=10),
-    visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=10)
+    visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=10),
+    # Add custom hook to log validation losses to wandb
+    val_loss_wandb=dict(
+        type='ValLossWandbHook',
+        interval=1
+    )
 )
 
 log_config = dict(

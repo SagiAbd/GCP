@@ -114,6 +114,23 @@ def main():
                     num_eval_images=10
                 )
             )
+            
+        # Add ValLossWandbHook to default_hooks to log validation losses
+        if hasattr(cfg, 'default_hooks'):
+            # Add to existing default_hooks without overwriting
+            if 'val_loss_wandb' not in cfg.default_hooks:
+                cfg.default_hooks['val_loss_wandb'] = dict(
+                    type='ValLossWandbHook',
+                    interval=1
+                )
+        else:
+            # Create default_hooks if it doesn't exist
+            cfg.default_hooks = dict(
+                val_loss_wandb=dict(
+                    type='ValLossWandbHook',
+                    interval=1
+                )
+            )
 
     # work_dir is determined in this priority: CLI > segment in file > filename
     if args.work_dir is not None:

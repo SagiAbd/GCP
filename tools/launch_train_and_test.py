@@ -35,17 +35,17 @@ def main():
     comparison_dir = os.path.join(run_dir, 'comparison')
     os.makedirs(comparison_dir, exist_ok=True)
 
-    # # 1. Train
-    # train_cmd = [
-    #     'python', 'tools/train.py',
-    #     CONFIG["train_config"],
-    #     '--wandb-group', CONFIG["wandb_group"],
-    #     '--wandb-name', CONFIG["wandb_name"],
-    #     '--wandb-project', CONFIG["wandb_project"]
-    # ]
-    # if CONFIG.get("load_from"):
-    #     train_cmd += ['--cfg-options', f'load_from={CONFIG["load_from"]}']
-    # run_command(train_cmd)
+    # 1. Train
+    train_cmd = [
+        'python', 'tools/train.py',
+        CONFIG["train_config"],
+        '--wandb-group', CONFIG["wandb_group"],
+        '--wandb-name', CONFIG["wandb_name"],
+        '--wandb-project', CONFIG["wandb_project"]
+    ]
+    if CONFIG.get("load_from"):
+        train_cmd += ['--cfg-options', f'load_from={CONFIG["load_from"]}']
+    run_command(train_cmd)
 
     # 2. Dynamically set test1_checkpoint to the last epoch checkpoint
     max_epochs = CONFIG.get("max_epochs", 10)

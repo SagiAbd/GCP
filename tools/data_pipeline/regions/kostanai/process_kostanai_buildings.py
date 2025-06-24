@@ -18,7 +18,7 @@ from pathlib import Path
 
 class ProcessKostanaiBuildings:
     def __init__(self, distance_threshold=0.15, min_intersection_length=2.0, 
-                 max_group_size=100, min_area_threshold=5.0, use_scaling_merge=False, target_intersection_ratio=0.02, max_scale=3.0):
+                 max_group_size=100, min_area_threshold=5.0):
         """
         Initialize the Kostanai Buildings processor.
         
@@ -33,9 +33,6 @@ class ProcessKostanaiBuildings:
         self.max_group_size = max_group_size
         self.min_area_threshold = min_area_threshold
         self.output_dir = Path(r"./data/raw/labels/kostanai/buildings_kostanai_processed/")
-        self.use_scaling_merge = use_scaling_merge
-        self.target_intersection_ratio = target_intersection_ratio
-        self.max_scale = max_scale
         
     def clean_geometry(self, gdf):
         """Clean the GeoDataFrame by removing rows with null geometry."""
@@ -265,7 +262,6 @@ class ProcessKostanaiBuildings:
             result = ungrouped_gdf
         
         return result
-    
     def expand_merge_shrink_to_original(self, geom, linear_expand_dist=0.15):
         """Expand geometry by fixed distance, merge parts, then shrink back to original area."""
         if geom.is_empty or geom.area == 0:
@@ -319,290 +315,6 @@ class ProcessKostanaiBuildings:
         restored = translate(restored, xoff=dx, yoff=dy)
 
         return restored
-    
-    def scale_until_intersection(self, geom1, geom2, target_intersection_ratio=0.02, max_scale=3.0, scale_step=0.01):
-        """
-        Scale two geometries until their intersection area is at least target_intersection_ratio of their total area.
-        
-        Args:
-            geom1, geom2: Input geometries
-            target_intersection_ratio: Target intersection ratio (default: 2%)
-            max_scale: Maximum scaling factor (default: 3.0)
-            scale_step: Scaling increment (default: 0.01)
-        
-        Returns:
-            tuple: (scaled_geom1, scaled_geom2, achieved_ratio, scale_factor)
-        """
-        if geom1.is_empty or geom2.is_empty:
-            return geom1, geom2, 0, 1.0
-        
-        original_area1 = geom1.area
-        original_area2 = geom2.area
-        total_original_area = original_area1 + original_area2
-        
-        current_scale = 1.0
-        best_scale = 1.0
-        best_ratio = 0
-        
-        while current_scale <= max_scale:
-            # Scale both geometries from their centroids
-            scaled_geom1 = scale(geom1, xfact=current_scale, yfact=current_scale, origin='centroid')
-            scaled_geom2 = scale(geom2, xfact=current_scale, yfact=current_scale, origin='centroid')
-            
-            # Calculate intersection
-            intersection = scaled_geom1.intersection(scaled_geom2)
-            
-            if not intersection.is_empty:
-                intersection_area = intersection.area
-                current_ratio = intersection_area / total_original_area
-                
-                if current_ratio >= target_intersection_ratio:
-                    return scaled_geom1, scaled_geom2, current_ratio, current_scale
-                
-                # Keep track of best achieved ratio
-                if current_ratio > best_ratio:
-                    best_ratio = current_ratio
-                    best_scale = current_scale
-            
-            current_scale += scale_step
-        
-        # If target not reached, return best achieved
-        if best_scale > 1.0:
-            scaled_geom1 = scale(geom1, xfact=best_scale, yfact=best_scale, origin='centroid')
-            scaled_geom2 = scale(geom2, xfact=best_scale, yfact=best_scale, origin='centroid')
-            return scaled_geom1, scaled_geom2, best_ratio, best_scale
-        
-        return geom1, geom2, 0, 1.0
-
-    def merge_buildings_by_scaling(self, geom1, geom2, target_intersection_ratio=0.02, max_scale=3.0):
-        """
-        Merge two buildings by scaling them until intersection, then union and scale back.
-        
-        Args:
-            geom1, geom2: Input geometries to merge
-            target_intersection_ratio: Target intersection ratio (default: 2%)
-            max_scale: Maximum scaling factor
-        
-        Returns:
-            Merged geometry with original total area preserved
-        """
-        if geom1.is_empty or geom2.is_empty:
-            return unary_union([geom1, geom2])
-        
-        # Store original areas and centroids
-        original_area1 = geom1.area
-        original_area2 = geom2.area
-        total_original_area = original_area1 + original_area2
-        
-        original_centroid1 = geom1.centroid
-        original_centroid2 = geom2.centroid
-        
-        # Scale until intersection
-        scaled_geom1, scaled_geom2, achieved_ratio, scale_factor = self.scale_until_intersection(
-            geom1, geom2, target_intersection_ratio, max_scale
-        )
-        
-        # If no meaningful intersection achieved, return original union
-        if achieved_ratio < 0.001:  # Less than 0.1%
-            return unary_union([geom1, geom2])
-        
-        # Union the scaled geometries
-        union_geom = unary_union([scaled_geom1, scaled_geom2])
-        
-        if union_geom.is_empty:
-            return unary_union([geom1, geom2])
-        
-        # Calculate scale-down factor to restore original total area
-        current_area = union_geom.area
-        if current_area <= 0:
-            return unary_union([geom1, geom2])
-        
-        area_scale_factor = math.sqrt(total_original_area / current_area)
-        
-        # Scale down to original area
-        restored_geom = scale(union_geom, xfact=area_scale_factor, yfact=area_scale_factor, origin='centroid')
-        
-        # Optionally adjust position to be between original centroids
-        restored_centroid = restored_geom.centroid
-        target_centroid_x = (original_centroid1.x + original_centroid2.x) / 2
-        target_centroid_y = (original_centroid1.y + original_centroid2.y) / 2
-        
-        dx = target_centroid_x - restored_centroid.x
-        dy = target_centroid_y - restored_centroid.y
-        
-        final_geom = translate(restored_geom, xoff=dx, yoff=dy)
-        
-        return final_geom
-
-    def check_buildings_for_scaling_merge(self, geom1, geom2, distance_threshold=None, 
-                                        target_intersection_ratio=0.02, max_scale=3.0):
-        """
-        Check if two buildings should be merged using the scaling method.
-        
-        Args:
-            geom1, geom2: Geometries to check
-            distance_threshold: Maximum distance to consider for merging
-            target_intersection_ratio: Required intersection ratio after scaling
-            max_scale: Maximum allowed scaling factor
-        
-        Returns:
-            bool: True if buildings should be merged
-        """
-        if distance_threshold is None:
-            distance_threshold = self.distance_threshold
-        
-        # Basic distance check
-        if geom1.distance(geom2) > distance_threshold:
-            return False
-        
-        # Check if scaling can achieve target intersection
-        _, _, achieved_ratio, scale_factor = self.scale_until_intersection(
-            geom1, geom2, target_intersection_ratio, max_scale
-        )
-        
-        # Merge if we can achieve target intersection within reasonable scaling
-        return achieved_ratio >= target_intersection_ratio and scale_factor <= max_scale
-
-    def find_connected_components_with_scaling(self, gdf, target_intersection_ratio=0.02, max_scale=3.0):
-        """
-        Find connected components using the new scaling-based intersection method.
-        Modified version of find_all_connected_components.
-        """
-        if len(gdf) == 0:
-            return []
-        
-        n = len(gdf)
-        tree = STRtree(gdf.geometry)
-        
-        # Union-Find data structure
-        parent = list(range(n))
-        rank = [0] * n
-        group_size = [1] * n
-        
-        def find(x):
-            if parent[x] != x:
-                parent[x] = find(parent[x])
-            return parent[x]
-        
-        def union(x, y):
-            px, py = find(x), find(y)
-            if px == py:
-                return False
-            
-            if group_size[px] + group_size[py] > self.max_group_size:
-                return False
-            
-            if rank[px] < rank[py]:
-                px, py = py, px
-            parent[py] = px
-            group_size[px] += group_size[py]
-            if rank[px] == rank[py]:
-                rank[px] += 1
-            return True
-        
-        # Pre-filter valid indices (exclude canopies)
-        valid_indices = []
-        for i in range(n):
-            if gdf.iloc[i].get('name_usl', '') != "Навесы и перекрытия между зданиями":
-                valid_indices.append(i)
-        
-        print(f"Processing {len(valid_indices)} geometries with scaling-based intersection...")
-        
-        processed_pairs = set()
-        successful_unions = 0
-        rejected_unions = 0
-        
-        for i in valid_indices:
-            geom_i = gdf.geometry.iloc[i]
-            
-            # Find candidates using spatial index
-            buffered = geom_i.buffer(self.distance_threshold)
-            candidates = tree.query(buffered, predicate='intersects')
-            
-            for j in candidates:
-                if j <= i or j not in valid_indices:
-                    continue
-                
-                pair = (i, j)
-                if pair in processed_pairs:
-                    continue
-                processed_pairs.add(pair)
-                
-                geom_j = gdf.geometry.iloc[j]
-                
-                # Use new scaling-based check
-                if self.check_buildings_for_scaling_merge(
-                    geom_i, geom_j, self.distance_threshold, 
-                    target_intersection_ratio, max_scale
-                ):
-                    if union(i, j):
-                        successful_unions += 1
-                    else:
-                        rejected_unions += 1
-        
-        print(f"Scaling-based unions: {successful_unions}")
-        print(f"Rejected unions: {rejected_unions}")
-        
-        # Group indices by root parent
-        groups = {}
-        for i in valid_indices:
-            root = find(i)
-            if root not in groups:
-                groups[root] = []
-            groups[root].append(i)
-        
-        # Return groups with multiple geometries
-        connected_components = []
-        for group in groups.values():
-            if len(group) > 1:
-                connected_components.append(group)
-        
-        return connected_components
-
-    def create_multipolygons_with_scaling_merge(self, gdf, groups, target_intersection_ratio=0.02, max_scale=3.0):
-        """
-        Create multipolygons using the scaling-based merge method.
-        Modified version of create_multipolygons_from_groups.
-        """
-        multipolygon_rows = []
-        grouped_indices = set()
-        
-        for group in groups:
-            group_df = gdf.iloc[group]
-            geometries = group_df.geometry.tolist()
-            
-            # For pairs, use scaling merge; for larger groups, use traditional approach
-            if len(geometries) == 2:
-                merged_geom = self.merge_buildings_by_scaling(
-                    geometries[0], geometries[1], target_intersection_ratio, max_scale
-                )
-            else:
-                # For larger groups, merge pairwise or use traditional union
-                merged_geom = unary_union(geometries)
-            
-            # Create multipolygon row
-            multipolygon_row = group_df.iloc[0].copy()
-            multipolygon_row['geometry'] = merged_geom
-            multipolygon_row['name_usl'] = 'scaling_merged_group'
-            multipolygon_row['shape_Area'] = merged_geom.area
-            
-            if 'area_build' in multipolygon_row.index:
-                multipolygon_row['area_build'] = group_df['area_build'].sum()
-            
-            multipolygon_rows.append(multipolygon_row)
-            grouped_indices.update(group)
-        
-        # Combine with ungrouped features
-        ungrouped_indices = [i for i in range(len(gdf)) if i not in grouped_indices]
-        ungrouped_gdf = gdf.iloc[ungrouped_indices]
-        
-        if multipolygon_rows:
-            multipolygon_gdf = gpd.GeoDataFrame(multipolygon_rows, crs=gdf.crs)
-            result = pd.concat([ungrouped_gdf, multipolygon_gdf], ignore_index=True)
-        else:
-            result = ungrouped_gdf
-        
-        return result
     
     def buffer_expand_merge_shrink(self, geom, buffer_distance=0.02):
         """Buffer-based expand-merge-shrink preserving original area and position."""
@@ -767,23 +479,6 @@ class ProcessKostanaiBuildings:
         
         # Step 2: Compute areas if missing
         gdf = self.compute_area_if_missing(gdf)
-
-        # Step 3: Choose merging method
-        if use_scaling_merge is None:
-            use_scaling_merge = self.use_scaling_merge
-        
-        if use_scaling_merge:
-            print("Using scaling-based intersection merging...")
-            connected_components = self.find_connected_components_with_scaling(
-                gdf, self.target_intersection_ratio, self.max_scale
-            )
-            gdf = self.create_multipolygons_with_scaling_merge(
-                gdf, connected_components, self.target_intersection_ratio, self.max_scale
-            )
-        else:
-            print("Using traditional buffer-based merging...")
-            connected_components = self.find_all_connected_components(gdf)
-            gdf = self.create_multipolygons_from_groups(gdf, connected_components)
         
         # Step 3: Find connected components and create multipolygons
         print("Finding connected components of close geometries...")
@@ -851,23 +546,15 @@ if __name__ == "__main__":
     
     # Initialize with custom parameters
     processor = ProcessKostanaiBuildings(
-        distance_threshold=0.15,
-        min_intersection_length=2.0,  # Not used in scaling method
-        max_group_size=100,
-        min_area_threshold=5.0,
-        use_scaling_merge=True,       # New scaling method
-        target_intersection_ratio=0.02,  # 2% intersection requirement
-        max_scale=1.5              # Maximum 1.5x scaling
+        distance_threshold=0.15,      # 15cm grouping distance
+        min_intersection_length=2.0,  # 2m minimum intersection
+        max_group_size=100,           # Max 100 buildings per group
+        min_area_threshold=5.0        # 5m² minimum area
     )
-
-    # processor_traditional = ProcessKostanaiBuildings(
-    #     distance_threshold=0.15,
-    #     min_intersection_length=2.0,
-    #     max_group_size=100,
-    #     min_area_threshold=5.0,
-    #     use_scaling_merge=False  # Traditional method
-    # )
     
     merger = MergeKostanaiBuildings()
     gdf = merger.process()
-    processed_gdf = processor.process_geodataframe_optimized(gdf)
+    processed_gdf = processor.process_geodataframe_optimized(
+        gdf, 
+        apply_geometry_processing=True  # Set False to skip geometry enhancement
+    )
