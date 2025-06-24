@@ -93,13 +93,12 @@ def run_stage2():
             distance_threshold=0.15,      # 15cm grouping distance
             min_intersection_length=2.0,  # 2m minimum intersection
             max_group_size=100,           # Max 100 buildings per group
-            min_area_threshold=10        # 5m² minimum area
+            min_area_threshold=10,       # 5m² minimum area
+            use_scaling_merge=False             # Maximum 1.5x scaling
         )
         
         # Process the merged data
-        processed_gdf = processor.process_geodataframe_optimized(
-            merged_gdf
-        )
+        processed_gdf = processor.process_geodataframe_optimized(merged_gdf)
         
         end_time = time.time()
         duration = end_time - start_time
