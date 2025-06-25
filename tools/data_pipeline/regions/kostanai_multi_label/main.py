@@ -144,7 +144,7 @@ def run_stage3():
         # Configuration for the data split
         config = {
             'tiff_dir': r"D:\Sagi\GCP\GCP\data\raw\images\kostanai\Images\ortho kostanay",
-            'region_shapefile_path': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\region_bbox\region_bbox_20250619.shp",
+            'region_shapefile_path': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\region_bbox\region_bbox.shp",
             'labels_gdf': processed_gdf,  # Pass the processed GeoDataFrame directly (with building_type column)
             'output_dir': r"D:\Sagi\GCP\GCP\data\processed\multi-label-kostanai",
             'chunk_size': (512, 512, 3),

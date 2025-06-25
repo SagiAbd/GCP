@@ -81,16 +81,17 @@ img_norm_cfg = dict(
     ],
     to_rgb=True)
 launcher = 'none'
-load_from = 'checkpoints/mask2former_r50_pretrained_50e_whu-mix-vector.pth'
+load_from = 'work_dir\\mask2former_training\\mask2former_e10_lre-5_kostanai_afs_frozen2_batch2\\epoch_4.pth'
 log_config = dict(hooks=[
     dict(type='TextLoggerHook'),
     dict(
         init_kwargs=dict(
             allow_val_change=True,
             group='mask2former_training',
+            id='b2izs1o6',
             name='mask2former_e10_lre-5_kostanai_afs_frozen2_batch2',
             project='building-segmentation-gcp',
-            resume='never'),
+            resume='must'),
         interval=10,
         log_checkpoint=True,
         log_checkpoint_metadata=True,
@@ -281,7 +282,7 @@ param_scheduler = [
         ],
         type='MultiStepLR'),
 ]
-resume = False
+resume = True
 test_cfg = dict(type='TestLoop')
 test_dataloader = dict(
     batch_size=2,
@@ -474,9 +475,10 @@ vis_backends = [
         init_kwargs=dict(
             allow_val_change=True,
             group='mask2former_training',
+            id='b2izs1o6',
             name='mask2former_e10_lre-5_kostanai_afs_frozen2_batch2',
             project='building-segmentation-gcp',
-            resume='never'),
+            resume='must'),
         save_dir=
         'work_dir\\mask2former_training\\mask2former_e10_lre-5_kostanai_afs_frozen2_batch2\\wandb',
         type='WandbVisBackend'),
@@ -489,9 +491,10 @@ visualizer = dict(
             init_kwargs=dict(
                 allow_val_change=True,
                 group='mask2former_training',
+                id='b2izs1o6',
                 name='mask2former_e10_lre-5_kostanai_afs_frozen2_batch2',
                 project='building-segmentation-gcp',
-                resume='never'),
+                resume='must'),
             save_dir=
             'work_dir\\mask2former_training\\mask2former_e10_lre-5_kostanai_afs_frozen2_batch2\\wandb',
             type='WandbVisBackend'),

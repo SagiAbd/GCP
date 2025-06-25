@@ -8,12 +8,13 @@ This script orchestrates the execution of three data processing steps:
 3. Stage 3: Split the processed data into train/val/test sets with image chunking
 
 Usage:
-    python tools/data_pipeline/regions/kostanai/main.py [stage1|stage2|stage3|all]
+    python tools/data_pipeline/regions/kostanai/main.py [stage1|stage2|stage3|customsplit|all]
     
 Examples:
     python tools/data_pipeline/regions/kostanai/main.py stage1    # Run only stage 1
     python tools/data_pipeline/regions/kostanai/main.py stage2    # Run only stage 2
     python tools/data_pipeline/regions/kostanai/main.py stage3    # Run only stage 3
+    python tools/data_pipeline/regions/kostanai/main.py customsplit  # Save all chunks into 'complete_dataset' for annotation
     python tools/data_pipeline/regions/kostanai/main.py all       # Run all stages
     python tools/data_pipeline/regions/kostanai/main.py           # Run all stages (default)
 """
@@ -93,7 +94,7 @@ def run_stage2():
             distance_threshold=0.15,      # 15cm grouping distance
             min_intersection_length=2.0,  # 2m minimum intersection
             max_group_size=100,           # Max 100 buildings per group
-            min_area_threshold=10,       # 5m² minimum area
+            min_area_threshold=5,       # 5m² minimum area
             use_scaling_merge=False             # Maximum 1.5x scaling
         )
         
@@ -181,6 +182,50 @@ def run_stage3():
         
         return False
 
+def run_custom_split_stage():
+    """Custom split: Save all chunks into a single 'complete_dataset' folder for annotation."""
+    global processed_gdf
+    print(f"\n{'='*60}")
+    print(f"CUSTOM SPLIT: Save all chunks into 'complete_dataset' for annotation")
+    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"{'='*60}")
+    start_time = time.time()
+    try:
+        from data_train_test_split import OptimizedTIFFChunkerWithShapefiles
+        if processed_gdf is None:
+            print("Processed data not available, running Stage 2 first...")
+            if not run_stage2():
+                return False
+        config = {
+            'tiff_dir': r"D:\Sagi\GCP\GCP\data\raw\images\kostanai\Images\ortho kostanay",
+            'region_shapefile_path': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\region_bbox\region_bbox.shp",
+            'labels_gdf': processed_gdf,
+            'output_dir': r"D:\Sagi\GCP\GCP\data\kostanai",
+            'chunk_size': (512, 512, 3),
+            'overlap': 0,
+            'original_resolution': 5.0,
+            'target_resolution': 30.0,
+            'train_split': 0.9,
+            'val_split': 0.05,
+            'test_split': 0.05,
+            'min_valid_pixels': 0.3,
+            'rewrite_output_dir': True
+        }
+        chunker = OptimizedTIFFChunkerWithShapefiles(**config)
+        chunker.process_custom_splits()
+        end_time = time.time()
+        duration = end_time - start_time
+        print(f"\n✅ SUCCESS: Custom split completed")
+        print(f"Duration: {duration:.2f} seconds")
+        return True
+    except Exception as e:
+        end_time = time.time()
+        duration = end_time - start_time
+        print(f"\n❌ ERROR: Custom split failed")
+        print(f"Error: {str(e)}")
+        print(f"Duration: {duration:.2f} seconds")
+        return False
+
 def run_all_stages():
     """Run all stages in sequence."""
     print("🚀 KOSTANAI DATA PROCESSING PIPELINE - ALL STAGES")
@@ -242,6 +287,7 @@ Examples:
   python tools/data_pipeline/regions/kostanai/main.py stage1    # Run only stage 1
   python tools/data_pipeline/regions/kostanai/main.py stage2    # Run only stage 2
   python tools/data_pipeline/regions/kostanai/main.py stage3    # Run only stage 3
+  python tools/data_pipeline/regions/kostanai/main.py customsplit  # Save all chunks into 'complete_dataset' for annotation
   python tools/data_pipeline/regions/kostanai/main.py all       # Run all stages
   python tools/data_pipeline/regions/kostanai/main.py           # Run all stages (default)
         """
@@ -251,10 +297,9 @@ Examples:
         'stage',
         nargs='?',
         default='all',
-        choices=['stage1', 'stage2', 'stage3', 'all'],
+        choices=['stage1', 'stage2', 'stage3', 'customsplit', 'all'],
         help='Which stage(s) to run (default: all)'
     )
-    
     args = parser.parse_args()
     
     # Run the appropriate stage(s)
@@ -264,11 +309,13 @@ Examples:
         run_stage2()
     elif args.stage == 'stage3':
         run_stage3()
+    elif args.stage == 'customsplit':
+        run_custom_split_stage()
     elif args.stage == 'all':
         run_all_stages()
 
 if __name__ == "__main__":
     """
-    python tools/data_pipeline/regions/kostanai/main.py [stage1|stage2|stage3|all]
+    python tools/data_pipeline/regions/kostanai/main.py [stage1|stage2|stage3|customsplit|all]
     """
     main()

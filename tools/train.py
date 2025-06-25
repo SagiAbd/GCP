@@ -91,8 +91,9 @@ def main():
                 'project': args.wandb_project or 'default-project',
                 'name': args.wandb_name,
                 'group': args.wandb_group,
-                'resume': 'allow',
-                'allow_val_change': True
+                'resume': 'never',
+                'allow_val_change': True,
+                # 'id': "b2izs1o6"
             },
             'save_dir': wandb_dir
         }
@@ -148,7 +149,7 @@ def main():
     if args.resume == 'auto':
         cfg.resume = True
         cfg.load_from = None
-    elif args.resume is not None:
+    elif args.resume is not None:   
         cfg.resume = True
         cfg.load_from = args.resume
 

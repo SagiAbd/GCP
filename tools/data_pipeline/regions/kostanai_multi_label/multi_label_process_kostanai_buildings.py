@@ -18,7 +18,7 @@ from pathlib import Path
 
 class ProcessKostanaiBuildings:
     def __init__(self, distance_threshold=0.15, min_intersection_length=2.0, 
-                 max_group_size=10, min_area_threshold=5.0):
+                 max_group_size=10, min_area_threshold=5.0, use_scaling_merge=False, target_intersection_ratio=0.02, max_scale=3.0):
         """
         Initialize the Kostanai Buildings processor.
         
@@ -27,12 +27,18 @@ class ProcessKostanaiBuildings:
             min_intersection_length: Minimum intersection length for grouping (default: 2.0m)
             max_group_size: Maximum number of buildings in a group (default: 10)
             min_area_threshold: Minimum area to keep buildings (default: 5.0 sq units)
+            use_scaling_merge: Whether to use scaling merge for close buildings (default: False)
+            target_intersection_ratio: Target intersection ratio for scaling merge (default: 0.02)
+            max_scale: Maximum scale factor for scaling merge (default: 3.0)
         """
         self.distance_threshold = distance_threshold
         self.min_intersection_length = min_intersection_length
         self.max_group_size = max_group_size
         self.min_area_threshold = min_area_threshold
         self.output_dir = Path(r"./data/raw/labels/kostanai/buildings_kostanai_processed/")
+        self.use_scaling_merge = use_scaling_merge
+        self.target_intersection_ratio = target_intersection_ratio
+        self.max_scale = max_scale
         
     def clean_geometry(self, gdf):
         """Clean the GeoDataFrame by removing rows with null geometry."""
@@ -69,15 +75,12 @@ class ProcessKostanaiBuildings:
         """Calculate the intersection length between two geometries after buffering."""
         if buffer_distance is None:
             buffer_distance = self.distance_threshold
-            
         try:
-            buffered1 = geom1.buffer(buffer_distance)
-            buffered2 = geom2.buffer(buffer_distance)
+            buffered1 = geom1.buffer(buffer_distance, join_style='mitre', mitre_limit=5.0)
+            buffered2 = geom2.buffer(buffer_distance, join_style='mitre', mitre_limit=5.0)
             intersection = buffered1.intersection(buffered2)
-            
             if intersection.is_empty:
                 return 0
-            
             if hasattr(intersection, 'length'):
                 return intersection.length
             elif hasattr(intersection, 'geoms'):
@@ -520,6 +523,32 @@ class ProcessKostanaiBuildings:
         
         print(f"✅ Saved processed shapefile to:\n{output_path}")
         return output_path
+
+    # Add scaling/merging logic (adapted for multi-label)
+    def scale_until_intersection(self, geom1, geom2, target_intersection_ratio=0.02, max_scale=3.0, scale_step=0.01):
+        """Scale geom2 until it intersects geom1 by at least the target ratio."""
+        scale_factor = 1.0
+        while scale_factor <= max_scale:
+            scaled_geom2 = scale(geom2, xfact=scale_factor, yfact=scale_factor, origin='centroid')
+            intersection = geom1.intersection(scaled_geom2)
+            if not intersection.is_empty and intersection.area / geom2.area >= target_intersection_ratio:
+                return scaled_geom2
+            scale_factor += scale_step
+        return geom2
+
+    def merge_buildings_by_scaling(self, geom1, geom2, target_intersection_ratio=0.02, max_scale=3.0):
+        """Merge two buildings by scaling geom2 until sufficient intersection, then union."""
+        scaled_geom2 = self.scale_until_intersection(geom1, geom2, target_intersection_ratio, max_scale)
+        return unary_union([geom1, scaled_geom2])
+
+    def check_buildings_for_scaling_merge(self, geom1, geom2, distance_threshold=None, target_intersection_ratio=0.02, max_scale=3.0):
+        """Check if two buildings should be merged by scaling."""
+        if distance_threshold is None:
+            distance_threshold = self.distance_threshold
+        if geom1.distance(geom2) <= distance_threshold:
+            merged = self.merge_buildings_by_scaling(geom1, geom2, target_intersection_ratio, max_scale)
+            return merged
+        return None
 
 if __name__ == "__main__":
     """ 

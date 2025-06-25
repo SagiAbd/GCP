@@ -17,6 +17,7 @@ from sklearn.model_selection import train_test_split
 import warnings
 from tqdm import tqdm
 import shutil
+import random
 
 warnings.filterwarnings('ignore')
 
@@ -644,6 +645,61 @@ class OptimizedTIFFChunkerWithShapefiles:
             'test_chunks': test_chunks,
             'coco_data': self.coco_data
         }
+
+    def process_custom_splits(self):
+        """Save all chunks into a single 'complete_dataset' folder with images and a single COCO annotation JSON."""
+        # Find all TIFF files
+        tiff_files = list(self.tiff_dir.glob('*.tif')) + list(self.tiff_dir.glob('*.TIF')) + \
+                    list(self.tiff_dir.glob('*.tiff')) + list(self.tiff_dir.glob('*.TIFF'))
+        print(f"Found {len(tiff_files)} TIFF files")
+        if len(tiff_files) == 0:
+            print("No TIFF files found!")
+            return
+        all_chunks = []
+        with tqdm(total=len(tiff_files), desc="Processing TIFF files") as pbar:
+            for tiff_path in tiff_files:
+                pbar.set_postfix_str(f"Processing {tiff_path.name}")
+                chunks = self._process_tiff_file(tiff_path)
+                all_chunks.extend(chunks)
+                pbar.update(1)
+        print(f"\nTotal chunks created: {len(all_chunks)}")
+        if len(all_chunks) == 0:
+            print("No valid chunks created!")
+            return
+        # Create output dir
+        dataset_dir = self.output_dir / 'complete_dataset'
+        img_dir = dataset_dir / 'images'
+        img_dir.mkdir(parents=True, exist_ok=True)
+        # Prepare COCO structure
+        coco_data = self._init_coco_structure()
+        for chunk_info in all_chunks:
+            # Save chunk image
+            chunk_path = img_dir / chunk_info['filename']
+            cv2.imwrite(str(chunk_path), chunk_info['chunk'])
+            # Add image to COCO
+            image_data = {
+                "license": 4,
+                "file_name": chunk_info['filename'],
+                "coco_url": "",
+                "height": self.chunk_size[0],
+                "width": self.chunk_size[1],
+                "date_captured": "",
+                "flickr_url": "",
+                "id": chunk_info['image_id']
+            }
+            coco_data['images'].append(image_data)
+            # Add annotations
+            for annotation in chunk_info['annotations']:
+                annotation = annotation.copy()
+                annotation['image_id'] = chunk_info['image_id']
+                coco_data['annotations'].append(annotation)
+        # Save COCO JSON
+        json_path = self.output_dir / 'complete_dataset.json'
+        with open(json_path, 'w') as f:
+            json.dump(coco_data, f, indent=2)
+        print(f"Saved complete_dataset: {len(all_chunks)} images, {len(coco_data['annotations'])} annotations")
+        print("\nComplete dataset creation finished!")
+        return all_chunks
 
 
 def main():
