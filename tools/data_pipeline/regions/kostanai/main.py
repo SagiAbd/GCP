@@ -8,13 +8,12 @@ This script orchestrates the execution of three data processing steps:
 3. Stage 3: Split the processed data into train/val/test sets with image chunking
 
 Usage:
-    python tools/data_pipeline/regions/kostanai/main.py [stage1|stage2|stage3|customsplit|all]
+    python tools/data_pipeline/regions/kostanai/main.py [stage1|stage2|stage3|all]
     
 Examples:
     python tools/data_pipeline/regions/kostanai/main.py stage1    # Run only stage 1
     python tools/data_pipeline/regions/kostanai/main.py stage2    # Run only stage 2
     python tools/data_pipeline/regions/kostanai/main.py stage3    # Run only stage 3
-    python tools/data_pipeline/regions/kostanai/main.py customsplit  # Save all chunks into 'complete_dataset' for annotation
     python tools/data_pipeline/regions/kostanai/main.py all       # Run all stages
     python tools/data_pipeline/regions/kostanai/main.py           # Run all stages (default)
 """
@@ -150,7 +149,7 @@ def run_stage3():
             'overlap': 0,
             'original_resolution': 5.0,
             'target_resolution': 30.0,
-            'train_split': 0.9,
+            'train_split': 0.90,
             'val_split': 0.05,
             'test_split': 0.05,
             'min_valid_pixels': 0.3,
@@ -181,51 +180,7 @@ def run_stage3():
         print(f"Duration: {duration:.2f} seconds")
         
         return False
-
-def run_custom_split_stage():
-    """Custom split: Save all chunks into a single 'complete_dataset' folder for annotation."""
-    global processed_gdf
-    print(f"\n{'='*60}")
-    print(f"CUSTOM SPLIT: Save all chunks into 'complete_dataset' for annotation")
-    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"{'='*60}")
-    start_time = time.time()
-    try:
-        from data_train_test_split import OptimizedTIFFChunkerWithShapefiles
-        if processed_gdf is None:
-            print("Processed data not available, running Stage 2 first...")
-            if not run_stage2():
-                return False
-        config = {
-            'tiff_dir': r"D:\Sagi\GCP\GCP\data\raw\images\kostanai\Images\ortho kostanay",
-            'region_shapefile_path': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\region_bbox\region_bbox.shp",
-            'labels_gdf': processed_gdf,
-            'output_dir': r"D:\Sagi\GCP\GCP\data\kostanai",
-            'chunk_size': (512, 512, 3),
-            'overlap': 0,
-            'original_resolution': 5.0,
-            'target_resolution': 30.0,
-            'train_split': 0.9,
-            'val_split': 0.05,
-            'test_split': 0.05,
-            'min_valid_pixels': 0.3,
-            'rewrite_output_dir': True
-        }
-        chunker = OptimizedTIFFChunkerWithShapefiles(**config)
-        chunker.process_custom_splits()
-        end_time = time.time()
-        duration = end_time - start_time
-        print(f"\n✅ SUCCESS: Custom split completed")
-        print(f"Duration: {duration:.2f} seconds")
-        return True
-    except Exception as e:
-        end_time = time.time()
-        duration = end_time - start_time
-        print(f"\n❌ ERROR: Custom split failed")
-        print(f"Error: {str(e)}")
-        print(f"Duration: {duration:.2f} seconds")
-        return False
-
+    
 def run_all_stages():
     """Run all stages in sequence."""
     print("🚀 KOSTANAI DATA PROCESSING PIPELINE - ALL STAGES")
@@ -277,6 +232,58 @@ def run_all_stages():
     
     print(f"\nCompleted at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
+def run_customsplit(split_size=100):
+    global processed_gdf
+
+    print(f"\n{'='*60}")
+    print(f"CUSTOM SPLIT: Split data into user-defined splits with image chunking")
+    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"{'='*60}")
+
+    start_time = time.time()
+
+    try:
+        from data_train_test_split import OptimizedTIFFChunkerWithShapefiles
+
+        if processed_gdf is None:
+            print("Processed data not available, running Stage 2 first...")
+            if not run_stage2():
+                return False
+
+        config = {
+            'tiff_dir': r"D:\Sagi\GCP\GCP\data\raw\images\kostanai\Images\ortho kostanay",
+            'region_shapefile_path': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\region_bbox\region_bbox.shp",
+            'labels_gdf': processed_gdf,
+            'output_dir': r"D:\Sagi\GCP\GCP\data\kostanai",
+            'chunk_size': (512, 512, 3),
+            'overlap': 0,
+            'original_resolution': 5.0,
+            'target_resolution': 30.0,
+            'min_valid_pixels': 0.3,
+            'rewrite_output_dir': True
+        }
+
+        chunker = OptimizedTIFFChunkerWithShapefiles(**config)
+        chunker.process_custom_splits_by_count(split_size)
+
+        end_time = time.time()
+        duration = end_time - start_time
+
+        print(f"\n✅ SUCCESS: Custom split completed")
+        print(f"Duration: {duration:.2f} seconds")
+
+        return True
+
+    except Exception as e:
+        end_time = time.time()
+        duration = end_time - start_time
+
+        print(f"\n❌ ERROR: Custom split failed")
+        print(f"Error: {str(e)}")
+        print(f"Duration: {duration:.2f} seconds")
+
+        return False
+
 def main():
     """Main function to handle command line arguments and run appropriate stages."""
     parser = argparse.ArgumentParser(
@@ -300,6 +307,12 @@ Examples:
         choices=['stage1', 'stage2', 'stage3', 'customsplit', 'all'],
         help='Which stage(s) to run (default: all)'
     )
+    parser.add_argument(
+        '--split-size',
+        type=int,
+        default=100,
+        help='Number of images per split (default: 100)'
+    )
     args = parser.parse_args()
     
     # Run the appropriate stage(s)
@@ -310,7 +323,7 @@ Examples:
     elif args.stage == 'stage3':
         run_stage3()
     elif args.stage == 'customsplit':
-        run_custom_split_stage()
+        run_customsplit(args.split_size)
     elif args.stage == 'all':
         run_all_stages()
 

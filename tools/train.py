@@ -93,7 +93,7 @@ def main():
                 'group': args.wandb_group,
                 'resume': 'never',
                 'allow_val_change': True,
-                # 'id': "b2izs1o6"
+                # 'id': ""
             },
             'save_dir': wandb_dir
         }
@@ -109,7 +109,7 @@ def main():
                 dict(
                     type='MMDetWandbHook',
                     init_kwargs=wandb_backend['init_kwargs'],
-                    interval=10,
+                    interval=3,
                     log_checkpoint=True,
                     log_checkpoint_metadata=True,
                     num_eval_images=10

@@ -17,6 +17,7 @@ from sklearn.model_selection import train_test_split
 import warnings
 from tqdm import tqdm
 import shutil
+import hashlib
 import random
 
 warnings.filterwarnings('ignore')
@@ -456,6 +457,9 @@ class OptimizedTIFFChunkerWithShapefiles:
             rows = (height - self.overlap) // step_height + (1 if (height - self.overlap) % step_height > 0 else 0)
             cols = (width - self.overlap) // step_width + (1 if (width - self.overlap) % step_width > 0 else 0)
 
+            # Create a hash of the TIFF path for unique chunk filenames
+            tiff_hash = hashlib.md5(str(tiff_path).encode()).hexdigest()[:8]
+
             chunks_info = []
             for row in range(rows):
                 for col in range(cols):
@@ -483,8 +487,8 @@ class OptimizedTIFFChunkerWithShapefiles:
                         padded_chunk[:chunk.shape[0], :chunk.shape[1]] = chunk
                         chunk = padded_chunk
 
-                    # Prepare chunk info
-                    chunk_filename = f"{Path(tiff_path).stem}_chunk_{row:03d}_{col:03d}.TIF"
+                    # Prepare chunk info with unique filename
+                    chunk_filename = f"{Path(tiff_path).stem}_{tiff_hash}_chunk_{row:03d}_{col:03d}.TIF"
                     chunks_info.append({
                         'filename': chunk_filename,
                         'chunk': chunk,
@@ -580,9 +584,10 @@ class OptimizedTIFFChunkerWithShapefiles:
     
     def process_all_tiffs(self):
         """Process all TIFF files in the directory."""
-        # Find all TIFF files
-        tiff_files = list(self.tiff_dir.glob('*.tif')) + list(self.tiff_dir.glob('*.TIF')) + \
-                    list(self.tiff_dir.glob('*.tiff')) + list(self.tiff_dir.glob('*.TIFF'))
+        # Find all TIFF files with exact extensions only
+        tiff_files = []
+        for ext in ['.tif', '.TIF', '.tiff', '.TIFF']:
+            tiff_files.extend([f for f in self.tiff_dir.glob(f'*{ext}') if f.name.endswith(ext)])
         
         print(f"Found {len(tiff_files)} TIFF files")
         
@@ -646,15 +651,21 @@ class OptimizedTIFFChunkerWithShapefiles:
             'coco_data': self.coco_data
         }
 
-    def process_custom_splits(self):
-        """Save all chunks into a single 'complete_dataset' folder with images and a single COCO annotation JSON."""
-        # Find all TIFF files
-        tiff_files = list(self.tiff_dir.glob('*.tif')) + list(self.tiff_dir.glob('*.TIF')) + \
-                    list(self.tiff_dir.glob('*.tiff')) + list(self.tiff_dir.glob('*.TIFF'))
+    def process_custom_splits(self, split_sizes):
+        """
+        Custom split: Instead of train/val/test, create N splits (split0, split1, ...) with user-specified sizes.
+        Args:
+            split_sizes: List of fractions (e.g., [0.5, 0.3, 0.2]) or counts (e.g., [1000, 500, 500]) summing to 1.0 or total chunk count.
+        """
+        # Find all TIFF files with exact extensions only
+        tiff_files = []
+        for ext in ['.tif', '.TIF', '.tiff', '.TIFF']:
+            tiff_files.extend([f for f in self.tiff_dir.glob(f'*{ext}') if f.name.endswith(ext)])
         print(f"Found {len(tiff_files)} TIFF files")
         if len(tiff_files) == 0:
             print("No TIFF files found!")
             return
+        # Process all TIFF files
         all_chunks = []
         with tqdm(total=len(tiff_files), desc="Processing TIFF files") as pbar:
             for tiff_path in tiff_files:
@@ -666,40 +677,128 @@ class OptimizedTIFFChunkerWithShapefiles:
         if len(all_chunks) == 0:
             print("No valid chunks created!")
             return
-        # Create output dir
-        dataset_dir = self.output_dir / 'complete_dataset'
-        img_dir = dataset_dir / 'images'
-        img_dir.mkdir(parents=True, exist_ok=True)
-        # Prepare COCO structure
-        coco_data = self._init_coco_structure()
-        for chunk_info in all_chunks:
-            # Save chunk image
-            chunk_path = img_dir / chunk_info['filename']
-            cv2.imwrite(str(chunk_path), chunk_info['chunk'])
-            # Add image to COCO
-            image_data = {
-                "license": 4,
-                "file_name": chunk_info['filename'],
-                "coco_url": "",
-                "height": self.chunk_size[0],
-                "width": self.chunk_size[1],
-                "date_captured": "",
-                "flickr_url": "",
-                "id": chunk_info['image_id']
-            }
-            coco_data['images'].append(image_data)
-            # Add annotations
-            for annotation in chunk_info['annotations']:
-                annotation = annotation.copy()
-                annotation['image_id'] = chunk_info['image_id']
-                coco_data['annotations'].append(annotation)
-        # Save COCO JSON
-        json_path = self.output_dir / 'complete_dataset.json'
-        with open(json_path, 'w') as f:
-            json.dump(coco_data, f, indent=2)
-        print(f"Saved complete_dataset: {len(all_chunks)} images, {len(coco_data['annotations'])} annotations")
-        print("\nComplete dataset creation finished!")
-        return all_chunks
+        # Determine split indices
+        n_chunks = len(all_chunks)
+        # If split_sizes are fractions, convert to counts
+        if all(isinstance(s, float) and s <= 1.0 for s in split_sizes):
+            counts = [int(round(s * n_chunks)) for s in split_sizes]
+            # Adjust last count to ensure sum == n_chunks
+            counts[-1] += n_chunks - sum(counts)
+        else:
+            counts = split_sizes
+        assert sum(counts) == n_chunks, f"Split sizes {counts} do not sum to total chunks {n_chunks}"
+        # Shuffle chunks for randomness
+        random.seed(42)
+        random.shuffle(all_chunks)
+        # Prepare splits
+        splits = []
+        idx = 0
+        for count in counts:
+            splits.append(all_chunks[idx:idx+count])
+            idx += count
+        # Save each split
+        for i, split_chunks in enumerate(splits):
+            split_dir = self.output_dir / f'split{i}'
+            img_dir = split_dir / 'images'
+            img_dir.mkdir(parents=True, exist_ok=True)
+            # COCO structure
+            coco = self._init_coco_structure()
+            for chunk_info in split_chunks:
+                # Save image
+                chunk_path = img_dir / chunk_info['filename']
+                cv2.imwrite(str(chunk_path), chunk_info['chunk'])
+                # Add image entry
+                image_data = {
+                    "license": 4,
+                    "file_name": chunk_info['filename'],
+                    "coco_url": "",
+                    "height": self.chunk_size[0],
+                    "width": self.chunk_size[1],
+                    "date_captured": "",
+                    "flickr_url": "",
+                    "id": chunk_info['image_id']
+                }
+                coco['images'].append(image_data)
+                # Add annotations
+                for annotation in chunk_info['annotations']:
+                    annotation = annotation.copy()
+                    annotation['image_id'] = chunk_info['image_id']
+                    coco['annotations'].append(annotation)
+            # Save COCO JSON
+            json_path = split_dir / f'split{i}.json'
+            with open(json_path, 'w') as f:
+                json.dump(coco, f, indent=2)
+            print(f"Saved split {i}: {len(split_chunks)} images, {len(coco['annotations'])} annotations")
+        print("\nCustom splitting complete!")
+        return splits
+
+    def process_custom_splits_by_count(self, split_size=100):
+        """
+        Custom split: Instead of train/val/test, create splits (split0, split1, ...) with a fixed number of images per split.
+        Args:
+            split_size: Number of images per split (default: 100)
+        """
+        # Find all TIFF files with exact extensions only
+        tiff_files = []
+        for ext in ['.tif', '.TIF', '.tiff', '.TIFF']:
+            tiff_files.extend([f for f in self.tiff_dir.glob(f'*{ext}') if f.name.endswith(ext)])
+        print(f"Found {len(tiff_files)} TIFF files")
+        if len(tiff_files) == 0:
+            print("No TIFF files found!")
+            return
+        # Process all TIFF files
+        all_chunks = []
+        with tqdm(total=len(tiff_files), desc="Processing TIFF files") as pbar:
+            for tiff_path in tiff_files:
+                pbar.set_postfix_str(f"Processing {tiff_path.name}")
+                chunks = self._process_tiff_file(tiff_path)
+                all_chunks.extend(chunks)
+                pbar.update(1)
+        print(f"\nTotal chunks created: {len(all_chunks)}")
+        if len(all_chunks) == 0:
+            print("No valid chunks created!")
+            return
+        # Shuffle chunks for randomness
+        random.seed(42)
+        random.shuffle(all_chunks)
+        # Split into groups of split_size
+        n_chunks = len(all_chunks)
+        n_splits = (n_chunks + split_size - 1) // split_size
+        for i in range(n_splits):
+            split_chunks = all_chunks[i*split_size:(i+1)*split_size]
+            split_dir = self.output_dir / f'split{i}'
+            img_dir = split_dir / 'images'
+            img_dir.mkdir(parents=True, exist_ok=True)
+            # COCO structure
+            coco = self._init_coco_structure()
+            for chunk_info in split_chunks:
+                # Save image
+                chunk_path = img_dir / chunk_info['filename']
+                cv2.imwrite(str(chunk_path), chunk_info['chunk'])
+                # Add image entry
+                image_data = {
+                    "license": 4,
+                    "file_name": chunk_info['filename'],
+                    "coco_url": "",
+                    "height": self.chunk_size[0],
+                    "width": self.chunk_size[1],
+                    "date_captured": "",
+                    "flickr_url": "",
+                    "id": chunk_info['image_id']
+                }
+                coco['images'].append(image_data)
+                # Add annotations
+                for annotation in chunk_info['annotations']:
+                    annotation = annotation.copy()
+                    annotation['image_id'] = chunk_info['image_id']
+                    coco['annotations'].append(annotation)
+            # Save COCO JSON
+            json_path = split_dir / f'split{i}.json'
+            with open(json_path, 'w') as f:
+                json.dump(coco, f, indent=2)
+            print(f"Saved split {i}: {len(split_chunks)} images, {len(coco['annotations'])} annotations")
+        print("\nCustom splitting complete!")
+        return n_splits
 
 
 def main():

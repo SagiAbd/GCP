@@ -9,7 +9,7 @@ python tools/launch_train_and_test.py
 
 CONFIG = {
     "wandb_group": "mask2former_training",
-    "wandb_name": "mask2former_e10_lre-5_kostanai_afs_frozen2_batch2",
+    "wandb_name": "mask2former_e1_lre-5_kostanai_afs_quicktest",
     "wandb_project": "building-segmentation-gcp",
     "train_config": "configs/gcp/mask2former_r50_kazgisa-kostanai.py",
     "load_from": "checkpoints/mask2former_r50_pretrained_50e_whu-mix-vector.pth",
@@ -21,7 +21,7 @@ CONFIG = {
     "gpus": 1,
     "comparison_limit": 30,
     "show_image_width": 10,
-    "max_epochs": 6
+    "max_epochs": 10
 }
 
 def run_command(cmd):
@@ -36,19 +36,19 @@ def main():
     comparison_dir = os.path.join(run_dir, 'comparison')
     os.makedirs(comparison_dir, exist_ok=True)
 
-    # # 1. Train
-    # train_cmd = [
-    #     'python', 'tools/train.py',
-    #     CONFIG["train_config"],
-    #     '--wandb-group', CONFIG["wandb_group"],
-    #     '--wandb-name', CONFIG["wandb_name"],
-    #     '--wandb-project', CONFIG["wandb_project"]
-    # ]
-    # if CONFIG.get("resume_from"):
-    #     train_cmd += ['--resume', CONFIG["resume_from"]]
-    # elif CONFIG.get("load_from"):
-    #     train_cmd += ['--cfg-options', f'load_from={CONFIG["load_from"]}']
-    # run_command(train_cmd)
+    # 1. Train
+    train_cmd = [
+        'python', 'tools/train.py',
+        CONFIG["train_config"],
+        '--wandb-group', CONFIG["wandb_group"],
+        '--wandb-name', CONFIG["wandb_name"],
+        '--wandb-project', CONFIG["wandb_project"]
+    ]
+    if CONFIG.get("resume_from"):
+        train_cmd += ['--resume', CONFIG["resume_from"]]
+    elif CONFIG.get("load_from"):
+        train_cmd += ['--cfg-options', f'load_from={CONFIG["load_from"]}']
+    run_command(train_cmd)
 
     # 2. Dynamically set test1_checkpoint to the last epoch checkpoint
     max_epochs = CONFIG.get("max_epochs", 10)
