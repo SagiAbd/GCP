@@ -119,12 +119,16 @@ def run_stage2():
         
         return False
 
-def run_stage3():
+def run_stage3_with_delete(force_delete=False):
     """Stage 3: Split data into train/val/test sets with image chunking."""
     global processed_gdf
     
     print(f"\n{'='*60}")
     print(f"STAGE 3: Split data into train/val/test sets with image chunking")
+    if force_delete:
+        print(f"⚠️  WARNING: Force delete mode enabled - existing data will be deleted!")
+    else:
+        print(f"📁 Preserving existing data (use --force-delete to delete existing data)")
     print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"{'='*60}")
     
@@ -153,7 +157,8 @@ def run_stage3():
             'val_split': 0.05,
             'test_split': 0.05,
             'min_valid_pixels': 0.3,
-            'rewrite_output_dir': True
+            'rewrite_output_dir': force_delete,  # Only delete if explicitly requested
+            'use_train_val_test': True
         }
         
         # Create and run chunker
@@ -180,10 +185,14 @@ def run_stage3():
         print(f"Duration: {duration:.2f} seconds")
         
         return False
-    
-def run_all_stages():
+
+def run_all_stages(force_delete=False):
     """Run all stages in sequence."""
     print("🚀 KOSTANAI DATA PROCESSING PIPELINE - ALL STAGES")
+    if force_delete:
+        print("⚠️  WARNING: Force delete mode enabled - existing data will be deleted!")
+    else:
+        print("📁 Preserving existing data (use --force-delete to delete existing data)")
     print(f"Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"Working directory: {os.getcwd()}")
     
@@ -196,7 +205,7 @@ def run_all_stages():
     stages = [
         ("Stage 1", run_stage1),
         ("Stage 2", run_stage2),
-        ("Stage 3", run_stage3)
+        ("Stage 3", lambda: run_stage3_with_delete(force_delete))
     ]
     
     for i, (stage_name, stage_func) in enumerate(stages, 1):
@@ -260,7 +269,8 @@ def run_customsplit(split_size=100):
             'original_resolution': 5.0,
             'target_resolution': 30.0,
             'min_valid_pixels': 0.3,
-            'rewrite_output_dir': True
+            'rewrite_output_dir': False,  # Don't delete existing train/val/test directories
+            'use_train_val_test': False  # Don't delete existing train/val/test directories
         }
 
         chunker = OptimizedTIFFChunkerWithShapefiles(**config)
@@ -284,6 +294,128 @@ def run_customsplit(split_size=100):
 
         return False
 
+def run_complete_dataset():
+    global processed_gdf
+
+    print(f"\n{'='*60}")
+    print(f"COMPLETE DATASET: Create all chunks in a single folder for annotation")
+    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"{'='*60}")
+
+    start_time = time.time()
+
+    try:
+        from data_train_test_split import OptimizedTIFFChunkerWithShapefiles
+
+        if processed_gdf is None:
+            print("Processed data not available, running Stage 2 first...")
+            if not run_stage2():
+                return False
+
+        config = {
+            'tiff_dir': r"D:\Sagi\GCP\GCP\data\raw\images\kostanai\Images\ortho kostanay",
+            'region_shapefile_path': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\region_bbox\region_bbox.shp",
+            'labels_gdf': processed_gdf,
+            'output_dir': r"D:\Sagi\GCP\GCP\data\kostanai",
+            'chunk_size': (512, 512, 3),
+            'overlap': 0,
+            'original_resolution': 5.0,
+            'target_resolution': 30.0,
+            'min_valid_pixels': 0.3,
+            'rewrite_output_dir': False,  # Don't delete existing train/val/test directories
+            'use_train_val_test': False  # Don't delete existing train/val/test directories
+        }
+
+        chunker = OptimizedTIFFChunkerWithShapefiles(**config)
+        
+        # Create complete_dataset folder
+        complete_dataset_dir = Path(config['output_dir']) / 'complete_dataset'
+        complete_dataset_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Process all TIFF files and save to complete_dataset
+        tiff_files = []
+        for ext in ['.tif', '.TIF', '.tiff', '.TIFF']:
+            tiff_files.extend([f for f in Path(config['tiff_dir']).glob(f'*{ext}') if f.name.endswith(ext)])
+        
+        print(f"Found {len(tiff_files)} TIFF files")
+        if len(tiff_files) == 0:
+            print("No TIFF files found!")
+            return False
+            
+        # Process all TIFF files
+        all_chunks = []
+        from tqdm import tqdm
+        with tqdm(total=len(tiff_files), desc="Processing TIFF files") as pbar:
+            for tiff_path in tiff_files:
+                pbar.set_postfix_str(f"Processing {tiff_path.name}")
+                chunks = chunker._process_tiff_file(tiff_path)
+                all_chunks.extend(chunks)
+                pbar.update(1)
+        
+        print(f"\nTotal chunks created: {len(all_chunks)}")
+        if len(all_chunks) == 0:
+            print("No valid chunks created!")
+            return False
+        
+        # Save all chunks to complete_dataset folder
+        img_dir = complete_dataset_dir / 'images'
+        img_dir.mkdir(parents=True, exist_ok=True)
+        
+        # COCO structure for complete dataset
+        coco = chunker._init_coco_structure()
+        
+        for chunk_info in all_chunks:
+            # Save image
+            chunk_path = img_dir / chunk_info['filename']
+            import cv2
+            cv2.imwrite(str(chunk_path), chunk_info['chunk'])
+            
+            # Add image entry
+            image_data = {
+                "license": 4,
+                "file_name": chunk_info['filename'],
+                "coco_url": "",
+                "height": config['chunk_size'][0],
+                "width": config['chunk_size'][1],
+                "date_captured": "",
+                "flickr_url": "",
+                "id": chunk_info['image_id']
+            }
+            coco['images'].append(image_data)
+            
+            # Add annotations
+            for annotation in chunk_info['annotations']:
+                annotation = annotation.copy()
+                annotation['image_id'] = chunk_info['image_id']
+                coco['annotations'].append(annotation)
+        
+        # Save COCO JSON
+        import json
+        json_path = complete_dataset_dir / 'complete_dataset.json'
+        with open(json_path, 'w') as f:
+            json.dump(coco, f, indent=2)
+        
+        print(f"Saved complete dataset: {len(all_chunks)} images, {len(coco['annotations'])} annotations")
+        print(f"Location: {complete_dataset_dir}")
+
+        end_time = time.time()
+        duration = end_time - start_time
+
+        print(f"\n✅ SUCCESS: Complete dataset created")
+        print(f"Duration: {duration:.2f} seconds")
+
+        return True
+
+    except Exception as e:
+        end_time = time.time()
+        duration = end_time - start_time
+
+        print(f"\n❌ ERROR: Complete dataset creation failed")
+        print(f"Error: {str(e)}")
+        print(f"Duration: {duration:.2f} seconds")
+
+        return False
+
 def main():
     """Main function to handle command line arguments and run appropriate stages."""
     parser = argparse.ArgumentParser(
@@ -293,8 +425,10 @@ def main():
 Examples:
   python tools/data_pipeline/regions/kostanai/main.py stage1    # Run only stage 1
   python tools/data_pipeline/regions/kostanai/main.py stage2    # Run only stage 2
-  python tools/data_pipeline/regions/kostanai/main.py stage3    # Run only stage 3
-  python tools/data_pipeline/regions/kostanai/main.py customsplit  # Save all chunks into 'complete_dataset' for annotation
+  python tools/data_pipeline/regions/kostanai/main.py stage3    # Run only stage 3 (preserves existing data)
+  python tools/data_pipeline/regions/kostanai/main.py stage3 --force-delete  # Run stage 3 and delete existing data
+  python tools/data_pipeline/regions/kostanai/main.py customsplit  # Create numbered splits (split0, split1, etc.)
+  python tools/data_pipeline/regions/kostanai/main.py complete_dataset  # Save all chunks into 'complete_dataset' for annotation
   python tools/data_pipeline/regions/kostanai/main.py all       # Run all stages
   python tools/data_pipeline/regions/kostanai/main.py           # Run all stages (default)
         """
@@ -304,7 +438,7 @@ Examples:
         'stage',
         nargs='?',
         default='all',
-        choices=['stage1', 'stage2', 'stage3', 'customsplit', 'all'],
+        choices=['stage1', 'stage2', 'stage3', 'customsplit', 'complete_dataset', 'all'],
         help='Which stage(s) to run (default: all)'
     )
     parser.add_argument(
@@ -312,6 +446,11 @@ Examples:
         type=int,
         default=100,
         help='Number of images per split (default: 100)'
+    )
+    parser.add_argument(
+        '--force-delete',
+        action='store_true',
+        help='WARNING: Force deletion of existing output data. Use with extreme caution!'
     )
     args = parser.parse_args()
     
@@ -321,14 +460,16 @@ Examples:
     elif args.stage == 'stage2':
         run_stage2()
     elif args.stage == 'stage3':
-        run_stage3()
+        run_stage3_with_delete(args.force_delete)
     elif args.stage == 'customsplit':
         run_customsplit(args.split_size)
+    elif args.stage == 'complete_dataset':
+        run_complete_dataset()
     elif args.stage == 'all':
-        run_all_stages()
+        run_all_stages(args.force_delete)
 
 if __name__ == "__main__":
     """
-    python tools/data_pipeline/regions/kostanai/main.py [stage1|stage2|stage3|customsplit|all]
+    python tools/data_pipeline/regions/kostanai/main.py [stage1|stage2|stage3|customsplit|complete_dataset|all]
     """
     main()

@@ -36,7 +36,8 @@ class OptimizedTIFFChunkerWithShapefiles:
                  val_split=0.15,
                  test_split=0.15,
                  min_valid_pixels=0.3,
-                 rewrite_output_dir=True):
+                 rewrite_output_dir=False,
+                 use_train_val_test=True):
         """
         Initialize the optimized TIFF chunker with shapefile integration.
         
@@ -53,7 +54,8 @@ class OptimizedTIFFChunkerWithShapefiles:
             val_split: Fraction of data for validation
             test_split: Fraction of data for testing
             min_valid_pixels: Minimum fraction of valid pixels in a chunk
-            rewrite_output_dir: If True, rewrite the output directory (default: True)
+            rewrite_output_dir: If True, DELETE existing output directory contents. WARNING: This will permanently delete all existing data! (default: False)
+            use_train_val_test: If True, create train/val/test structure. If False, preserve existing structure for custom splits.
         """
         self.tiff_dir = Path(tiff_dir)
         self.region_shapefile_path = region_shapefile_path
@@ -66,6 +68,7 @@ class OptimizedTIFFChunkerWithShapefiles:
         self.scale_factor = original_resolution / target_resolution
         self.min_valid_pixels = min_valid_pixels
         self.rewrite_output_dir = rewrite_output_dir
+        self.use_train_val_test = use_train_val_test
         
         # Split ratios
         self.train_split = train_split
@@ -74,23 +77,40 @@ class OptimizedTIFFChunkerWithShapefiles:
         
         # Create output directories with updated structure (only if output_dir is provided)
         if self.output_dir:
-            # Rewrite output directory if it exists and rewrite_output_dir is True
-            if self.rewrite_output_dir and self.output_dir.exists():
-                print(f"Rewriting contents of output directory: {self.output_dir}")
+            # Only rewrite output directory if explicitly requested AND we're using train/val/test structure
+            if self.use_train_val_test and self.rewrite_output_dir and self.output_dir.exists():
+                print(f"⚠️  WARNING: DELETING existing output directory: {self.output_dir}")
+                print("   This will permanently delete all existing data!")
+                print("   Set rewrite_output_dir=False to preserve existing data.")
                 shutil.rmtree(self.output_dir)
+            elif self.use_train_val_test and self.output_dir.exists() and not self.rewrite_output_dir:
+                print(f"📁 Using existing output directory: {self.output_dir}")
+                print("   Existing data will be preserved. Set rewrite_output_dir=True to delete and recreate.")
             
-            self.train_dir = self.output_dir / 'train'
-            self.val_dir = self.output_dir / 'val'
-            self.test_dir = self.output_dir / 'test'
-            
-            # Create image subdirectories
-            self.train_img_dir = self.train_dir / 'images'
-            self.val_img_dir = self.val_dir / 'images'
-            self.test_img_dir = self.test_dir / 'images'
-            
-            for dir_path in [self.train_dir, self.val_dir, self.test_dir,
-                            self.train_img_dir, self.val_img_dir, self.test_img_dir]:
-                dir_path.mkdir(parents=True, exist_ok=True)
+            # Only create train/val/test directories if we're using that structure
+            if self.use_train_val_test:
+                self.train_dir = self.output_dir / 'train'
+                self.val_dir = self.output_dir / 'val'
+                self.test_dir = self.output_dir / 'test'
+                
+                # Create image subdirectories
+                self.train_img_dir = self.train_dir / 'images'
+                self.val_img_dir = self.val_dir / 'images'
+                self.test_img_dir = self.test_dir / 'images'
+                
+                for dir_path in [self.train_dir, self.val_dir, self.test_dir,
+                                self.train_img_dir, self.val_img_dir, self.test_img_dir]:
+                    dir_path.mkdir(parents=True, exist_ok=True)
+            else:
+                # For custom splits, just ensure the base output directory exists
+                self.output_dir.mkdir(parents=True, exist_ok=True)
+                # Initialize these as None for custom splits
+                self.train_dir = None
+                self.val_dir = None
+                self.test_dir = None
+                self.train_img_dir = None
+                self.val_img_dir = None
+                self.test_img_dir = None
         
         # Load shapefiles and create spatial index
         self.region_gdf = None
@@ -815,18 +835,21 @@ def main():
         'val_split': 0.05,
         'test_split': 0.05,
         'min_valid_pixels': 0.3,
-        'rewrite_output_dir': True
+        'rewrite_output_dir': False,  # WARNING: Set to True only if you want to delete existing data!
+        'use_train_val_test': True
     }
     
     # Note: labels_gdf should be provided from the processed buildings data
     # This is just an example - in practice, you would pass the GeoDataFrame from the previous step
     print("Note: This script now requires labels_gdf to be passed as a parameter.")
     print("Please use this class from the main.py script or provide the GeoDataFrame directly.")
+    print("\n⚠️  WARNING: rewrite_output_dir=False by default to preserve existing data.")
+    print("   Set rewrite_output_dir=True only if you explicitly want to delete existing data!")
     
     # Example of how to use with a GeoDataFrame:
     # labels_gdf = gpd.read_file("path_to_processed_buildings.shp")
     # config['labels_gdf'] = labels_gdf
-    # config['rewrite_output_dir'] = True
+    # config['rewrite_output_dir'] = False  # Preserve existing data
     # chunker = OptimizedTIFFChunkerWithShapefiles(**config)
     # chunker.process_all_tiffs()
 
