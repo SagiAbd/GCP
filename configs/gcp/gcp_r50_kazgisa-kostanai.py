@@ -33,6 +33,7 @@ model = dict(
         'panoptic_head.cls_embed',
         'panoptic_head.mask_embed',
     ],
+    
     backbone=dict(
         type='ResNet',
         depth=50,
@@ -213,17 +214,12 @@ model = dict(
     ),
     test_cfg=dict(
         panoptic_on=False,
-        # For now, the dataset does not support
-        # evaluating semantic segmentation metric.
         semantic_on=False,
         instance_on=True,
-        # max_per_image is for instance segmentation.
         max_per_image=300,
         iou_thr=0.8,
-        # In Mask2Former's panoptic postprocessing,
-        # it will filter mask area where score is less than 0.5 .
-        # filter_low_score=True
-        filter_low_score=False,
+        filter_low_score=True,
+        score_thr=0.6,
     ),
     init_cfg=None)
 
@@ -296,7 +292,7 @@ default_hooks = dict(
         max_keep_ckpts=3,
         interval=1),
     # visualizer=dict(type='WandbVisualizer', wandb_cfg=wandb_cfg, name='wandb_vis')
-    visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=10)
+    visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=3, score_thr=0.6)
 )
 
 # vis_backends = [
@@ -317,7 +313,7 @@ default_hooks = dict(
 #     type='TanmlhVisualizer', vis_backends=vis_backends, name='visualizer'
 # )
 
-auto_scale_lr = dict(enable=False, base_batch_size=2)
+auto_scale_lr = dict(enable=False, base_batch_size=4)
 
 # switch the test split between split1 and split2 if needed
 test_dataloader = dict(

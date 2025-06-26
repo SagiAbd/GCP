@@ -127,17 +127,12 @@ model = dict(
         sampler=dict(type='MaskPseudoSampler')),
     test_cfg=dict(
         panoptic_on=False,
-        # For now, the dataset does not support
-        # evaluating semantic segmentation metric.
         semantic_on=False,
         instance_on=True,
-        # max_per_image is for instance segmentation.
         max_per_image=200,
         iou_thr=0.8,
-        # In Mask2Former's panoptic postprocessing,
-        # it will filter mask area where score is less than 0.5 .
-        # filter_low_score=True
-        filter_low_score=False
+        filter_low_score=True,
+        score_thr=0.6    
     ),
     init_cfg=None)
 
@@ -213,7 +208,7 @@ default_hooks = dict(
         interval=1
     ),
     logger=dict(type='LoggerHook', interval=10),
-    visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=10)
+    visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=3, score_thr=0.6)
 )
 
 log_config = dict(

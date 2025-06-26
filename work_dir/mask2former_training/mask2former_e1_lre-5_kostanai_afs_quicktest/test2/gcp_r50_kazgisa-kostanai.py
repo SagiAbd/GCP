@@ -1,4 +1,4 @@
-auto_scale_lr = dict(base_batch_size=4, enable=True)
+auto_scale_lr = dict(base_batch_size=4, enable=False)
 backend_args = None
 batch_augments = [
     dict(
@@ -57,12 +57,16 @@ default_hooks = dict(
         max_keep_ckpts=3,
         save_last=True,
         type='CheckpointHook'),
-    logger=dict(interval=10, type='LoggerHook'),
+    logger=dict(interval=50, type='LoggerHook'),
     param_scheduler=dict(type='ParamSchedulerHook'),
     sampler_seed=dict(type='DistSamplerSeedHook'),
     timer=dict(type='IterTimerHook'),
     visualization=dict(
-        draw=True, interval=3, score_thr=0.6, type='TanmlhVisualizationHook'))
+        draw=True,
+        interval=3,
+        score_thr=0.6,
+        test_out_dir='visualizations',
+        type='TanmlhVisualizationHook'))
 default_scope = 'mmdet'
 embed_multi = dict(decay_mult=0.0, lr_mult=1.0)
 env_cfg = dict(
@@ -82,30 +86,14 @@ img_norm_cfg = dict(
     ],
     to_rgb=True)
 launcher = 'none'
-load_from = None
-log_config = dict(hooks=[
-    dict(type='TextLoggerHook'),
-    dict(
-        init_kwargs=dict(
-            allow_val_change=True,
-            group='mask2former_training',
-            id='yymtrhr6',
-            name='mask2former_e1_lre-5_kostanai_afs_quicktest',
-            project='building-segmentation-gcp',
-            resume='must'),
-        interval=3,
-        log_checkpoint=True,
-        log_checkpoint_metadata=True,
-        num_eval_images=10,
-        type='MMDetWandbHook'),
-])
+load_from = 'checkpoints/gcp_r50_pretrained_12e_whu-mix-vector.pth'
 log_level = 'INFO'
 log_processor = dict(by_epoch=True, type='LogProcessor', window_size=10)
-max_epochs = 10
+max_epochs = 8
 model = dict(
     backbone=dict(
         depth=50,
-        frozen_stages=2,
+        frozen_stages=-1,
         init_cfg=dict(checkpoint='torchvision://resnet50', type='Pretrained'),
         norm_cfg=dict(requires_grad=False, type='BN'),
         norm_eval=True,
@@ -136,14 +124,42 @@ model = dict(
             57.375,
         ],
         type='DetDataPreprocessor'),
+    frozen_parameters=[
+        'backbone',
+        'panoptic_head.pixel_decoder',
+        'panoptic_head.transformer_decoder',
+        'panoptic_head.decoder_input_projs',
+        'panoptic_head.query_embed',
+        'panoptic_head.query_feat',
+        'panoptic_head.level_embed',
+        'panoptic_head.cls_embed',
+        'panoptic_head.mask_embed',
+    ],
     init_cfg=None,
     panoptic_fusion_head=dict(
         init_cfg=None,
         loss_panoptic=None,
         num_stuff_classes=0,
         num_things_classes=1,
-        type='MaskFormerFusionHead'),
+        type='PolyFormerFusionHeadV2'),
     panoptic_head=dict(
+        dp_polygonize_head=dict(
+            init_cfg=None,
+            layer_cfg=dict(
+                cross_attn_cfg=dict(
+                    batch_first=True, dropout=0.0, embed_dims=256,
+                    num_heads=8),
+                ffn_cfg=dict(
+                    act_cfg=dict(inplace=True, type='ReLU'),
+                    embed_dims=256,
+                    feedforward_channels=2048,
+                    ffn_drop=0.0,
+                    num_fcs=2),
+                self_attn_cfg=dict(
+                    batch_first=True, dropout=0.0, embed_dims=256,
+                    num_heads=8)),
+            num_layers=3,
+            return_intermediate=True),
         enforce_decoder_input_project=False,
         feat_channels=256,
         in_channels=[
@@ -174,6 +190,10 @@ model = dict(
             reduction='mean',
             type='CrossEntropyLoss',
             use_sigmoid=True),
+        loss_poly_ang=dict(
+            loss_weight=1.0, reduction='mean', type='SmoothL1Loss'),
+        loss_poly_reg=dict(
+            loss_weight=1.0, reduction='mean', type='SmoothL1Loss'),
         num_queries=300,
         num_stuff_classes=0,
         num_things_classes=1,
@@ -201,6 +221,39 @@ model = dict(
             num_outs=3,
             positional_encoding=dict(normalize=True, num_feats=128),
             type='MSDeformAttnPixelDecoder'),
+        poly_cfg=dict(
+            align_iou_thre=0.5,
+            apply_angle_loss=True,
+            apply_prim_pred=True,
+            lam=4,
+            loss_weight_dp=0.01,
+            map_features=True,
+            mask_cls_thre=0.0,
+            max_align_dis=15,
+            max_match_dis=10,
+            max_offsets=5,
+            max_step_size=128,
+            num_cls_channels=2,
+            num_inter_points=64,
+            num_min_bins=32,
+            point_as_prim=True,
+            poly_decode_type='dp',
+            polygonize_mode='cv2_single_mask',
+            polygonized_scale=4.0,
+            pred_angle=False,
+            prim_cls_thre=0.1,
+            proj_gt=False,
+            reg_targets_type='vertice',
+            return_poly_json=False,
+            sample_points=True,
+            step_size=4,
+            stride_size=64,
+            use_coords_in_poly_feat=True,
+            use_decoded_feat_in_poly_feat=True,
+            use_gt_jsons=False,
+            use_ind_offset=True,
+            use_point_feat_in_poly_feat=True,
+            use_ref_rings=False),
         positional_encoding=dict(normalize=True, num_feats=128),
         strides=[
             4,
@@ -225,16 +278,17 @@ model = dict(
                     num_heads=8)),
             num_layers=9,
             return_intermediate=True),
-        type='Mask2FormerHead'),
+        type='PolygonizerHead'),
     test_cfg=dict(
         filter_low_score=True,
         instance_on=True,
         iou_thr=0.8,
-        max_per_image=200,
+        max_per_image=300,
         panoptic_on=False,
         score_thr=0.6,
         semantic_on=False),
     train_cfg=dict(
+        add_target_to_data_samples=True,
         assigner=dict(
             match_costs=[
                 dict(type='ClassificationCost', weight=2.0),
@@ -246,8 +300,13 @@ model = dict(
         importance_sample_ratio=0.75,
         num_points=12544,
         oversample_ratio=3.0,
+        prim_assigner=dict(
+            match_costs=[
+                dict(type='PointL1Cost', weight=0.1),
+            ],
+            type='HungarianAssigner'),
         sampler=dict(type='MaskPseudoSampler')),
-    type='Mask2Former')
+    type='PolyFormerV2')
 num_classes = 1
 num_stuff_classes = 0
 num_things_classes = 1
@@ -272,19 +331,16 @@ optim_wrapper = dict(
     type='OptimWrapper')
 param_scheduler = [
     dict(
-        begin=0, by_epoch=False, end=1000, start_factor=0.001,
-        type='LinearLR'),
-    dict(
         begin=0,
         by_epoch=True,
-        end=10,
+        end=8,
         gamma=0.1,
         milestones=[
-            40,
+            9,
         ],
         type='MultiStepLR'),
 ]
-resume = True
+resume = False
 test_cfg = dict(type='TestLoop')
 test_dataloader = dict(
     batch_size=1,
@@ -325,9 +381,13 @@ test_evaluator = [
     dict(
         ann_file='data/kostanai/test/test.json',
         backend_args=None,
+        calculate_iou_ciou=True,
+        calculate_mta=True,
+        mask_type='polygon',
         metric=[
             'segm',
         ],
+        score_thre=0.5,
         type='CocoMetric'),
 ]
 test_pipeline = [
@@ -352,7 +412,7 @@ test_pipeline = [
         ),
         type='PackDetInputs'),
 ]
-train_cfg = dict(max_epochs=10, type='EpochBasedTrainLoop', val_interval=1)
+train_cfg = dict(max_epochs=8, type='EpochBasedTrainLoop', val_interval=1)
 train_dataloader = dict(
     batch_sampler=dict(type='AspectRatioBatchSampler'),
     batch_size=4,
@@ -467,38 +527,22 @@ val_evaluator = [
     dict(
         ann_file='data/kostanai/val/val.json',
         backend_args=None,
+        calculate_iou_ciou=True,
+        calculate_mta=True,
+        mask_type='polygon',
         metric=[
             'segm',
         ],
+        score_thre=0.5,
         type='CocoMetric'),
 ]
 vis_backends = [
-    dict(
-        init_kwargs=dict(
-            allow_val_change=True,
-            group='mask2former_training',
-            id='yymtrhr6',
-            name='mask2former_e1_lre-5_kostanai_afs_quicktest',
-            project='building-segmentation-gcp',
-            resume='must'),
-        save_dir=
-        'work_dir\\mask2former_training\\mask2former_e1_lre-5_kostanai_afs_quicktest\\wandb',
-        type='WandbVisBackend'),
+    dict(type='LocalVisBackend'),
 ]
 visualizer = dict(
     name='visualizer',
     type='TanmlhVisualizer',
     vis_backends=[
-        dict(
-            init_kwargs=dict(
-                allow_val_change=True,
-                group='mask2former_training',
-                id='yymtrhr6',
-                name='mask2former_e1_lre-5_kostanai_afs_quicktest',
-                project='building-segmentation-gcp',
-                resume='must'),
-            save_dir=
-            'work_dir\\mask2former_training\\mask2former_e1_lre-5_kostanai_afs_quicktest\\wandb',
-            type='WandbVisBackend'),
+        dict(type='LocalVisBackend'),
     ])
-work_dir = 'work_dir\\mask2former_training\\mask2former_e1_lre-5_kostanai_afs_quicktest'
+work_dir = 'work_dir\\mask2former_training\\mask2former_e1_lre-5_kostanai_afs_quicktest\\test2'

@@ -8,14 +8,14 @@ This script orchestrates the execution of three data processing steps:
 3. Stage 3: Split the processed data into train/val/test sets with image chunking
 
 Usage:
-    python tools/data_pipeline/regions/kostanai/main.py [stage1|stage2|stage3|all]
+    python tools/data_pipeline/main.py [stage1|stage2|stage3|all]
     
 Examples:
-    python tools/data_pipeline/regions/kostanai/main.py stage1    # Run only stage 1
-    python tools/data_pipeline/regions/kostanai/main.py stage2    # Run only stage 2
-    python tools/data_pipeline/regions/kostanai/main.py stage3    # Run only stage 3
-    python tools/data_pipeline/regions/kostanai/main.py all       # Run all stages
-    python tools/data_pipeline/regions/kostanai/main.py           # Run all stages (default)
+    python tools/data_pipeline/main.py stage1    # Run only stage 1
+    python tools/data_pipeline/main.py stage2    # Run only stage 2
+    python tools/data_pipeline/main.py stage3    # Run only stage 3
+    python tools/data_pipeline/main.py all       # Run all stages
+    python tools/data_pipeline/main.py           # Run all stages (default)
 """
 
 import os
@@ -92,8 +92,8 @@ def run_stage2():
         processor = ProcessKostanaiBuildings(
             distance_threshold=0.15,      # 15cm grouping distance
             min_intersection_length=2.0,  # 2m minimum intersection
-            max_group_size=100,           # Max 100 buildings per group
-            min_area_threshold=5,       # 5m² minimum area
+            max_group_size=50,           # Max 100 buildings per group
+            min_area_threshold=10,       # 5m² minimum area
             use_scaling_merge=False             # Maximum 1.5x scaling
         )
         
@@ -153,9 +153,9 @@ def run_stage3_with_delete(force_delete=False):
             'overlap': 0,
             'original_resolution': 5.0,
             'target_resolution': 30.0,
-            'train_split': 0.90,
+            'train_split': 0.949,
             'val_split': 0.05,
-            'test_split': 0.05,
+            'test_split': 0.001,
             'min_valid_pixels': 0.3,
             'rewrite_output_dir': force_delete,  # Only delete if explicitly requested
             'use_train_val_test': True
@@ -332,10 +332,10 @@ def run_complete_dataset():
         complete_dataset_dir = Path(config['output_dir']) / 'complete_dataset'
         complete_dataset_dir.mkdir(parents=True, exist_ok=True)
         
-        # Process all TIFF files and save to complete_dataset
+        # Find all TIFF files with exact extensions only (recursive)
         tiff_files = []
         for ext in ['.tif', '.TIF', '.tiff', '.TIFF']:
-            tiff_files.extend([f for f in Path(config['tiff_dir']).glob(f'*{ext}') if f.name.endswith(ext)])
+            tiff_files.extend([f for f in Path(config['tiff_dir']).rglob(f'*{ext}') if f.name.endswith(ext)])
         
         print(f"Found {len(tiff_files)} TIFF files")
         if len(tiff_files) == 0:
@@ -423,14 +423,14 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python tools/data_pipeline/regions/kostanai/main.py stage1    # Run only stage 1
-  python tools/data_pipeline/regions/kostanai/main.py stage2    # Run only stage 2
-  python tools/data_pipeline/regions/kostanai/main.py stage3    # Run only stage 3 (preserves existing data)
-  python tools/data_pipeline/regions/kostanai/main.py stage3 --force-delete  # Run stage 3 and delete existing data
-  python tools/data_pipeline/regions/kostanai/main.py customsplit  # Create numbered splits (split0, split1, etc.)
-  python tools/data_pipeline/regions/kostanai/main.py complete_dataset  # Save all chunks into 'complete_dataset' for annotation
-  python tools/data_pipeline/regions/kostanai/main.py all       # Run all stages
-  python tools/data_pipeline/regions/kostanai/main.py           # Run all stages (default)
+  python tools/data_pipeline/main.py stage1    # Run only stage 1
+  python tools/data_pipeline/main.py stage2    # Run only stage 2
+  python tools/data_pipeline/main.py stage3    # Run only stage 3 (preserves existing data)
+  python tools/data_pipeline/main.py stage3 --force-delete  # Run stage 3 and delete existing data
+  python tools/data_pipeline/main.py customsplit  # Create numbered splits (split0, split1, etc.)
+  python tools/data_pipeline/main.py complete_dataset  # Save all chunks into 'complete_dataset' for annotation
+  python tools/data_pipeline/main.py all       # Run all stages
+  python tools/data_pipeline/main.py           # Run all stages (default)
         """
     )
     
@@ -470,6 +470,6 @@ Examples:
 
 if __name__ == "__main__":
     """
-    python tools/data_pipeline/regions/kostanai/main.py [stage1|stage2|stage3|customsplit|complete_dataset|all]
+    python tools/data_pipeline/main.py [stage1|stage2|stage3|customsplit|complete_dataset|all]
     """
     main()

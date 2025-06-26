@@ -593,11 +593,18 @@ class PolygonizerHead(MaskFormerHead):
         mask_preds = mask_preds[mask_weights > 0]
 
         if mask_targets.shape[0] == 0:
-            # zero match
-            loss_dice = mask_preds.sum()
-            loss_mask = mask_preds.sum()
-            loss_poly = mask_preds.sum()
-            return loss_cls, loss_mask, loss_dice, loss_poly
+            # zero match: make dummy losses that require grad
+            trainable_params = [p for p in self.parameters() if p.requires_grad]
+            print("Trainable params:", len(trainable_params))
+            param = next(p for p in self.parameters() if p.requires_grad)
+            dummy = param.sum() * 0.0
+            losses = dict(
+                loss_cls=loss_cls,
+                loss_mask=dummy,
+                loss_dice=dummy,
+                loss_poly=dummy
+            )
+            return losses
 
         with torch.no_grad():
             points_coords = get_uncertain_point_coords_with_randomness(

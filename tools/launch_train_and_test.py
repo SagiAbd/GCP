@@ -8,20 +8,21 @@ python tools/launch_train_and_test.py
 """
 
 CONFIG = {
-    "wandb_group": "mask2former_training",
-    "wandb_name": "mask2former_e1_lre-5_kostanai_afs_quicktest",
+    "wandb_group": "gcp_training",
+    "wandb_name": "gcp_e5_lre-5_kostanai_afs_v1",
     "wandb_project": "building-segmentation-gcp",
-    "train_config": "configs/gcp/mask2former_r50_kazgisa-kostanai.py",
-    "load_from": "checkpoints/mask2former_r50_pretrained_50e_whu-mix-vector.pth",
-    # "resume_from": 'work_dir\mask2former_training\mask2former_e10_lre-5_kostanai_afs_frozen2_batch2\epoch_4.pth',
-    "test1_config": "configs/gcp/mask2former_r50_kazgisa-kostanai.py",
-    "test1_checkpoint": None,
+    "train_config": "configs/gcp/gcp_r50_kazgisa-kostanai.py",
+    "load_from": "checkpoints/mask2former_e10_lre-5_kostanai-afs_v1.pth",
+    # "resume_from": 'work_dir\mask2former_training\mask2former_e1_lre-5_kostanai_afs_quicktest\epoch_2.pth',
+    "resume": False,  # Automatically resume from last available epoch if no resume_from/load_from specified
+    "test1_config": "configs/gcp/gcp_r50_kazgisa-kostanai.py",
+    # "test1_checkpoint": "work_dir\mask2former_training\mask2former_e1_lre-5_kostanai_afs_quicktest\epoch_6.pth",
     "test2_config": "configs/gcp/gcp_r50_kazgisa-kostanai.py",
     "test2_checkpoint": "checkpoints/gcp_r50_pretrained_12e_whu-mix-vector.pth",
     "gpus": 1,
     "comparison_limit": 30,
     "show_image_width": 10,
-    "max_epochs": 10
+    "max_epochs": 5
 }
 
 def run_command(cmd):
@@ -48,6 +49,8 @@ def main():
         train_cmd += ['--resume', CONFIG["resume_from"]]
     elif CONFIG.get("load_from"):
         train_cmd += ['--cfg-options', f'load_from={CONFIG["load_from"]}']
+    elif CONFIG.get("resume"):
+         train_cmd += ['--resume']
     run_command(train_cmd)
 
     # 2. Dynamically set test1_checkpoint to the last epoch checkpoint
@@ -70,7 +73,7 @@ def main():
         '--show-dir', "visualizations",
         '--out', test1_metrics
     ]
-    run_command(test1_cmd + ['--launcher', 'none'])
+    # run_command(test1_cmd + ['--launcher', 'none'])
 
     # 4. Test 2
     test2_out_dir = os.path.join(run_dir, 'test2')
@@ -86,20 +89,20 @@ def main():
         '--show-dir', 'visualizations',
         '--out', test2_metrics
     ]
-    run_command(test2_cmd + ['--launcher', 'none'])
+    # run_command(test2_cmd + ['--launcher', 'none'])
 
     # 5. Comparison visualization
     directories = {
         "Test1": test1_vis_dir,
         "Test2": test2_vis_dir,
     }
-    run_comparison_from_config(
-        directories=directories,
-        output_dir=comparison_dir,
-        show_image_width=CONFIG["show_image_width"],
-        limit=CONFIG["comparison_limit"],
-        save_comparisons=True
-    )
+    # run_comparison_from_config(
+    #     directories=directories,
+    #     output_dir=comparison_dir,
+    #     show_image_width=CONFIG["show_image_width"],
+    #     limit=CONFIG["comparison_limit"],
+    #     save_comparisons=True
+    # )
 
 if __name__ == '__main__':
     main()

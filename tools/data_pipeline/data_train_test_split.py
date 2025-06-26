@@ -604,10 +604,10 @@ class OptimizedTIFFChunkerWithShapefiles:
     
     def process_all_tiffs(self):
         """Process all TIFF files in the directory."""
-        # Find all TIFF files with exact extensions only
+        # Find all TIFF files with exact extensions only (recursive)
         tiff_files = []
         for ext in ['.tif', '.TIF', '.tiff', '.TIFF']:
-            tiff_files.extend([f for f in self.tiff_dir.glob(f'*{ext}') if f.name.endswith(ext)])
+            tiff_files.extend([f for f in self.tiff_dir.rglob(f'*{ext}') if f.name.endswith(ext)])
         
         print(f"Found {len(tiff_files)} TIFF files")
         
@@ -677,10 +677,10 @@ class OptimizedTIFFChunkerWithShapefiles:
         Args:
             split_sizes: List of fractions (e.g., [0.5, 0.3, 0.2]) or counts (e.g., [1000, 500, 500]) summing to 1.0 or total chunk count.
         """
-        # Find all TIFF files with exact extensions only
+        # Find all TIFF files with exact extensions only (recursive)
         tiff_files = []
         for ext in ['.tif', '.TIF', '.tiff', '.TIFF']:
-            tiff_files.extend([f for f in self.tiff_dir.glob(f'*{ext}') if f.name.endswith(ext)])
+            tiff_files.extend([f for f in self.tiff_dir.rglob(f'*{ext}') if f.name.endswith(ext)])
         print(f"Found {len(tiff_files)} TIFF files")
         if len(tiff_files) == 0:
             print("No TIFF files found!")
@@ -758,10 +758,10 @@ class OptimizedTIFFChunkerWithShapefiles:
         Args:
             split_size: Number of images per split (default: 100)
         """
-        # Find all TIFF files with exact extensions only
+        # Find all TIFF files with exact extensions only (recursive)
         tiff_files = []
         for ext in ['.tif', '.TIF', '.tiff', '.TIFF']:
-            tiff_files.extend([f for f in self.tiff_dir.glob(f'*{ext}') if f.name.endswith(ext)])
+            tiff_files.extend([f for f in self.tiff_dir.rglob(f'*{ext}') if f.name.endswith(ext)])
         print(f"Found {len(tiff_files)} TIFF files")
         if len(tiff_files) == 0:
             print("No TIFF files found!")

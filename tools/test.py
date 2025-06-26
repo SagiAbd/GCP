@@ -63,6 +63,10 @@ def parse_args():
     # will pass the `--local-rank` parameter to `tools/train.py` instead
     # of `--local_rank`.
     parser.add_argument('--local_rank', '--local-rank', type=int, default=0)
+    # Add wandb CLI arguments
+    parser.add_argument('--wandb-project', type=str, default=None, help='wandb project name')
+    parser.add_argument('--wandb-name', type=str, help='wandb run name')
+    parser.add_argument('--wandb-group', type=str, help='wandb group name')
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -82,23 +86,60 @@ def main():
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)
     
-    cfg.vis_backends = [dict(type='LocalVisBackend')]
-    cfg.visualizer = dict(
-        type='TanmlhVisualizer',
-        vis_backends=cfg.vis_backends,
-        name='visualizer'
-    )
-
-    # work_dir is determined in this priority: CLI > segment in file > filename
-    if args.work_dir is not None:
-        # update configs according to CLI args if args.work_dir is not None
+    # Compute run_dir and wandb_dir if wandb args are provided
+    run_dir = None
+    wandb_dir = None
+    if args.wandb_name and args.wandb_group:
+        run_dir = os.path.join('work_dir', args.wandb_group, args.wandb_name)
+        wandb_dir = os.path.join(run_dir, 'wandb')
+        cfg.work_dir = run_dir
+    elif args.work_dir is not None:
         cfg.work_dir = args.work_dir
     elif cfg.get('work_dir', None) is None:
-        # use config filename as default work_dir if cfg.work_dir is None
         cfg.work_dir = osp.join('./work_dirs',
                                 osp.splitext(osp.basename(args.config))[0])
 
     cfg.load_from = args.checkpoint
+
+    # Inject wandb visualizer if wandb args are provided
+    if args.wandb_project or args.wandb_name or args.wandb_group:
+        wandb_backend = {
+            'type': 'WandbVisBackend',
+            'init_kwargs': {
+                'project': args.wandb_project or 'default-project',
+                'name': args.wandb_name,
+                'group': args.wandb_group,
+                'resume': 'never',
+                'allow_val_change': True,
+                # 'id': "yymtrhr6"
+            },
+            'save_dir': wandb_dir or './wandb'
+        }
+        cfg.vis_backends = [wandb_backend]
+        cfg.visualizer = dict(
+            type='TanmlhVisualizer',
+            vis_backends=cfg.vis_backends,
+            name='visualizer'
+        )
+        # Optionally add MMDetWandbHook to log_config if present
+        if hasattr(cfg, 'log_config') and 'hooks' in cfg.log_config:
+            cfg.log_config['hooks'].append(
+                dict(
+                    type='MMDetWandbHook',
+                    init_kwargs=wandb_backend['init_kwargs'],
+                    interval=3,
+                    log_checkpoint=True,
+                    log_checkpoint_metadata=True,
+                    num_eval_images=10
+                )
+            )
+    else:
+        cfg.vis_backends = [dict(type='LocalVisBackend')]
+        cfg.visualizer = dict(
+            type='TanmlhVisualizer',
+            vis_backends=cfg.vis_backends,
+            name='visualizer'
+        )
 
     if args.show or args.show_dir:
         cfg = trigger_visualization_hook(cfg, args)

@@ -62,7 +62,11 @@ default_hooks = dict(
     sampler_seed=dict(type='DistSamplerSeedHook'),
     timer=dict(type='IterTimerHook'),
     visualization=dict(
-        draw=True, interval=3, score_thr=0.6, type='TanmlhVisualizationHook'))
+        draw=True,
+        interval=3,
+        score_thr=0.6,
+        test_out_dir='visualizations',
+        type='TanmlhVisualizationHook'))
 default_scope = 'mmdet'
 embed_multi = dict(decay_mult=0.0, lr_mult=1.0)
 env_cfg = dict(
@@ -82,22 +86,9 @@ img_norm_cfg = dict(
     ],
     to_rgb=True)
 launcher = 'none'
-load_from = None
+load_from = 'work_dir\\mask2former_training\\mask2former_e1_lre-5_kostanai_afs_quicktest\\epoch_6.pth'
 log_config = dict(hooks=[
     dict(type='TextLoggerHook'),
-    dict(
-        init_kwargs=dict(
-            allow_val_change=True,
-            group='mask2former_training',
-            id='yymtrhr6',
-            name='mask2former_e1_lre-5_kostanai_afs_quicktest',
-            project='building-segmentation-gcp',
-            resume='must'),
-        interval=3,
-        log_checkpoint=True,
-        log_checkpoint_metadata=True,
-        num_eval_images=10,
-        type='MMDetWandbHook'),
 ])
 log_level = 'INFO'
 log_processor = dict(by_epoch=True, type='LogProcessor', window_size=10)
@@ -284,7 +275,7 @@ param_scheduler = [
         ],
         type='MultiStepLR'),
 ]
-resume = True
+resume = False
 test_cfg = dict(type='TestLoop')
 test_dataloader = dict(
     batch_size=1,
@@ -473,32 +464,12 @@ val_evaluator = [
         type='CocoMetric'),
 ]
 vis_backends = [
-    dict(
-        init_kwargs=dict(
-            allow_val_change=True,
-            group='mask2former_training',
-            id='yymtrhr6',
-            name='mask2former_e1_lre-5_kostanai_afs_quicktest',
-            project='building-segmentation-gcp',
-            resume='must'),
-        save_dir=
-        'work_dir\\mask2former_training\\mask2former_e1_lre-5_kostanai_afs_quicktest\\wandb',
-        type='WandbVisBackend'),
+    dict(type='LocalVisBackend'),
 ]
 visualizer = dict(
     name='visualizer',
     type='TanmlhVisualizer',
     vis_backends=[
-        dict(
-            init_kwargs=dict(
-                allow_val_change=True,
-                group='mask2former_training',
-                id='yymtrhr6',
-                name='mask2former_e1_lre-5_kostanai_afs_quicktest',
-                project='building-segmentation-gcp',
-                resume='must'),
-            save_dir=
-            'work_dir\\mask2former_training\\mask2former_e1_lre-5_kostanai_afs_quicktest\\wandb',
-            type='WandbVisBackend'),
+        dict(type='LocalVisBackend'),
     ])
-work_dir = 'work_dir\\mask2former_training\\mask2former_e1_lre-5_kostanai_afs_quicktest'
+work_dir = 'work_dir\\mask2former_training\\mask2former_e1_lre-5_kostanai_afs_quicktest\\test1'

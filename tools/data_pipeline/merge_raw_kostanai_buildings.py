@@ -1,5 +1,5 @@
 """
-python tools/data_pipeline/regions/kostanai/merge_kostanai_buildings.py
+python tools/data_pipeline/merge_raw_kostanai_buildings.py
 """
 
 import os
@@ -24,9 +24,9 @@ class MergeKostanaiBuildings:
         self.output_dir = Path(r"./data/raw/labels/kostanai/buildings_kostanai_tiles_merged/")
 
     def _find_data_files(self):
-        # Find both .gdb and .gpkg files
-        gdb_files = list(self.gdb_dir.glob("*.gdb"))
-        gpkg_files = list(self.gdb_dir.glob("*.gpkg"))
+        # Find both .gdb and .gpkg files recursively
+        gdb_files = list(self.gdb_dir.rglob("*.gdb"))
+        gpkg_files = list(self.gdb_dir.rglob("*.gpkg"))
         return gdb_files + gpkg_files
 
     def _read_and_merge_data(self, layer_name: str = "invsitibuild"):
