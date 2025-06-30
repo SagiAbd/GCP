@@ -606,12 +606,12 @@ class PolygonizerHead(MaskFormerHead):
             loss_dice = dummy
             loss_mask = dummy
             loss_poly = dummy
-            # print("="*100)
-            # print("Returning Zero Match Case")
-            # print(f"loss_cls requires_grad: {loss_cls.requires_grad}, grad_fn: {loss_cls.grad_fn}")
-            # print(f"loss_mask requires_grad: {loss_mask.requires_grad}, grad_fn: {loss_mask.grad_fn}")
-            # print(f"loss_dice requires_grad: {loss_dice.requires_grad}, grad_fn: {loss_dice.grad_fn}")
-            # print(f"loss_poly requires_grad: {loss_poly.requires_grad}, grad_fn: {loss_poly.grad_fn}")
+            print("="*100)
+            print("Returning Zero Match Case")
+            print(f"loss_cls requires_grad: {loss_cls.requires_grad}, grad_fn: {loss_cls.grad_fn}")
+            print(f"loss_mask requires_grad: {loss_mask.requires_grad}, grad_fn: {loss_mask.grad_fn}")
+            print(f"loss_dice requires_grad: {loss_dice.requires_grad}, grad_fn: {loss_dice.grad_fn}")
+            print(f"loss_poly requires_grad: {loss_poly.requires_grad}, grad_fn: {loss_poly.grad_fn}")
             
             return dict(loss_cls=loss_cls,
                         loss_mask=loss_mask,
@@ -701,30 +701,23 @@ class PolygonizerHead(MaskFormerHead):
                     mask_targets=mask_targets[poly2mask_idxes]
                 )
             else:
-                # Safely create a dummy loss that requires grad
-                param = next((p for p in self.parameters() if p.requires_grad), None)
-                dummy = param.sum() * 0.0 if param is not None else torch.zeros(1, device=mask_preds.device, requires_grad=True)
-
-                # Create the dummy polygon losses
                 losses_poly = dict(
-                    loss_dp=dummy,
-                    loss_poly_iou=dummy,
-                    loss_poly_reg=dummy
+                    loss_dp=mask_preds[:0].sum(),
+                    loss_poly_iou=mask_preds[:0].sum(),
+                    loss_poly_reg=mask_preds[:0].sum()
                 )
-
-                # Optionally add angle loss if it's enabled in the config
                 if self.poly_cfg.get('apply_angle_loss', False):
-                    losses_poly['loss_poly_ang'] = dummy
+                    losses_poly['loss_poly_ang'] = mask_preds[:0].sum()
 
         # Always update losses with losses_poly, even if empty
         losses.update(losses_poly)
 
-        # # After all losses are computed and before return, print their grad status
-        # print("Returning Normal Case Losses:")
-        # for k, v in losses.items():
-        #     print(f"{k} requires_grad: {v.requires_grad}, grad_fn: {v.grad_fn}")
-        # if 'loss_poly' in locals():
-        #     print(f"loss_poly requires_grad: {loss_poly.requires_grad}, grad_fn: {loss_poly.grad_fn}")
+        # After all losses are computed and before return, print their grad status
+        print("Returning Normal Case Losses:")
+        for k, v in losses.items():
+            print(f"{k} requires_grad: {v.requires_grad}, grad_fn: {v.grad_fn}")
+        if 'loss_poly' in locals():
+            print(f"loss_poly requires_grad: {loss_poly.requires_grad}, grad_fn: {loss_poly.grad_fn}")
         return losses
 
     def _forward_head(

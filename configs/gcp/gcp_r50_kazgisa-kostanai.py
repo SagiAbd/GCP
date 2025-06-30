@@ -254,13 +254,13 @@ optim_wrapper = dict(
     type='OptimWrapper',
     optimizer=dict(
         type='AdamW',
-        lr=0.00001,  # Reduced learning rate for fine-tuning
+        lr=0.0001,  # Reduced learning rate for fine-tuning
         weight_decay=0.05,
         eps=1e-8,
         betas=(0.9, 0.999)),
     paramwise_cfg=dict(
         custom_keys={
-            'backbone': dict(lr_mult=0.01, decay_mult=1.0),  # Even lower LR for backbone
+            'backbone': dict(lr_mult=0.1, decay_mult=1.0),  # Even lower LR for backbone
             'query_embed': embed_multi,
             'query_feat': embed_multi,
             'level_embed': embed_multi,

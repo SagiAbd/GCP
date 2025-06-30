@@ -24,6 +24,7 @@ import time
 import argparse
 from pathlib import Path
 from datetime import datetime
+import geopandas as gpd  # <-- Ensure geopandas is imported
 
 # Add the parent directory to the path to import the modules
 current_dir = Path(__file__).parent
@@ -32,6 +33,63 @@ sys.path.append(str(current_dir))
 # Global variables to store results between stages
 merged_gdf = None
 processed_gdf = None
+
+# =====================
+# Centralized Pipeline Configurations
+# =====================
+PIPELINE_CONFIGS = {
+    'merge_kostanai_buildings': {
+        'gdb_dir': r"D:\Sagi\GCP\GCP\data\raw\labels\shymkent\buildings_shymkent_tiles_raw",
+        'output_dir': r"./data/raw/labels/shymkent/buildings_shymkent_tiles_merged/",
+        'layer_name': "invsitibuild"
+    },
+    'process_kostanai_buildings': {
+        'distance_threshold': 0.15,      # 15cm grouping distance
+        'min_intersection_length': 2.0,  # 2m minimum intersection
+        'max_group_size': 50,           # Max 50 buildings per group
+        'min_area_threshold': 10,       # 10m² minimum area
+        'use_scaling_merge': False,     # Use scaling merge
+        'target_intersection_ratio': 0.02, # 2% intersection requirement
+        'max_scale': 1.5,                # Maximum 1.5x scaling
+        'output_dir': r"./data/raw/labels/shymkent/buildings_shymkent_processed/"
+    },
+    'data_split': {
+        'tiff_dir': r"D:\Sagi\GCP\GCP\data\raw\images\shymkent",
+        'region_shapefile_path': None,
+        'output_dir': r"D:\Sagi\GCP\GCP\data\shymkent",
+        'chunk_size': (512, 512, 3),
+        'overlap': 0,
+        'original_resolution': 5.0,
+        'target_resolution': 30.0,
+        'train_split': 0.949,
+        'val_split': 0.05,
+        'test_split': 0.001,
+        'min_valid_pixels': 0.3,
+        'use_train_val_test': True
+    },
+    'custom_split': {
+        'tiff_dir': r"D:\Sagi\GCP\GCP\data\raw\images\shymkent",
+        'region_shapefile_path': None,
+        'output_dir': r"D:\Sagi\GCP\GCP\data\shymkent",
+        'chunk_size': (512, 512, 3),
+        'overlap': 0,
+        'original_resolution': 5.0,
+        'target_resolution': 30.0,
+        'min_valid_pixels': 0.3,
+        'use_train_val_test': False
+    },
+    'complete_dataset': {
+        'tiff_dir': r"D:\Sagi\GCP\GCP\data\raw\images\kostanai\Images\ortho kostanay",
+        'region_shapefile_path': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\region_bbox\region_bbox.shp",
+        'output_dir': r"D:\Sagi\GCP\GCP\data\kostanai",
+        'chunk_size': (512, 512, 3),
+        'overlap': 0,
+        'original_resolution': 5.0,
+        'target_resolution': 30.0,
+        'min_valid_pixels': 0.3,
+        'use_train_val_test': False
+    }
+}
 
 def run_stage1():
     """Stage 1: Merge raw Kostanai building data from multiple GDB files."""
@@ -46,8 +104,9 @@ def run_stage1():
     
     try:
         from merge_raw_kostanai_buildings import MergeKostanaiBuildings
-        merger = MergeKostanaiBuildings()
-        merged_gdf = merger.process()
+        merge_cfg = PIPELINE_CONFIGS['merge_kostanai_buildings'].copy()
+        merger = MergeKostanaiBuildings(gdb_dir=merge_cfg['gdb_dir'], output_dir=merge_cfg['output_dir'])
+        merged_gdf = merger.process(layer_name=merge_cfg['layer_name'])
         
         end_time = time.time()
         duration = end_time - start_time
@@ -89,13 +148,8 @@ def run_stage2():
                 return False
         
         # Initialize processor with custom parameters
-        processor = ProcessKostanaiBuildings(
-            distance_threshold=0.15,      # 15cm grouping distance
-            min_intersection_length=2.0,  # 2m minimum intersection
-            max_group_size=50,           # Max 100 buildings per group
-            min_area_threshold=10,       # 5m² minimum area
-            use_scaling_merge=False             # Maximum 1.5x scaling
-        )
+        process_cfg = PIPELINE_CONFIGS['process_kostanai_buildings'].copy()
+        processor = ProcessKostanaiBuildings(**process_cfg)
         
         # Process the merged data
         processed_gdf = processor.process_geodataframe_optimized(merged_gdf)
@@ -120,7 +174,6 @@ def run_stage2():
         return False
 
 def run_stage3_with_delete(force_delete=False):
-    """Stage 3: Split data into train/val/test sets with image chunking."""
     global processed_gdf
     
     print(f"\n{'='*60}")
@@ -137,29 +190,35 @@ def run_stage3_with_delete(force_delete=False):
     try:
         from data_train_test_split import OptimizedTIFFChunkerWithShapefiles
         
-        # If processed_gdf is not available, run stage 2 first
+        # If processed_gdf is not available, try to load from shapefile if not force_delete
         if processed_gdf is None:
-            print("Processed data not available, running Stage 2 first...")
-            if not run_stage2():
-                return False
+            if not force_delete:
+                # Try to load the latest processed shapefile from stage 2 output dir
+                stage2_outdir = PIPELINE_CONFIGS['process_kostanai_buildings']['output_dir']
+                stage2_outdir = Path(stage2_outdir)
+                shp_files = list(stage2_outdir.glob('buildings_processed_*.shp'))
+                if shp_files:
+                    # Sort by timestamp in filename, descending
+                    shp_files.sort(key=lambda x: x.stat().st_mtime, reverse=True)
+                    latest_shp = shp_files[0]
+                    print(f"Loading processed buildings from: {latest_shp}")
+                    processed_gdf = gpd.read_file(str(latest_shp))
+                else:
+                    print("No processed shapefile found in stage 2 output directory. Running Stage 2...")
+                    if not run_stage2():
+                        return False
+            else:
+                print("Processed data not available, running Stage 2 first...")
+                if not run_stage2():
+                    return False
         
         # Configuration for the data split
-        config = {
-            'tiff_dir': r"D:\Sagi\GCP\GCP\data\raw\images\kostanai\Images\ortho kostanay",
-            'region_shapefile_path': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\region_bbox\region_bbox.shp",
-            'labels_gdf': processed_gdf,  # Pass the processed GeoDataFrame directly
-            'output_dir': r"D:\Sagi\GCP\GCP\data\kostanai",
-            'chunk_size': (512, 512, 3),
-            'overlap': 0,
-            'original_resolution': 5.0,
-            'target_resolution': 30.0,
-            'train_split': 0.949,
-            'val_split': 0.05,
-            'test_split': 0.001,
-            'min_valid_pixels': 0.3,
-            'rewrite_output_dir': force_delete,  # Only delete if explicitly requested
-            'use_train_val_test': True
-        }
+        config = PIPELINE_CONFIGS['data_split'].copy()
+        config['labels_gdf'] = processed_gdf
+        config['rewrite_output_dir'] = force_delete  # Only delete if explicitly requested
+        # If region_shapefile_path is not specified, set to None
+        if not config.get('region_shapefile_path'):
+            config['region_shapefile_path'] = None
         
         # Create and run chunker
         chunker = OptimizedTIFFChunkerWithShapefiles(**config)
@@ -241,7 +300,7 @@ def run_all_stages(force_delete=False):
     
     print(f"\nCompleted at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-def run_customsplit(split_size=100):
+def run_customsplit(split_size=100, force_delete=False):
     global processed_gdf
 
     print(f"\n{'='*60}")
@@ -254,24 +313,33 @@ def run_customsplit(split_size=100):
     try:
         from data_train_test_split import OptimizedTIFFChunkerWithShapefiles
 
-        if processed_gdf is None:
-            print("Processed data not available, running Stage 2 first...")
-            if not run_stage2():
-                return False
-
-        config = {
-            'tiff_dir': r"D:\Sagi\GCP\GCP\data\raw\images\kostanai\Images\ortho kostanay",
-            'region_shapefile_path': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\region_bbox\region_bbox.shp",
-            'labels_gdf': processed_gdf,
-            'output_dir': r"D:\Sagi\GCP\GCP\data\kostanai",
-            'chunk_size': (512, 512, 3),
-            'overlap': 0,
-            'original_resolution': 5.0,
-            'target_resolution': 30.0,
-            'min_valid_pixels': 0.3,
-            'rewrite_output_dir': False,  # Don't delete existing train/val/test directories
-            'use_train_val_test': False  # Don't delete existing train/val/test directories
-        }
+        config = PIPELINE_CONFIGS['custom_split'].copy()
+        labels_gdf = processed_gdf
+        # If labels_gdf is not available, try to load from shapefile if not force_delete
+        if labels_gdf is None:
+            if not force_delete:
+                # Try to load the latest processed shapefile from stage 2 output dir
+                stage2_outdir = PIPELINE_CONFIGS['process_kostanai_buildings']['output_dir']
+                stage2_outdir = Path(stage2_outdir)
+                shp_files = list(stage2_outdir.glob('buildings_processed_*.shp'))
+                if shp_files:
+                    # Sort by timestamp in filename, descending
+                    shp_files.sort(key=lambda x: x.stat().st_mtime, reverse=True)
+                    latest_shp = shp_files[0]
+                    print(f"Loading processed buildings from: {latest_shp}")
+                    labels_gdf = gpd.read_file(str(latest_shp))
+                else:
+                    print("No processed shapefile found in stage 2 output directory. Running Stage 2...")
+                    if not run_stage2():
+                        return False
+            else:
+                print("Processed data not available, running Stage 2 first...")
+                if not run_stage2():
+                    return False
+        config['labels_gdf'] = labels_gdf
+        config['rewrite_output_dir'] = False
+        if not config.get('region_shapefile_path'):
+            config['region_shapefile_path'] = None
 
         chunker = OptimizedTIFFChunkerWithShapefiles(**config)
         chunker.process_custom_splits_by_count(split_size)
@@ -312,19 +380,11 @@ def run_complete_dataset():
             if not run_stage2():
                 return False
 
-        config = {
-            'tiff_dir': r"D:\Sagi\GCP\GCP\data\raw\images\kostanai\Images\ortho kostanay",
-            'region_shapefile_path': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\region_bbox\region_bbox.shp",
-            'labels_gdf': processed_gdf,
-            'output_dir': r"D:\Sagi\GCP\GCP\data\kostanai",
-            'chunk_size': (512, 512, 3),
-            'overlap': 0,
-            'original_resolution': 5.0,
-            'target_resolution': 30.0,
-            'min_valid_pixels': 0.3,
-            'rewrite_output_dir': False,  # Don't delete existing train/val/test directories
-            'use_train_val_test': False  # Don't delete existing train/val/test directories
-        }
+        config = PIPELINE_CONFIGS['complete_dataset'].copy()
+        config['labels_gdf'] = processed_gdf
+        config['rewrite_output_dir'] = False
+        if not config.get('region_shapefile_path'):
+            config['region_shapefile_path'] = None
 
         chunker = OptimizedTIFFChunkerWithShapefiles(**config)
         
@@ -444,7 +504,7 @@ Examples:
     parser.add_argument(
         '--split-size',
         type=int,
-        default=100,
+        default=200,
         help='Number of images per split (default: 100)'
     )
     parser.add_argument(

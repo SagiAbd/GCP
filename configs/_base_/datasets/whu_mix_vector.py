@@ -1,6 +1,6 @@
 # dataset settings
 dataset_type = 'WHUMixVectorDataset'
-data_root = 'D:\Sagi\GCP\GCP\data\kazgisa-pavlodar-test'
+data_root = r'D:\Sagi\GCP\GCP\data\processed\whu-mix'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True
 )
@@ -74,8 +74,8 @@ train_dataloader = dict(
         data_root=data_root,
         pipeline=train_pipeline,
         backend_args=backend_args,
-        ann_file='train/train.json',
-        data_prefix=dict(img='train/image'),
+        ann_file='val/val.json',
+        data_prefix=dict(img='val/image'),
     )
 )
 
@@ -93,8 +93,8 @@ val_dataloader = dict(
         backend_args=backend_args,
         # ann_file='val/val.json',
         # data_prefix=dict(img='val/image'),
-        ann_file='test1/test-small.json',
-        data_prefix=dict(img='test1/image'),
+        ann_file='val/val.json',
+        data_prefix=dict(img='val/image'),
         test_mode=True,
         # coco_ann_path = '../../Datasets/Dataset4EO/CrowdAI/0a5c561f-e361-4e9b-a3e2-94f42a003a2b_val/val/annotation.json',
     )
@@ -114,9 +114,9 @@ test_dataloader = dict(
         # data_prefix=dict(img='val/image'),
         # ann_file='val/val.json',
 
-        data_prefix=dict(img='test/'),
+        data_prefix=dict(img='val/'),
         # ann_file='test1/test-small.json',
-        ann_file='test.json',
+        ann_file='val.json',
         # data_prefix=dict(img='test2/image'),
         # ann_file='test2/test-small.json',
         # ann_file='test2/test.json',

@@ -9,12 +9,12 @@ python tools/launch_train_and_test.py
 
 CONFIG = {
     "wandb_group": "gcp_training",
-    "wandb_name": "gcp_e5_lre-5_kostanai_afs_v1",
+    "wandb_name": "gcp_e5_lre-4_kostanai_afs_v2",
     "wandb_project": "building-segmentation-gcp",
     "train_config": "configs/gcp/gcp_r50_kazgisa-kostanai.py",
-    "load_from": "checkpoints/mask2former_e10_lre-5_kostanai-afs_v1.pth",
+    # "load_from": "checkpoints/mask2former_e10_lre-5_kostanai-afs_v1.pth",
     # "resume_from": 'work_dir\mask2former_training\mask2former_e1_lre-5_kostanai_afs_quicktest\epoch_2.pth',
-    "resume": False,  # Automatically resume from last available epoch if no resume_from/load_from specified
+    "resume": True,  # Automatically resume from last available epoch if no resume_from/load_from specified
     "test1_config": "configs/gcp/gcp_r50_kazgisa-kostanai.py",
     # "test1_checkpoint": "work_dir\mask2former_training\mask2former_e1_lre-5_kostanai_afs_quicktest\epoch_6.pth",
     "test2_config": "configs/gcp/gcp_r50_kazgisa-kostanai.py",

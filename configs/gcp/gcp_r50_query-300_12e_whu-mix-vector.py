@@ -229,7 +229,7 @@ model = dict(
 val_evaluator = [
     dict(
         type='CocoMetric',
-        ann_file=r'D:\Sagi\GCP\GCP\data\kazgisa-pavlodar-test\test.json',
+        ann_file=r'D:\Sagi\GCP\GCP\data\processed\whu-mix\val\val.json',
         # ann_file='../../Datasets/Dataset4EO/WHU-Mix/test2/test.json',
         metric=['segm'],
         mask_type='polygon',

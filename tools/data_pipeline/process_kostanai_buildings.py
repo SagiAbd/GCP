@@ -14,11 +14,12 @@ import os
 from datetime import datetime
 import shutil
 from pathlib import Path
+from shapely.validation import make_valid
 
 
 class ProcessKostanaiBuildings:
     def __init__(self, distance_threshold=0.15, min_intersection_length=2.0, 
-                 max_group_size=100, min_area_threshold=5.0, use_scaling_merge=False, target_intersection_ratio=0.02, max_scale=3.0):
+                 max_group_size=100, min_area_threshold=5.0, use_scaling_merge=False, target_intersection_ratio=0.02, max_scale=3.0, output_dir=None):
         """
         Initialize the Kostanai Buildings processor.
         
@@ -27,26 +28,51 @@ class ProcessKostanaiBuildings:
             min_intersection_length: Minimum intersection length for grouping (default: 2.0m)
             max_group_size: Maximum number of buildings in a group (default: 100)
             min_area_threshold: Minimum area to keep buildings (default: 5.0 sq units)
+            output_dir: Directory to save processed shapefiles (required)
         """
         self.distance_threshold = distance_threshold
         self.min_intersection_length = min_intersection_length
         self.max_group_size = max_group_size
         self.min_area_threshold = min_area_threshold
-        self.output_dir = Path(r"./data/raw/labels/kostanai/buildings_kostanai_processed/")
+        self.output_dir = Path(output_dir) if output_dir is not None else None
         self.use_scaling_merge = use_scaling_merge
         self.target_intersection_ratio = target_intersection_ratio
         self.max_scale = max_scale
         
     def clean_geometry(self, gdf):
-        """Clean the GeoDataFrame by removing rows with null geometry."""
+        """Clean the GeoDataFrame by removing rows with null geometry and fixing invalid geometries."""
         print("Cleaning geometry data...")
         gdf_clean = gdf.dropna(subset=['geometry'])
-        
         print(f"Total rows after cleaning: {len(gdf_clean)}")
         print(f"Rows removed: {len(gdf) - len(gdf_clean)}")
         print(f"Remaining missing geometry: {gdf_clean.geometry.isna().sum()}")
-        
-        return gdf_clean.reset_index(drop=True)
+
+        # Fix invalid geometries using make_valid, fallback to buffer(0)
+        def fix_geom(geom):
+            if geom is None or geom.is_empty:
+                return geom
+            if not geom.is_valid:
+                try:
+                    fixed = make_valid(geom)
+                    if fixed.is_valid:
+                        return fixed
+                except Exception:
+                    pass
+                try:
+                    fixed = geom.buffer(0)
+                    if fixed.is_valid:
+                        return fixed
+                except Exception:
+                    pass
+                print("Warning: Could not fix invalid geometry, setting to None.")
+                return None
+            return geom
+        gdf_clean['geometry'] = gdf_clean['geometry'].apply(fix_geom)
+        # Drop any that are still None or empty
+        gdf_clean = gdf_clean.dropna(subset=['geometry'])
+        gdf_clean = gdf_clean[~gdf_clean.geometry.is_empty]
+        gdf_clean = gdf_clean.reset_index(drop=True)
+        return gdf_clean
     
     def compute_area_if_missing(self, gdf):
         """Compute area if shape_Area column is null or missing."""
@@ -203,67 +229,38 @@ class ProcessKostanaiBuildings:
         
         return connected_components
     
-    def create_multipolygons_from_groups(self, gdf, groups, use_union_for_overlapping=True):
-        """Create multipolygons from groups of close geometries."""
+    def create_multipolygons_from_groups(self, gdf, groups):
+        """Create multipolygons from groups of geometries, ensuring validity before union."""
         multipolygon_rows = []
         grouped_indices = set()
-        
         for group in groups:
             group_df = gdf.iloc[group]
-            
-            # Get geometries to combine into multipolygon
-            geometries = group_df.geometry.tolist()
-            
-            # Create multipolygon from close geometries
-            polygon_list = []
-            for geom in geometries:
-                if geom.geom_type == 'Polygon':
-                    polygon_list.append(geom)
-                elif geom.geom_type == 'MultiPolygon':
-                    polygon_list.extend(list(geom.geoms))
-            
-            if len(polygon_list) > 1:
-                if use_union_for_overlapping:
-                    # Check if polygons overlap significantly
-                    total_individual_area = sum(p.area for p in polygon_list)
-                    union_geom = unary_union(polygon_list)
-                    union_area = union_geom.area
-                    
-                    # If there's significant overlap (>10% area difference), use union
-                    if (total_individual_area - union_area) / total_individual_area > 0.1:
-                        multipolygon_geom = union_geom
-                    else:
-                        multipolygon_geom = MultiPolygon(polygon_list)
-                else:
-                    multipolygon_geom = MultiPolygon(polygon_list)
-            elif len(polygon_list) == 1:
-                multipolygon_geom = polygon_list[0]
-            else:
+            geometries = [make_valid(geom) if not geom.is_valid else geom for geom in group_df.geometry]
+            # Remove any empty or None
+            geometries = [g for g in geometries if g is not None and not g.is_empty]
+            if not geometries:
                 continue
-            
-            # Create multipolygon row
+            try:
+                merged = unary_union(geometries)
+            except Exception as e:
+                print(f"Warning: Failed to union group due to: {e}. Attempting buffer(0) fallback.")
+                try:
+                    merged = unary_union([g.buffer(0) for g in geometries])
+                except Exception as e2:
+                    print(f"Error: Could not fix group, skipping. {e2}")
+                    continue
             multipolygon_row = group_df.iloc[0].copy()
-            multipolygon_row['geometry'] = multipolygon_geom
-            multipolygon_row['name_usl'] = 'multipolygon_group'
-            multipolygon_row['shape_Area'] = multipolygon_geom.area
-            
-            # Sum area_build if available (but use actual geometry area for shape_Area)
-            if 'area_build' in multipolygon_row.index:
-                multipolygon_row['area_build'] = group_df['area_build'].sum()
-            
+            multipolygon_row['geometry'] = merged
             multipolygon_rows.append(multipolygon_row)
             grouped_indices.update(group)
-        
-        # Create final GeoDataFrame with ungrouped features
+        # Combine with ungrouped features
         ungrouped_indices = [i for i in range(len(gdf)) if i not in grouped_indices]
         ungrouped_gdf = gdf.iloc[ungrouped_indices]
-        
         if multipolygon_rows:
             multipolygon_gdf = gpd.GeoDataFrame(multipolygon_rows, crs=gdf.crs)
             result = pd.concat([ungrouped_gdf, multipolygon_gdf], ignore_index=True)
         else:
             result = ungrouped_gdf
-        
         return result
     
     def expand_merge_shrink_to_original(self, geom, linear_expand_dist=0.15):
@@ -832,7 +829,7 @@ class ProcessKostanaiBuildings:
         
         # Save to shapefile
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = self.output_dir / f'buildings_kostanai_processed_{timestamp}.shp'
+        output_path = self.output_dir / f'buildings_processed_{timestamp}.shp'
         gdf.to_file(output_path, driver='ESRI Shapefile')
         
         print(f"✅ Saved processed shapefile to:\n{output_path}")
