@@ -14,9 +14,9 @@ CONFIG = {
     "train_config": "configs/gcp/gcp_r50_kazgisa-kostanai.py",
     # "load_from": "checkpoints/mask2former_e10_lre-5_kostanai-afs_v1.pth",
     # "resume_from": 'work_dir\mask2former_training\mask2former_e1_lre-5_kostanai_afs_quicktest\epoch_2.pth',
-    "resume": True,  # Automatically resume from last available epoch if no resume_from/load_from specified
+    "resume": False,  # Automatically resume from last available epoch if no resume_from/load_from specified
     "test1_config": "configs/gcp/gcp_r50_kazgisa-kostanai.py",
-    # "test1_checkpoint": "work_dir\mask2former_training\mask2former_e1_lre-5_kostanai_afs_quicktest\epoch_6.pth",
+    "test1_checkpoint": "D:\Sagi\GCP\GCP\checkpoints\gcp_e5_lre-4_kostanai-afs_v1.pth",
     "test2_config": "configs/gcp/gcp_r50_kazgisa-kostanai.py",
     "test2_checkpoint": "checkpoints/gcp_r50_pretrained_12e_whu-mix-vector.pth",
     "gpus": 1,
@@ -51,7 +51,7 @@ def main():
         train_cmd += ['--cfg-options', f'load_from={CONFIG["load_from"]}']
     elif CONFIG.get("resume"):
          train_cmd += ['--resume']
-    run_command(train_cmd)
+    # run_command(train_cmd)
 
     # 2. Dynamically set test1_checkpoint to the last epoch checkpoint
     max_epochs = CONFIG.get("max_epochs", 10)
@@ -73,7 +73,7 @@ def main():
         '--show-dir', "visualizations",
         '--out', test1_metrics
     ]
-    # run_command(test1_cmd + ['--launcher', 'none'])
+    run_command(test1_cmd + ['--launcher', 'none'])
 
     # 4. Test 2
     test2_out_dir = os.path.join(run_dir, 'test2')
@@ -89,20 +89,20 @@ def main():
         '--show-dir', 'visualizations',
         '--out', test2_metrics
     ]
-    # run_command(test2_cmd + ['--launcher', 'none'])
+    run_command(test2_cmd + ['--launcher', 'none'])
 
     # 5. Comparison visualization
     directories = {
         "Test1": test1_vis_dir,
         "Test2": test2_vis_dir,
     }
-    # run_comparison_from_config(
-    #     directories=directories,
-    #     output_dir=comparison_dir,
-    #     show_image_width=CONFIG["show_image_width"],
-    #     limit=CONFIG["comparison_limit"],
-    #     save_comparisons=True
-    # )
+    run_comparison_from_config(
+        directories=directories,
+        output_dir=comparison_dir,
+        show_image_width=CONFIG["show_image_width"],
+        limit=CONFIG["comparison_limit"],
+        save_comparisons=True
+    )
 
 if __name__ == '__main__':
     main()

@@ -4,9 +4,10 @@ import os
 import json
 from pathlib import Path
 from datetime import datetime
+import argparse
 
-def chop_tiff_to_chunks(input_path, output_dir, chunk_size=(1024, 1024, 3), overlap=0, create_coco_json=True, 
-                       original_resolution=5.0, target_resolution=10.0):
+def chop_tiff_to_chunks(input_path, output_dir, chunk_size=(1024, 1024, 3), overlap=0, create_coco_json=False, 
+                       original_resolution=5.0, target_resolution=10.0, allow_partial_chunks=False):
     """
     Chop a TIFF image into chunks of specified size and save to output directory.
     
@@ -18,6 +19,7 @@ def chop_tiff_to_chunks(input_path, output_dir, chunk_size=(1024, 1024, 3), over
         create_coco_json (bool): Whether to create COCO-style JSON file
         original_resolution (float): Original resolution in cm/px (default: 5.0)
         target_resolution (float): Target resolution in cm/px (default: 10.0)
+        allow_partial_chunks (bool): Whether to allow saving partial (padded/black) chunks (default: False)
     
     Returns:
         tuple: (list of saved chunk file paths, path to JSON file if created)
@@ -34,21 +36,19 @@ def chop_tiff_to_chunks(input_path, output_dir, chunk_size=(1024, 1024, 3), over
     print(f"Original resolution: {original_resolution} cm/px")
     print(f"Target resolution: {target_resolution} cm/px")
     
-    # Calculate downscaling factor
+    # Calculate scale factor (from data_train_test_split.py logic)
+    # If original_resolution > target_resolution, image will be downscaled (lower resolution, fewer pixels)
     scale_factor = original_resolution / target_resolution
     print(f"Scale factor: {scale_factor}")
     
-    # Downscale the image if needed
+    # Resize only if scale_factor != 1.0
     if scale_factor != 1.0:
         original_height, original_width = img.shape[:2]
         new_height = int(original_height * scale_factor)
         new_width = int(original_width * scale_factor)
-        
-        print(f"Downscaling from {original_height}x{original_width} to {new_height}x{new_width}")
-        
-        # Use INTER_AREA for downscaling (best quality for shrinking)
+        print(f"Resizing from {original_height}x{original_width} to {new_height}x{new_width}")
         img = cv2.resize(img, (new_width, new_height), interpolation=cv2.INTER_AREA)
-        print(f"Downscaled image shape: {img.shape}")
+        print(f"Resized image shape: {img.shape}")
     
     # Get image dimensions after potential downscaling
     if len(img.shape) == 2:  # Grayscale
@@ -106,15 +106,26 @@ def chop_tiff_to_chunks(input_path, output_dir, chunk_size=(1024, 1024, 3), over
             chunk = img[start_row:end_row, start_col:end_col]
             
             # Pad chunk if it's smaller than target size
+            padded = False
             if chunk.shape[0] < chunk_height or chunk.shape[1] < chunk_width:
                 padded_chunk = np.zeros((chunk_height, chunk_width, channels), dtype=img.dtype)
                 padded_chunk[:chunk.shape[0], :chunk.shape[1]] = chunk
                 chunk = padded_chunk
+                padded = True
+            # If not allowing partial chunks and this chunk is padded, skip
+            if padded and not allow_partial_chunks:
+                print(f"Skipping partial (padded) chunk: {base_name}_chunk_{row:03d}_{col:03d}.TIF")
+                continue
             
-            # Generate filename
+            # Generate filename (prefix with base_name for uniqueness)
             base_name = Path(input_path).stem
             chunk_filename = f"{base_name}_chunk_{row:03d}_{col:03d}.TIF"
             chunk_path = os.path.join(output_dir, chunk_filename)
+            
+            # Caching: skip if file already exists
+            if os.path.exists(chunk_path):
+                print(f"Chunk already exists, skipping: {chunk_filename}")
+                continue
             
             # Save chunk
             cv2.imwrite(chunk_path, chunk)
@@ -216,14 +227,12 @@ def chop_tiff_advanced(input_path, output_dir, chunk_size=(1024, 1024, 3),
     
     original_shape = img.shape
     
-    # Calculate and apply downscaling
+    # Calculate and apply scale factor (from data_train_test_split.py logic)
     scale_factor = original_resolution / target_resolution
     if scale_factor != 1.0:
         original_height, original_width = img.shape[:2]
         new_height = int(original_height * scale_factor)
         new_width = int(original_width * scale_factor)
-        
-        # Use INTER_AREA for downscaling (best quality for shrinking)
         img = cv2.resize(img, (new_width, new_height), interpolation=cv2.INTER_AREA)
     
     # Handle channel conversion
@@ -323,44 +332,89 @@ def chop_tiff_advanced(input_path, output_dir, chunk_size=(1024, 1024, 3),
         'scale_factor': original_resolution / target_resolution
     }
 
-# Example usage
-if __name__ == "__main__":
-    # Basic usage
-    input_tiff = r"D:\Sagi\GCP\GCP\data\raw\Pavlodar_AFS_2019_22_11.tif"
-    output_directory = r"D:\Sagi\GCP\GCP\data\kazgisa-pavlodar-test"
-    
-    try:
-        # Simple chunking with resolution downscaling
-        saved_files, json_file = chop_tiff_to_chunks(
-            input_path=input_tiff,
+def process_directory_of_tiffs(input_dir, output_dir, chunk_size=(1024, 1024, 3), overlap=0, create_coco_json=False, original_resolution=5.0, target_resolution=10.0, allow_partial_chunks=False):
+    """
+    Process all .tif/.tiff files in a directory.
+    """
+    input_dir = Path(input_dir)
+    tiff_files = list(input_dir.glob('*.tif')) + list(input_dir.glob('*.tiff'))
+    if not tiff_files:
+        print(f"No .tif or .tiff files found in {input_dir}")
+        return []
+    results = []
+    for tiff_file in tiff_files:
+        print(f"\nProcessing {tiff_file}...")
+        try:
+            saved_files, json_file = chop_tiff_to_chunks(
+                input_path=str(tiff_file),
+                output_dir=output_dir,  # No subfolder
+                chunk_size=chunk_size,
+                overlap=overlap,
+                create_coco_json=create_coco_json,
+                original_resolution=original_resolution,
+                target_resolution=target_resolution,
+                allow_partial_chunks=allow_partial_chunks
+            )
+            results.append({'file': str(tiff_file), 'chunks': saved_files, 'json': json_file})
+            print(f"Created {len(saved_files)} chunks for {tiff_file.name}.")
+            if json_file:
+                print(f"COCO JSON: {json_file}")
+        except Exception as e:
+            print(f"Error processing {tiff_file}: {e}")
+    print(f"\nProcessed {len(results)} files from {input_dir}.")
+    return results
+
+if __name__ == "__main__": 
+    """
+    python tools/data_pipeline/misc/chip_tiff.py --input D:\Sagi\GCP\GCP\data\raw\images\shymkent --output D:\Sagi\GCP\GCP\data\shymkent\images --chunk_size 512 512 3 --overlap 0 --original_resolution 5.0 --target_resolution 30.0
+    """
+    parser = argparse.ArgumentParser(description="Chop TIFF(s) into chunks.")
+    parser.add_argument('--input', type=str, required=True, help='Input TIFF file or directory')
+    parser.add_argument('--output', type=str, required=True, help='Output directory for chunks')
+    parser.add_argument('--chunk_size', type=int, nargs=3, default=[512, 512, 3], help='Chunk size: H W C')
+    parser.add_argument('--overlap', type=int, default=0, help='Overlap between chunks in pixels')
+    parser.add_argument('--create_coco_json', action='store_true', help='Create COCO JSON for each file')
+    parser.add_argument('--original_resolution', type=float, default=5.0, help='Original resolution (cm/px)')
+    parser.add_argument('--target_resolution', type=float, default=30.0, help='Target resolution (cm/px)')
+    parser.add_argument('--allow_partial_chunks', action='store_true', help='Allow saving partial (padded/black) chunks (default: False)')
+    args = parser.parse_args()
+
+    input_path = args.input
+    output_directory = args.output
+    chunk_size = tuple(args.chunk_size)
+    overlap = args.overlap
+    create_coco_json = args.create_coco_json
+    original_resolution = args.original_resolution
+    target_resolution = args.target_resolution
+    allow_partial_chunks = args.allow_partial_chunks
+
+    if os.path.isdir(input_path):
+        print(f"Input is a directory. Processing all .tif/.tiff files in {input_path}...")
+        process_directory_of_tiffs(
+            input_dir=input_path,
             output_dir=output_directory,
-            chunk_size=(512, 512, 3),
-            overlap=0,
-            create_coco_json=True,
-            original_resolution=5.0,  # 5 cm/px
-            target_resolution=30    # 30 cm/px
+            chunk_size=chunk_size,
+            overlap=overlap,
+            create_coco_json=create_coco_json,
+            original_resolution=original_resolution,
+            target_resolution=target_resolution,
+            allow_partial_chunks=allow_partial_chunks
         )
-        
-        print(f"\nChunking complete! Created {len(saved_files)} chunks.")
-        if json_file:
-            print(f"Created COCO JSON file: {json_file}")
-        
-        # Advanced chunking with overlap and resolution change
-        # result = chop_tiff_advanced(
-        #     input_path=input_tiff,
-        #     output_dir="chunks_with_overlap",
-        #     chunk_size=(1024, 1024, 3),
-        #     overlap=128,
-        #     prefix="tile",
-        #     save_format="TIF",
-        #     create_coco_json=True,
-        #     original_resolution=5.0,
-        #     target_resolution=10.0
-        # )
-        # print(f"Advanced chunking: {result['total_chunks']} chunks created")
-        # print(f"Scale factor applied: {result['scale_factor']}")
-        # if result['json_path']:
-        #     print(f"JSON file created: {result['json_path']}")
-        
-    except Exception as e:
-        print(f"Error: {e}")
+    else:
+        print(f"Input is a file. Processing {input_path}...")
+        try:
+            saved_files, json_file = chop_tiff_to_chunks(
+                input_path=input_path,
+                output_dir=output_directory,
+                chunk_size=chunk_size,
+                overlap=overlap,
+                create_coco_json=create_coco_json,
+                original_resolution=original_resolution,
+                target_resolution=target_resolution,
+                allow_partial_chunks=allow_partial_chunks
+            )
+            print(f"\nChunking complete! Created {len(saved_files)} chunks.")
+            if json_file:
+                print(f"Created COCO JSON file: {json_file}")
+        except Exception as e:
+            print(f"Error: {e}")
