@@ -4,6 +4,8 @@ data_root = 'data/processed/multi-label-kostanai'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True
 )
+classes = ('building', 'road', 'vegetation')
+
 backend_args = None
 crop_size = (512, 512)
 
@@ -63,8 +65,8 @@ test_pipeline = [
 ]
 
 train_dataloader = dict(
-    batch_size=1,
-    num_workers=1,
+    batch_size=4,
+    num_workers=2,
     # persistent_workers=True,
     persistent_workers=False,
     sampler=dict(type='DefaultSampler', shuffle=True),

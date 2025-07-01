@@ -39,8 +39,8 @@ processed_gdf = None
 # =====================
 PIPELINE_CONFIGS = {
     'merge_kostanai_buildings': {
-        'gdb_dir': r"D:\Sagi\GCP\GCP\data\raw\labels\shymkent\buildings_shymkent_tiles_raw",
-        'output_dir': r"./data/raw/labels/shymkent/buildings_shymkent_tiles_merged/",
+        'gdb_dir': r"D:\Sagi\GCP\GCP\data\raw\labels\kostanai\buildings_kostanai_tiles_raw",
+        'output_dir': r"./data/raw/labels/kostanai/buildings_kostanai_tiles_merged/",
         'layer_name': "invsitibuild"
     },
     'process_kostanai_buildings': {

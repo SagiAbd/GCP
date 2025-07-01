@@ -8,6 +8,7 @@ from mmdet.apis import init_detector, inference_detector
 import json
 import numpy as np
 from pycocotools import mask as maskUtils
+import cv2
 
 def get_image_files(input_dir):
     input_dir = Path(input_dir)
@@ -65,11 +66,8 @@ def main():
         img = mmcv.imread(img_path)
         height, width = img.shape[:2]
         result = inference_detector(model, img)
-        
-        # Prepare image info
         file_name = os.path.basename(img_path)
         image_id = idx + 1
-        
         image_info.append({
             'id': image_id,
             'file_name': file_name,
@@ -77,45 +75,84 @@ def main():
             'height': height
         })
 
-        # Handle results - expecting (bbox_results, segm_results)
-        if isinstance(result, tuple) and len(result) == 2:
-            bbox_results, segm_results = result
-        else:
-            print(f"Warning: Unexpected result format for {file_name}")
-            continue
-
-        # Process detections (assuming single class - building)
-        class_id = 0  # Single class
-        if class_id < len(bbox_results) and class_id < len(segm_results):
-            bboxes = bbox_results[class_id]
-            polygons_list = segm_results[class_id]
-            
-            # Process each detection
-            for bbox, polygons in zip(bboxes, polygons_list):
-                score = float(bbox[4])
+        # Handle results - support both old and new MMDet formats
+        if hasattr(result, 'pred_instances'):
+            pred_instances = result.pred_instances
+            if len(pred_instances) == 0:
+                continue
+            bboxes = pred_instances.bboxes.cpu().numpy()
+            scores = pred_instances.scores.cpu().numpy()
+            labels = pred_instances.labels.cpu().numpy()
+            # Prefer polygons if present
+            has_polygons = hasattr(pred_instances, 'segmentations') and pred_instances.segmentations is not None
+            has_masks = hasattr(pred_instances, 'masks') and pred_instances.masks is not None
+            for i in range(len(bboxes)):
+                score = float(scores[i])
                 if score < args.score_thr:
                     continue
-                
-                # Convert bbox to COCO format [x, y, width, height]
-                x1, y1, x2, y2 = bbox[:4]
+                x1, y1, x2, y2 = bboxes[i]
                 bbox_coco = [float(x1), float(y1), float(x2 - x1), float(y2 - y1)]
-                
-                # Calculate exact polygon area
+                polygons = []
+                # 1. Use polygons from model if available
+                if has_polygons and pred_instances.segmentations[i] is not None and len(pred_instances.segmentations[i]) > 0:
+                    polygons = pred_instances.segmentations[i]
+                # 2. Fallback: convert mask to polygons
+                elif has_masks:
+                    mask_array = pred_instances.masks[i].cpu().numpy()
+                    mask_uint8 = (mask_array > 0.5).astype(np.uint8)
+                    contours, _ = cv2.findContours(mask_uint8, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                    for contour in contours:
+                        if len(contour) >= 3:
+                            polygon = contour.flatten().tolist()
+                            if len(polygon) >= 6:
+                                polygons.append(polygon)
+                if not polygons:
+                    print(f"Warning: No valid polygons for detection {i} in {file_name}")
+                    continue
                 area = calculate_polygon_area(polygons, height, width)
-                
-                # Create COCO annotation
                 coco_det = {
-                    'id': len(coco_results) + 1,  # Unique annotation ID
+                    'id': len(coco_results) + 1,
                     'image_id': image_id,
-                    'category_id': 1,  # Building class (1-based)
+                    'category_id': 1,
                     'bbox': bbox_coco,
                     'segmentation': polygons,
                     'area': area,
                     'score': score,
                     'iscrowd': 0
                 }
-                
                 coco_results.append(coco_det)
+        elif isinstance(result, tuple) and len(result) == 2:
+            # Old MMDet format (fallback)
+            class_id = 0
+            bbox_results, segm_results = result
+            if (segm_results is not None and class_id < len(bbox_results) and class_id < len(segm_results)):
+                bboxes_old = bbox_results[class_id]
+                polygons_list = segm_results[class_id]
+                for i, (bbox, polygons) in enumerate(zip(bboxes_old, polygons_list)):
+                    score = float(bbox[4])
+                    if score < args.score_thr:
+                        continue
+                    x1, y1, x2, y2 = bbox[:4]
+                    bbox_coco = [float(x1), float(y1), float(x2 - x1), float(y2 - y1)]
+                    # polygons_list is already polygons (from mask2poly)
+                    if not polygons or not any(len(poly) >= 6 for poly in polygons):
+                        # fallback: try to convert mask to polygon if possible (not implemented here)
+                        continue
+                    area = calculate_polygon_area(polygons, height, width)
+                    coco_det = {
+                        'id': len(coco_results) + 1,
+                        'image_id': image_id,
+                        'category_id': 1,
+                        'bbox': bbox_coco,
+                        'segmentation': polygons,
+                        'area': area,
+                        'score': score,
+                        'iscrowd': 0
+                    }
+                    coco_results.append(coco_det)
+        else:
+            print(f"Warning: Unsupported result format for {file_name}: {type(result)}")
+            continue
 
     # Create complete COCO-style output
     output_data = {

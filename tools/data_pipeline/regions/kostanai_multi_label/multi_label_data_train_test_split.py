@@ -17,6 +17,8 @@ from sklearn.model_selection import train_test_split
 import warnings
 from tqdm import tqdm
 import shutil
+import hashlib
+import random
 
 warnings.filterwarnings('ignore')
 
@@ -34,7 +36,8 @@ class OptimizedTIFFChunkerWithShapefiles:
                  val_split=0.15,
                  test_split=0.15,
                  min_valid_pixels=0.3,
-                 rewrite_output_dir=True):
+                 rewrite_output_dir=False,
+                 use_train_val_test=True):
         """
         Initialize the optimized TIFF chunker with shapefile integration.
         
@@ -51,7 +54,8 @@ class OptimizedTIFFChunkerWithShapefiles:
             val_split: Fraction of data for validation
             test_split: Fraction of data for testing
             min_valid_pixels: Minimum fraction of valid pixels in a chunk
-            rewrite_output_dir: If True, rewrite the output directory (default: True)
+            rewrite_output_dir: If True, DELETE existing output directory contents. WARNING: This will permanently delete all existing data! (default: False)
+            use_train_val_test: If True, create train/val/test structure. If False, preserve existing structure for custom splits.
         """
         self.tiff_dir = Path(tiff_dir)
         self.region_shapefile_path = region_shapefile_path
@@ -64,6 +68,7 @@ class OptimizedTIFFChunkerWithShapefiles:
         self.scale_factor = original_resolution / target_resolution
         self.min_valid_pixels = min_valid_pixels
         self.rewrite_output_dir = rewrite_output_dir
+        self.use_train_val_test = use_train_val_test
         
         # Split ratios
         self.train_split = train_split
@@ -72,23 +77,40 @@ class OptimizedTIFFChunkerWithShapefiles:
         
         # Create output directories with updated structure (only if output_dir is provided)
         if self.output_dir:
-            # Rewrite output directory if it exists and rewrite_output_dir is True
-            if self.rewrite_output_dir and self.output_dir.exists():
-                print(f"Rewriting contents of output directory: {self.output_dir}")
+            # Only rewrite output directory if explicitly requested AND we're using train/val/test structure
+            if self.use_train_val_test and self.rewrite_output_dir and self.output_dir.exists():
+                print(f"⚠️  WARNING: DELETING existing output directory: {self.output_dir}")
+                print("   This will permanently delete all existing data!")
+                print("   Set rewrite_output_dir=False to preserve existing data.")
                 shutil.rmtree(self.output_dir)
+            elif self.use_train_val_test and self.output_dir.exists() and not self.rewrite_output_dir:
+                print(f"📁 Using existing output directory: {self.output_dir}")
+                print("   Existing data will be preserved. Set rewrite_output_dir=True to delete and recreate.")
             
-            self.train_dir = self.output_dir / 'train'
-            self.val_dir = self.output_dir / 'val'
-            self.test_dir = self.output_dir / 'test'
-            
-            # Create image subdirectories
-            self.train_img_dir = self.train_dir / 'images'
-            self.val_img_dir = self.val_dir / 'images'
-            self.test_img_dir = self.test_dir / 'images'
-            
-            for dir_path in [self.train_dir, self.val_dir, self.test_dir,
-                            self.train_img_dir, self.val_img_dir, self.test_img_dir]:
-                dir_path.mkdir(parents=True, exist_ok=True)
+            # Only create train/val/test directories if we're using that structure
+            if self.use_train_val_test:
+                self.train_dir = self.output_dir / 'train'
+                self.val_dir = self.output_dir / 'val'
+                self.test_dir = self.output_dir / 'test'
+                
+                # Create image subdirectories
+                self.train_img_dir = self.train_dir / 'images'
+                self.val_img_dir = self.val_dir / 'images'
+                self.test_img_dir = self.test_dir / 'images'
+                
+                for dir_path in [self.train_dir, self.val_dir, self.test_dir,
+                                self.train_img_dir, self.val_img_dir, self.test_img_dir]:
+                    dir_path.mkdir(parents=True, exist_ok=True)
+            else:
+                # For custom splits, just ensure the base output directory exists
+                self.output_dir.mkdir(parents=True, exist_ok=True)
+                # Initialize these as None for custom splits
+                self.train_dir = None
+                self.val_dir = None
+                self.test_dir = None
+                self.train_img_dir = None
+                self.val_img_dir = None
+                self.test_img_dir = None
         
         # Load shapefiles and create spatial index
         self.region_gdf = None
@@ -109,16 +131,24 @@ class OptimizedTIFFChunkerWithShapefiles:
         self.transform_cache = {}
     
     def _init_coco_structure(self):
-        """Initialize COCO format structure with two categories."""
+        """Initialize COCO format structure."""
         return {
             "images": [],
             "annotations": [],
             "categories": [
-                {"supercategory": "building", "id": 1, "name": "residential"},
-                {"supercategory": "building", "id": 2, "name": "non-residential"}
+                {
+                    "supercategory": "building",
+                    "id": 0,
+                    "name": "residential"
+                },
+                {
+                    "supercategory": "building",
+                    "id": 1,
+                    "name": "non-residential"
+                }
             ],
             "info": {
-                "description": "Building segmentation dataset",
+                "description": "Residential and non-residential segmentation dataset",
                 "version": "1.0",
                 "year": datetime.now().year,
                 "contributor": "Optimized TIFF Chunker with Shapefiles",
@@ -329,20 +359,41 @@ class OptimizedTIFFChunkerWithShapefiles:
         """Get annotations for multiple chunks efficiently using spatial index."""
         # Query spatial index for all chunks at once
         all_chunk_polygons = [chunk['polygon'] for chunk in chunks_info]
+        
         for chunk_info in chunks_info:
             chunk_polygon = chunk_info['polygon']
             annotations = []
+            
+            # Use spatial index to find potential intersections
             possible_matches_idx = list(self.labels_tree.query(chunk_polygon))
+            
             if possible_matches_idx:
+                # Get actual intersections
                 possible_matches = self.labels_gdf.iloc[possible_matches_idx]
                 intersecting_labels = possible_matches[possible_matches.geometry.intersects(chunk_polygon)]
+                
                 for idx, label_row in intersecting_labels.iterrows():
                     try:
                         intersection = self._make_valid_geometry(label_row.geometry.intersection(chunk_polygon))
+                        
                         if intersection.is_empty:
                             continue
-                        building_type = label_row.get('building_type', 'non-residential')
-                        category_id = 1 if building_type == 'residential' else 2
+                        
+                        # Determine category_id from building_type
+                        building_type = label_row.get('building_type', None)
+                        if building_type is not None:
+                            if building_type == 'residential':
+                                category_id = 0
+                            else:
+                                category_id = 1
+                        else:
+                            # fallback: use name_usl if building_type missing
+                            name_usl = label_row.get('name_usl', '')
+                            if name_usl == 'Здания и сооружения жилые':
+                                category_id = 0
+                            else:
+                                category_id = 1
+                        
                         # Handle different geometry types
                         if intersection.geom_type == 'GeometryCollection':
                             for geom in intersection.geoms:
@@ -354,30 +405,36 @@ class OptimizedTIFFChunkerWithShapefiles:
                             for polygon in intersection.geoms:
                                 self._process_single_polygon_optimized(polygon, tiff_path, chunk_info, annotations, category_id)
                     except Exception as e:
-                        print(f"Annotation creation error: {e}")
                         continue
+            
             chunk_info['annotations'] = annotations
-            print(f"Chunk {chunk_info['filename']} got {len(annotations)} annotations")
     
     def _process_single_polygon_optimized(self, polygon, tiff_path, chunk_info, annotations, category_id):
         """Optimized polygon processing for annotation creation."""
         try:
+            # Convert polygon coordinates
             geo_coords = list(polygon.exterior.coords)
             pixel_coords = self._batch_geo_to_pixel_coords(tiff_path, [geo_coords])[0]
+            
+            # Adjust coordinates relative to chunk
             min_x, min_y = chunk_info['bounds'][:2]
             relative_coords = []
             for px_x, px_y in pixel_coords:
                 rel_x = (px_x - min_x) * self.scale_factor
                 rel_y = (px_y - min_y) * self.scale_factor
                 relative_coords.extend([rel_x, rel_y])
+            
+            # Calculate bbox and area
             x_coords = [relative_coords[i] for i in range(0, len(relative_coords), 2)]
             y_coords = [relative_coords[i] for i in range(1, len(relative_coords), 2)]
+            
             if len(x_coords) >= 3:  # Valid polygon
                 bbox_x = min(x_coords)
                 bbox_y = min(y_coords)
                 bbox_w = max(x_coords) - bbox_x
                 bbox_h = max(y_coords) - bbox_y
                 area = bbox_w * bbox_h
+                
                 annotation = {
                     "id": self.annotation_id_counter,
                     "image_id": None,  # Will be set later
@@ -387,10 +444,11 @@ class OptimizedTIFFChunkerWithShapefiles:
                     "bbox": [bbox_x, bbox_y, bbox_w, bbox_h],
                     "category_id": category_id
                 }
+                
                 annotations.append(annotation)
                 self.annotation_id_counter += 1
         except Exception as e:
-            print(f"Polygon annotation error: {e}")
+            pass
     
     def _process_tiff_file(self, tiff_path):
         if not self._check_tiff_region_overlap(tiff_path):
@@ -439,6 +497,9 @@ class OptimizedTIFFChunkerWithShapefiles:
             rows = (height - self.overlap) // step_height + (1 if (height - self.overlap) % step_height > 0 else 0)
             cols = (width - self.overlap) // step_width + (1 if (width - self.overlap) % step_width > 0 else 0)
 
+            # Create a hash of the TIFF path for unique chunk filenames
+            tiff_hash = hashlib.md5(str(tiff_path).encode()).hexdigest()[:8]
+
             chunks_info = []
             for row in range(rows):
                 for col in range(cols):
@@ -466,8 +527,8 @@ class OptimizedTIFFChunkerWithShapefiles:
                         padded_chunk[:chunk.shape[0], :chunk.shape[1]] = chunk
                         chunk = padded_chunk
 
-                    # Prepare chunk info
-                    chunk_filename = f"{Path(tiff_path).stem}_chunk_{row:03d}_{col:03d}.TIF"
+                    # Prepare chunk info with unique filename
+                    chunk_filename = f"{Path(tiff_path).stem}_{tiff_hash}_chunk_{row:03d}_{col:03d}.TIF"
                     chunks_info.append({
                         'filename': chunk_filename,
                         'chunk': chunk,
@@ -563,9 +624,10 @@ class OptimizedTIFFChunkerWithShapefiles:
     
     def process_all_tiffs(self):
         """Process all TIFF files in the directory."""
-        # Find all TIFF files
-        tiff_files = list(self.tiff_dir.glob('*.tif')) + list(self.tiff_dir.glob('*.TIF')) + \
-                    list(self.tiff_dir.glob('*.tiff')) + list(self.tiff_dir.glob('*.TIFF'))
+        # Find all TIFF files with exact extensions only (recursive)
+        tiff_files = []
+        for ext in ['.tif', '.TIF', '.tiff', '.TIFF']:
+            tiff_files.extend([f for f in self.tiff_dir.rglob(f'*{ext}') if f.name.endswith(ext)])
         
         print(f"Found {len(tiff_files)} TIFF files")
         
@@ -629,6 +691,155 @@ class OptimizedTIFFChunkerWithShapefiles:
             'coco_data': self.coco_data
         }
 
+    def process_custom_splits(self, split_sizes):
+        """
+        Custom split: Instead of train/val/test, create N splits (split0, split1, ...) with user-specified sizes.
+        Args:
+            split_sizes: List of fractions (e.g., [0.5, 0.3, 0.2]) or counts (e.g., [1000, 500, 500]) summing to 1.0 or total chunk count.
+        """
+        # Find all TIFF files with exact extensions only (recursive)
+        tiff_files = []
+        for ext in ['.tif', '.TIF', '.tiff', '.TIFF']:
+            tiff_files.extend([f for f in self.tiff_dir.rglob(f'*{ext}') if f.name.endswith(ext)])
+        print(f"Found {len(tiff_files)} TIFF files")
+        if len(tiff_files) == 0:
+            print("No TIFF files found!")
+            return
+        # Process all TIFF files
+        all_chunks = []
+        with tqdm(total=len(tiff_files), desc="Processing TIFF files") as pbar:
+            for tiff_path in tiff_files:
+                pbar.set_postfix_str(f"Processing {tiff_path.name}")
+                chunks = self._process_tiff_file(tiff_path)
+                all_chunks.extend(chunks)
+                pbar.update(1)
+        print(f"\nTotal chunks created: {len(all_chunks)}")
+        if len(all_chunks) == 0:
+            print("No valid chunks created!")
+            return
+        # Determine split indices
+        n_chunks = len(all_chunks)
+        # If split_sizes are fractions, convert to counts
+        if all(isinstance(s, float) and s <= 1.0 for s in split_sizes):
+            counts = [int(round(s * n_chunks)) for s in split_sizes]
+            # Adjust last count to ensure sum == n_chunks
+            counts[-1] += n_chunks - sum(counts)
+        else:
+            counts = split_sizes
+        assert sum(counts) == n_chunks, f"Split sizes {counts} do not sum to total chunks {n_chunks}"
+        # Shuffle chunks for randomness
+        random.seed(42)
+        random.shuffle(all_chunks)
+        # Prepare splits
+        splits = []
+        idx = 0
+        for count in counts:
+            splits.append(all_chunks[idx:idx+count])
+            idx += count
+        # Save each split
+        for i, split_chunks in enumerate(splits):
+            split_dir = self.output_dir / f'split{i}'
+            img_dir = split_dir / 'images'
+            img_dir.mkdir(parents=True, exist_ok=True)
+            # COCO structure
+            coco = self._init_coco_structure()
+            for chunk_info in split_chunks:
+                # Save image
+                chunk_path = img_dir / chunk_info['filename']
+                cv2.imwrite(str(chunk_path), chunk_info['chunk'])
+                # Add image entry
+                image_data = {
+                    "license": 4,
+                    "file_name": chunk_info['filename'],
+                    "coco_url": "",
+                    "height": self.chunk_size[0],
+                    "width": self.chunk_size[1],
+                    "date_captured": "",
+                    "flickr_url": "",
+                    "id": chunk_info['image_id']
+                }
+                coco['images'].append(image_data)
+                # Add annotations
+                for annotation in chunk_info['annotations']:
+                    annotation = annotation.copy()
+                    annotation['image_id'] = chunk_info['image_id']
+                    coco['annotations'].append(annotation)
+            # Save COCO JSON
+            json_path = split_dir / f'split{i}.json'
+            with open(json_path, 'w') as f:
+                json.dump(coco, f, indent=2)
+            print(f"Saved split {i}: {len(split_chunks)} images, {len(coco['annotations'])} annotations")
+        print("\nCustom splitting complete!")
+        return splits
+
+    def process_custom_splits_by_count(self, split_size=100):
+        """
+        Custom split: Instead of train/val/test, create splits (split0, split1, ...) with a fixed number of images per split.
+        Args:
+            split_size: Number of images per split (default: 100)
+        """
+        # Find all TIFF files with exact extensions only (recursive)
+        tiff_files = []
+        for ext in ['.tif', '.TIF', '.tiff', '.TIFF']:
+            tiff_files.extend([f for f in self.tiff_dir.rglob(f'*{ext}') if f.name.endswith(ext)])
+        print(f"Found {len(tiff_files)} TIFF files")
+        if len(tiff_files) == 0:
+            print("No TIFF files found!")
+            return
+        # Process all TIFF files
+        all_chunks = []
+        with tqdm(total=len(tiff_files), desc="Processing TIFF files") as pbar:
+            for tiff_path in tiff_files:
+                pbar.set_postfix_str(f"Processing {tiff_path.name}")
+                chunks = self._process_tiff_file(tiff_path)
+                all_chunks.extend(chunks)
+                pbar.update(1)
+        print(f"\nTotal chunks created: {len(all_chunks)}")
+        if len(all_chunks) == 0:
+            print("No valid chunks created!")
+            return
+        # Shuffle chunks for randomness
+        random.seed(42)
+        random.shuffle(all_chunks)
+        # Split into groups of split_size
+        n_chunks = len(all_chunks)
+        n_splits = (n_chunks + split_size - 1) // split_size
+        for i in range(n_splits):
+            split_chunks = all_chunks[i*split_size:(i+1)*split_size]
+            split_dir = self.output_dir / f'split{i}'
+            img_dir = split_dir / 'images'
+            img_dir.mkdir(parents=True, exist_ok=True)
+            # COCO structure
+            coco = self._init_coco_structure()
+            for chunk_info in split_chunks:
+                # Save image
+                chunk_path = img_dir / chunk_info['filename']
+                cv2.imwrite(str(chunk_path), chunk_info['chunk'])
+                # Add image entry
+                image_data = {
+                    "license": 4,
+                    "file_name": chunk_info['filename'],
+                    "coco_url": "",
+                    "height": self.chunk_size[0],
+                    "width": self.chunk_size[1],
+                    "date_captured": "",
+                    "flickr_url": "",
+                    "id": chunk_info['image_id']
+                }
+                coco['images'].append(image_data)
+                # Add annotations
+                for annotation in chunk_info['annotations']:
+                    annotation = annotation.copy()
+                    annotation['image_id'] = chunk_info['image_id']
+                    coco['annotations'].append(annotation)
+            # Save COCO JSON
+            json_path = split_dir / f'split{i}.json'
+            with open(json_path, 'w') as f:
+                json.dump(coco, f, indent=2)
+            print(f"Saved split {i}: {len(split_chunks)} images, {len(coco['annotations'])} annotations")
+        print("\nCustom splitting complete!")
+        return n_splits
+
 
 def main():
     # Configuration
@@ -644,18 +855,21 @@ def main():
         'val_split': 0.05,
         'test_split': 0.05,
         'min_valid_pixels': 0.3,
-        'rewrite_output_dir': True
+        'rewrite_output_dir': False,  # WARNING: Set to True only if you want to delete existing data!
+        'use_train_val_test': True
     }
     
     # Note: labels_gdf should be provided from the processed buildings data
     # This is just an example - in practice, you would pass the GeoDataFrame from the previous step
     print("Note: This script now requires labels_gdf to be passed as a parameter.")
     print("Please use this class from the main.py script or provide the GeoDataFrame directly.")
+    print("\n⚠️  WARNING: rewrite_output_dir=False by default to preserve existing data.")
+    print("   Set rewrite_output_dir=True only if you explicitly want to delete existing data!")
     
     # Example of how to use with a GeoDataFrame:
     # labels_gdf = gpd.read_file("path_to_processed_buildings.shp")
     # config['labels_gdf'] = labels_gdf
-    # config['rewrite_output_dir'] = True
+    # config['rewrite_output_dir'] = False  # Preserve existing data
     # chunker = OptimizedTIFFChunkerWithShapefiles(**config)
     # chunker.process_all_tiffs()
 
