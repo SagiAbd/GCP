@@ -75,7 +75,7 @@ train_dataloader = dict(
         pipeline=train_pipeline,
         backend_args=backend_args,
         ann_file='fgfgdsa/train/train.json',
-        data_prefix=dict(img='fgfgdsa/train/images'),
+        data_prefix=dict(img='gggggg/image'),
     )
 )
 
@@ -93,7 +93,7 @@ val_dataloader = dict(
         backend_args=backend_args,
         # ann_file='val/val.json',
         # data_prefix=dict(img='val/image'),
-        ann_file='whu-mix-vector-dataset-val/val.json',
+        ann_file='gggggg/train.json',
         data_prefix=dict(img='whu-mix-vector-dataset-val/image'),
         test_mode=True,
         # coco_ann_path = '../../Datasets/Dataset4EO/CrowdAI/0a5c561f-e361-4e9b-a3e2-94f42a003a2b_val/val/annotation.json',

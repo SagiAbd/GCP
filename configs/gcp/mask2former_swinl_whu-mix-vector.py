@@ -21,42 +21,42 @@ num_classes = num_things_classes + num_stuff_classes
 model = dict(
     type='Mask2Former',
     data_preprocessor=data_preprocessor,
-    # backbone=dict(
-    #     type='SwinTransformer',
-    #     frozen_stages=-1,
-    #     pretrain_img_size=384,
-    #     embed_dims=192,
-    #     patch_size=4,
-    #     window_size=12,
-    #     mlp_ratio=4,
-    #     depths=[2, 2, 18, 2],
-    #     num_heads=[6, 12, 24, 48],
-    #     qkv_bias=True,
-    #     qk_scale=None,
-    #     drop_rate=0.,
-    #     attn_drop_rate=0.,
-    #     drop_path_rate=0.3,
-    #     patch_norm=True,
-    #     out_indices=(0, 1, 2, 3),
-    #     with_cp=False,
-    #     convert_weights=True,
-    #     init_cfg=dict(type='Pretrained', checkpoint='https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_large_patch4_window12_384_22k.pth')
-    # ),
     backbone=dict(
-        type='ResNet',
-        depth=50,
-        num_stages=4,
+        type='SwinTransformer',
+        frozen_stages=-1,
+        pretrain_img_size=384,
+        embed_dims=192,
+        patch_size=4,
+        window_size=12,
+        mlp_ratio=4,
+        depths=[2, 2, 18, 2],
+        num_heads=[6, 12, 24, 48],
+        qkv_bias=True,
+        qk_scale=None,
+        drop_rate=0.,
+        attn_drop_rate=0.,
+        drop_path_rate=0.3,
+        patch_norm=True,
         out_indices=(0, 1, 2, 3),
-        frozen_stages=2,
-        norm_cfg=dict(type='BN', requires_grad=False),
-        norm_eval=True,
-        style='pytorch',
-        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50')
+        with_cp=False,
+        convert_weights=True,
+        init_cfg=dict(type='Pretrained', checkpoint='https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_large_patch4_window12_384_22k.pth')
     ),
+    # backbone=dict(
+    #     type='ResNet',
+    #     depth=50,
+    #     num_stages=4,
+    #     out_indices=(0, 1, 2, 3),
+    #     frozen_stages=2,
+    #     norm_cfg=dict(type='BN', requires_grad=False),
+    #     norm_eval=True,
+    #     style='pytorch',
+    #     init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50')
+    # ),
     panoptic_head=dict(
         type='Mask2FormerHead',
-        # in_channels=[192, 384, 768, 1536],  # Swin-L output channels
-        in_channels=[256, 512, 1024, 2048],  # pass to pixel_decoder inside
+        in_channels=[192, 384, 768, 1536],  # Swin-L output channels
+        # in_channels=[256, 512, 1024, 2048],  # pass to pixel_decoder inside
         strides=[4, 8, 16, 32],
         feat_channels=256,
         out_channels=256,

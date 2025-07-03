@@ -12,7 +12,7 @@ CONFIG = {
     "wandb_group": "mask2former_swin-l_training",
     "wandb_name": "mask2former_swin-l_e50_lre-4_whu-mix",
     "wandb_project": "building-segmentation-gcp",
-    "train_config": "configs/gcp/mask2former_swinl_whu-mix-vector.py",
+    "train_config": "configs/gcp/mask2former_r50_kazgisa-kostanai.py",
     "load_from": "checkpoints/mask2former_r50_pretrained_50e_whu-mix-vector.pth",
     # "resume_from": 'work_dir\mask2former_training\mask2former_e1_lre-5_kostanai_afs_quicktest\epoch_2.pth',
     "resume": False,  # Automatically resume from last available epoch if no resume_from/load_from specified
@@ -45,7 +45,7 @@ def main():
         '--wandb-group', CONFIG["wandb_group"],
         '--wandb-name', CONFIG["wandb_name"],
         '--wandb-project', CONFIG["wandb_project"],
-        '--amp'
+        # '--amp'
     ]
     if CONFIG.get("resume_from"):
         train_cmd += ['--resume', CONFIG["resume_from"]]
