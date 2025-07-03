@@ -195,12 +195,12 @@ optim_wrapper = dict(
             'level_embed': embed_multi,
         },
         norm_decay_mult=0.0),
-    clip_grad=dict(max_norm=1, norm_type=2))
+    clip_grad=dict(max_norm=0.1, norm_type=2))
 
 max_epochs=50
 param_scheduler = [
     dict(
-        type='LinearLR', start_factor=1e-6, by_epoch=False, begin=0,
+        type='LinearLR', start_factor=1e-5, by_epoch=False, begin=0,
         end=1000),
     dict(
         type='MultiStepLR',
