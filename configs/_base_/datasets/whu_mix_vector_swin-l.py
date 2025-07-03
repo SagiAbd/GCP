@@ -74,8 +74,8 @@ train_dataloader = dict(
         data_root=data_root,
         pipeline=train_pipeline,
         backend_args=backend_args,
-        ann_file='gggggg/train.json',
-        data_prefix=dict(img='gggggg/image'),
+        ann_file='fgfgdsa/train/train.json',
+        data_prefix=dict(img='fgfgdsa/train/images'),
     )
 )
 
