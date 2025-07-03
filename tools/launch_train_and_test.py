@@ -1,7 +1,8 @@
 import os
 import subprocess
 from vizualise.comparator import run_comparison_from_config
-
+import sys
+sys.path.insert(0, 'D:\Sagi\GCP\GCP')
 """
 $env:PYTHONPATH = "D:\Sagi\GCP\GCP"
 python tools/launch_train_and_test.py
