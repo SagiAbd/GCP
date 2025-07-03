@@ -1,0 +1,876 @@
+06/26 14:29:17 - mmengine - [4m[97mINFO[0m - Distributed training is not used, all SyncBatchNorm (SyncBN) layers in the model will be automatically reverted to BatchNormXd layers if they are used.
+06/26 14:29:17 - mmengine - [4m[97mINFO[0m - Hooks will be executed in the following order:
+before_run:
+(VERY_HIGH   ) RuntimeInfoHook
+(BELOW_NORMAL) LoggerHook
+ --------------------
+before_train:
+(VERY_HIGH   ) RuntimeInfoHook
+(NORMAL      ) IterTimerHook
+(VERY_LOW    ) CheckpointHook
+ --------------------
+before_train_epoch:
+(VERY_HIGH   ) RuntimeInfoHook
+(NORMAL      ) IterTimerHook
+(NORMAL      ) DistSamplerSeedHook
+ --------------------
+before_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook
+(NORMAL      ) IterTimerHook
+ --------------------
+after_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook
+(NORMAL      ) IterTimerHook
+(BELOW_NORMAL) LoggerHook
+(LOW         ) ParamSchedulerHook
+(VERY_LOW    ) CheckpointHook
+ --------------------
+after_train_epoch:
+(NORMAL      ) IterTimerHook
+(LOW         ) ParamSchedulerHook
+(VERY_LOW    ) CheckpointHook
+ --------------------
+before_val:
+(VERY_HIGH   ) RuntimeInfoHook
+ --------------------
+before_val_epoch:
+(NORMAL      ) IterTimerHook
+ --------------------
+before_val_iter:
+(NORMAL      ) IterTimerHook
+ --------------------
+after_val_iter:
+(NORMAL      ) IterTimerHook
+(NORMAL      ) TanmlhVisualizationHook
+(BELOW_NORMAL) LoggerHook
+ --------------------
+after_val_epoch:
+(VERY_HIGH   ) RuntimeInfoHook
+(NORMAL      ) IterTimerHook
+(BELOW_NORMAL) LoggerHook
+(LOW         ) ParamSchedulerHook
+(VERY_LOW    ) CheckpointHook
+ --------------------
+after_val:
+(VERY_HIGH   ) RuntimeInfoHook
+ --------------------
+after_train:
+(VERY_HIGH   ) RuntimeInfoHook
+(VERY_LOW    ) CheckpointHook
+ --------------------
+before_test:
+(VERY_HIGH   ) RuntimeInfoHook
+ --------------------
+before_test_epoch:
+(NORMAL      ) IterTimerHook
+ --------------------
+before_test_iter:
+(NORMAL      ) IterTimerHook
+ --------------------
+after_test_iter:
+(NORMAL      ) IterTimerHook
+(NORMAL      ) TanmlhVisualizationHook
+(BELOW_NORMAL) LoggerHook
+ --------------------
+after_test_epoch:
+(VERY_HIGH   ) RuntimeInfoHook
+(NORMAL      ) IterTimerHook
+(BELOW_NORMAL) LoggerHook
+ --------------------
+after_test:
+(VERY_HIGH   ) RuntimeInfoHook
+ --------------------
+after_run:
+(BELOW_NORMAL) LoggerHook
+ --------------------
+loading annotations into memory...
+Done (t=0.66s)
+creating index...
+index created!
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.conv1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.0.conv1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.0.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.0.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.0.conv2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.0.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.0.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.0.conv3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.0.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.0.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.0.downsample.0.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.0.downsample.1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.0.downsample.1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.1.conv1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.1.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.1.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.1.conv2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.1.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.1.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.1.conv3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.1.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.1.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.2.conv1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.2.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.2.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.2.conv2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.2.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.2.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.2.conv3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.2.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer1.2.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.0.conv1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.0.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.0.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.0.conv2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.0.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.0.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.0.conv3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.0.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.0.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.0.downsample.0.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.0.downsample.1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.0.downsample.1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.1.conv1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.1.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.1.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.1.conv2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.1.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.1.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.1.conv3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.1.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.1.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.2.conv1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.2.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.2.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.2.conv2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.2.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.2.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.2.conv3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.2.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.2.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.3.conv1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.3.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.3.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.3.conv2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.3.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.3.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.3.conv3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.3.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer2.3.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.conv1.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.conv1.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.conv1.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.conv1.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.0.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.0.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.conv2.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.conv2.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.conv2.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.conv2.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.0.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.0.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.conv3.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.conv3.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.conv3.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.conv3.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.0.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.0.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.downsample.0.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.downsample.0.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.downsample.0.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.0.downsample.0.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.0.downsample.1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.0.downsample.1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.1.conv1.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.1.conv1.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.1.conv1.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.1.conv1.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.1.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.1.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.1.conv2.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.1.conv2.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.1.conv2.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.1.conv2.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.1.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.1.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.1.conv3.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.1.conv3.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.1.conv3.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.1.conv3.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.1.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.1.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.2.conv1.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.2.conv1.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.2.conv1.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.2.conv1.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.2.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.2.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.2.conv2.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.2.conv2.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.2.conv2.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.2.conv2.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.2.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.2.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.2.conv3.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.2.conv3.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.2.conv3.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.2.conv3.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.2.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.2.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.3.conv1.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.3.conv1.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.3.conv1.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.3.conv1.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.3.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.3.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.3.conv2.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.3.conv2.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.3.conv2.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.3.conv2.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.3.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.3.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.3.conv3.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.3.conv3.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.3.conv3.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.3.conv3.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.3.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.3.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.4.conv1.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.4.conv1.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.4.conv1.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.4.conv1.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.4.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.4.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.4.conv2.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.4.conv2.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.4.conv2.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.4.conv2.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.4.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.4.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.4.conv3.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.4.conv3.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.4.conv3.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.4.conv3.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.4.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.4.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.5.conv1.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.5.conv1.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.5.conv1.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.5.conv1.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.5.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.5.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.5.conv2.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.5.conv2.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.5.conv2.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.5.conv2.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.5.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.5.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.5.conv3.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.5.conv3.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.5.conv3.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer3.5.conv3.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.5.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer3.5.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.conv1.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.conv1.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.conv1.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.conv1.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.0.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.0.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.conv2.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.conv2.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.conv2.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.conv2.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.0.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.0.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.conv3.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.conv3.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.conv3.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.conv3.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.0.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.0.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.downsample.0.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.downsample.0.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.downsample.0.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.0.downsample.0.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.0.downsample.1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.0.downsample.1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.1.conv1.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.1.conv1.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.1.conv1.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.1.conv1.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.1.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.1.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.1.conv2.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.1.conv2.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.1.conv2.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.1.conv2.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.1.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.1.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.1.conv3.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.1.conv3.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.1.conv3.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.1.conv3.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.1.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.1.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.2.conv1.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.2.conv1.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.2.conv1.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.2.conv1.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.2.bn1.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.2.bn1.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.2.conv2.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.2.conv2.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.2.conv2.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.2.conv2.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.2.bn2.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.2.bn2.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.2.conv3.weight:lr=1.0000000000000001e-07
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.2.conv3.weight:weight_decay=0.05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.2.conv3.weight:lr_mult=0.01
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- backbone.layer4.2.conv3.weight:decay_mult=1.0
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.2.bn3.weight is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [5m[4m[33mWARNING[0m - backbone.layer4.2.bn3.bias is skipped since its requires_grad=False
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.input_convs.0.gn.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.input_convs.0.gn.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.input_convs.1.gn.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.input_convs.1.gn.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.input_convs.2.gn.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.input_convs.2.gn.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.0.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.0.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.0.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.0.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.1.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.1.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.1.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.1.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.2.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.2.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.2.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.2.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.3.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.3.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.3.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.3.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.4.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.4.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.4.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.4.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.5.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.5.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.5.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.5.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.lateral_convs.0.gn.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.lateral_convs.0.gn.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.output_convs.0.gn.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.pixel_decoder.output_convs.0.gn.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.0.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.0.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.0.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.0.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.0.norms.2.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.0.norms.2.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.1.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.1.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.1.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.1.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.1.norms.2.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.1.norms.2.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.2.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.2.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.2.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.2.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.2.norms.2.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.2.norms.2.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.3.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.3.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.3.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.3.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.3.norms.2.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.3.norms.2.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.4.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.4.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.4.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.4.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.4.norms.2.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.4.norms.2.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.5.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.5.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.5.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.5.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.5.norms.2.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.5.norms.2.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.6.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.6.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.6.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.6.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.6.norms.2.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.6.norms.2.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.7.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.7.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.7.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.7.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.7.norms.2.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.7.norms.2.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.8.norms.0.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.8.norms.0.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.8.norms.1.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.8.norms.1.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.8.norms.2.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.layers.8.norms.2.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.post_norm.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.transformer_decoder.post_norm.bias:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.query_embed.weight:lr=1e-05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.query_embed.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.query_embed.weight:lr_mult=1.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.query_embed.weight:decay_mult=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.query_feat.weight:lr=1e-05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.query_feat.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.query_feat.weight:lr_mult=1.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.query_feat.weight:decay_mult=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.level_embed.weight:lr=1e-05
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.level_embed.weight:weight_decay=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.level_embed.weight:lr_mult=1.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - paramwise_options -- panoptic_head.level_embed.weight:decay_mult=0.0
+06/26 14:29:20 - mmengine - [4m[97mINFO[0m - LR is set based on batch size of 4 and the current batch size is 4. Scaling the original LR by 1.0.
+loading annotations into memory...
+Done (t=0.05s)
+creating index...
+index created!
+loading annotations into memory...
+Done (t=0.02s)
+creating index...
+index created!
+06/26 14:29:23 - mmengine - [4m[97mINFO[0m - load model from: torchvision://resnet50
+06/26 14:29:23 - mmengine - [4m[97mINFO[0m - Loads checkpoint by torchvision backend from path: torchvision://resnet50
+06/26 14:29:23 - mmengine - [5m[4m[33mWARNING[0m - The model and loaded state dict do not match exactly
+
+unexpected key in source state_dict: fc.weight, fc.bias
+
+06/26 14:29:23 - mmengine - [4m[97mINFO[0m - Auto resumed from the latest checkpoint D:\Sagi\GCP\GCP\work_dir\mask2former_training\mask2former_e1_lre-5_kostanai_afs_quicktest\epoch_7.pth.
+Loads checkpoint by local backend from path: D:\Sagi\GCP\GCP\work_dir\mask2former_training\mask2former_e1_lre-5_kostanai_afs_quicktest\epoch_7.pth
+06/26 14:29:30 - mmengine - [4m[97mINFO[0m - Load checkpoint from D:\Sagi\GCP\GCP\work_dir\mask2former_training\mask2former_e1_lre-5_kostanai_afs_quicktest\epoch_7.pth
+06/26 14:29:30 - mmengine - [4m[97mINFO[0m - resumed epoch: 7, iter: 3297
+06/26 14:29:30 - mmengine - [5m[4m[33mWARNING[0m - "FileClient" will be deprecated in future. Please use io functions in https://mmengine.readthedocs.io/en/latest/api/fileio.html#file-io
+06/26 14:29:30 - mmengine - [5m[4m[33mWARNING[0m - "HardDiskBackend" is the alias of "LocalBackend" and the former will be deprecated in future.
+06/26 14:29:30 - mmengine - [4m[97mINFO[0m - Checkpoints will be saved to D:\Sagi\GCP\GCP\work_dir\mask2former_training\mask2former_e1_lre-5_kostanai_afs_quicktest.
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\torch\functional.py:512: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at C:\cb\pytorch_1000000000000\work\aten\src\ATen\native\TensorShape.cpp:3588.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+06/26 14:29:53 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][ 10/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:55:06  time: 2.3570  data_time: 0.8276  memory: 5970  grad_norm: 19.7836  loss: 1.0565  loss_cls: 0.2466  loss_mask: 0.0599  loss_dice: 0.7501
+06/26 14:30:11 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][ 20/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:47:44  time: 1.7556  data_time: 0.0031  memory: 5963  grad_norm: 70.9462  loss: 1.1072  loss_cls: 0.2464  loss_mask: 0.0647  loss_dice: 0.7961
+06/26 14:30:28 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][ 30/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:44:50  time: 1.7238  data_time: 0.0019  memory: 6112  grad_norm: 18.3132  loss: 1.1923  loss_cls: 0.3047  loss_mask: 0.0618  loss_dice: 0.8258
+06/26 14:30:45 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][ 40/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:43:08  time: 1.7047  data_time: 0.0065  memory: 6265  grad_norm: 30.2350  loss: 1.1854  loss_cls: 0.2632  loss_mask: 0.0665  loss_dice: 0.8557
+06/26 14:31:01 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][ 50/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:41:38  time: 1.6248  data_time: 0.0047  memory: 5679  grad_norm: 19.2985  loss: 1.0973  loss_cls: 0.2120  loss_mask: 0.0950  loss_dice: 0.7904
+06/26 14:31:18 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][ 60/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:40:41  time: 1.6591  data_time: 0.0034  memory: 5845  grad_norm: 12.3762  loss: 1.1914  loss_cls: 0.2779  loss_mask: 0.0738  loss_dice: 0.8397
+06/26 14:31:34 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][ 70/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:39:52  time: 1.6443  data_time: 0.0016  memory: 5971  grad_norm: 47.3342  loss: 1.1431  loss_cls: 0.2243  loss_mask: 0.0827  loss_dice: 0.8361
+06/26 14:31:51 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][ 80/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:39:14  time: 1.6626  data_time: 0.0039  memory: 5985  grad_norm: 39.0731  loss: 1.1352  loss_cls: 0.2700  loss_mask: 0.1042  loss_dice: 0.7609
+06/26 14:32:07 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][ 90/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:38:40  time: 1.6533  data_time: 0.0027  memory: 6014  grad_norm: 29.3263  loss: 1.2342  loss_cls: 0.2652  loss_mask: 0.1062  loss_dice: 0.8629
+06/26 14:32:24 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][100/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:38:08  time: 1.6474  data_time: 0.0021  memory: 5780  grad_norm: 24.7176  loss: 1.0907  loss_cls: 0.2346  loss_mask: 0.0821  loss_dice: 0.7740
+06/26 14:32:41 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][110/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:37:44  time: 1.6851  data_time: 0.0025  memory: 5920  grad_norm: 8.8245  loss: 1.1726  loss_cls: 0.2621  loss_mask: 0.1058  loss_dice: 0.8047
+06/26 14:32:58 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][120/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:37:20  time: 1.6763  data_time: 0.0019  memory: 6286  grad_norm: 21.1300  loss: 1.0673  loss_cls: 0.2691  loss_mask: 0.0777  loss_dice: 0.7204
+06/26 14:33:14 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][130/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:36:58  time: 1.6879  data_time: 0.0058  memory: 5889  grad_norm: 19.3495  loss: 1.2739  loss_cls: 0.2845  loss_mask: 0.0846  loss_dice: 0.9048
+06/26 14:33:32 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][140/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:36:42  time: 1.7405  data_time: 0.0038  memory: 6558  grad_norm: 20.6702  loss: 1.2215  loss_cls: 0.3008  loss_mask: 0.0781  loss_dice: 0.8427
+06/26 14:33:49 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][150/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:36:22  time: 1.7012  data_time: 0.0055  memory: 6228  grad_norm: 11.4951  loss: 1.2621  loss_cls: 0.2720  loss_mask: 0.0881  loss_dice: 0.9021
+06/26 14:34:06 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][160/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:36:02  time: 1.6856  data_time: 0.0046  memory: 5831  grad_norm: 33.0868  loss: 1.1598  loss_cls: 0.2419  loss_mask: 0.0799  loss_dice: 0.8380
+06/26 14:34:23 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][170/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:35:42  time: 1.6962  data_time: 0.0015  memory: 6728  grad_norm: 14.6811  loss: 1.1598  loss_cls: 0.2573  loss_mask: 0.0874  loss_dice: 0.8151
+06/26 14:34:40 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][180/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:35:25  time: 1.7225  data_time: 0.0022  memory: 6104  grad_norm: 33.7723  loss: 1.2014  loss_cls: 0.2863  loss_mask: 0.1036  loss_dice: 0.8115
+06/26 14:34:58 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][190/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:35:11  time: 1.7730  data_time: 0.0018  memory: 6067  grad_norm: 18.8733  loss: 1.1477  loss_cls: 0.2564  loss_mask: 0.0750  loss_dice: 0.8163
+06/26 14:35:15 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][200/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:34:51  time: 1.6916  data_time: 0.0045  memory: 6148  grad_norm: 15.9727  loss: 1.1373  loss_cls: 0.2486  loss_mask: 0.0804  loss_dice: 0.8083
+06/26 14:35:31 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][210/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:34:30  time: 1.6455  data_time: 0.0017  memory: 6000  grad_norm: 35.7616  loss: 1.0504  loss_cls: 0.2181  loss_mask: 0.0868  loss_dice: 0.7455
+06/26 14:35:48 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][220/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:34:12  time: 1.7189  data_time: 0.0033  memory: 6227  grad_norm: 15.1687  loss: 1.1651  loss_cls: 0.2888  loss_mask: 0.0717  loss_dice: 0.8046
+06/26 14:36:05 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][230/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:33:52  time: 1.6608  data_time: 0.0045  memory: 5698  grad_norm: 18.7119  loss: 1.0345  loss_cls: 0.2546  loss_mask: 0.0747  loss_dice: 0.7053
+06/26 14:36:22 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][240/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:33:33  time: 1.6873  data_time: 0.0033  memory: 6176  grad_norm: 12.8298  loss: 1.2130  loss_cls: 0.2567  loss_mask: 0.1010  loss_dice: 0.8553
+06/26 14:36:39 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][250/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:33:19  time: 1.7663  data_time: 0.0694  memory: 5831  grad_norm: 19.7392  loss: 1.1934  loss_cls: 0.2652  loss_mask: 0.0970  loss_dice: 0.8311
+06/26 14:36:56 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][260/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:32:59  time: 1.6666  data_time: 0.0052  memory: 6169  grad_norm: 17.5433  loss: 1.0866  loss_cls: 0.2364  loss_mask: 0.0893  loss_dice: 0.7609
+06/26 14:37:13 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][270/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:32:42  time: 1.7174  data_time: 0.0059  memory: 6096  grad_norm: 28.3794  loss: 1.2333  loss_cls: 0.2745  loss_mask: 0.0784  loss_dice: 0.8804
+06/26 14:37:30 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][280/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:32:23  time: 1.6850  data_time: 0.0034  memory: 6413  grad_norm: 17.8919  loss: 1.0668  loss_cls: 0.2128  loss_mask: 0.0758  loss_dice: 0.7782
+06/26 14:37:47 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][290/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:32:06  time: 1.7051  data_time: 0.0033  memory: 6183  grad_norm: 18.9489  loss: 1.1758  loss_cls: 0.2906  loss_mask: 0.0709  loss_dice: 0.8143
+06/26 14:38:04 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][300/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:31:46  time: 1.6515  data_time: 0.0039  memory: 6154  grad_norm: 14.8029  loss: 1.1991  loss_cls: 0.2658  loss_mask: 0.0812  loss_dice: 0.8521
+06/26 14:38:20 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][310/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:31:25  time: 1.5921  data_time: 0.0055  memory: 5700  grad_norm: 9.6574  loss: 0.8187  loss_cls: 0.1619  loss_mask: 0.0687  loss_dice: 0.5882
+06/26 14:38:36 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][320/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:31:05  time: 1.6286  data_time: 0.0066  memory: 5919  grad_norm: 13.6429  loss: 1.0663  loss_cls: 0.2514  loss_mask: 0.0812  loss_dice: 0.7338
+06/26 14:38:53 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][330/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:30:47  time: 1.6827  data_time: 0.0033  memory: 6147  grad_norm: 7.9195  loss: 1.1760  loss_cls: 0.2503  loss_mask: 0.0739  loss_dice: 0.8518
+06/26 14:39:09 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][340/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:30:29  time: 1.6757  data_time: 0.0047  memory: 5904  grad_norm: 18.1216  loss: 1.1558  loss_cls: 0.2475  loss_mask: 0.0771  loss_dice: 0.8312
+06/26 14:39:26 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][350/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:30:10  time: 1.6230  data_time: 0.0039  memory: 5957  grad_norm: 14.1823  loss: 1.1810  loss_cls: 0.2302  loss_mask: 0.0898  loss_dice: 0.8610
+06/26 14:39:43 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][360/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:29:53  time: 1.7130  data_time: 0.0012  memory: 6176  grad_norm: 15.0657  loss: 1.1956  loss_cls: 0.2526  loss_mask: 0.0773  loss_dice: 0.8657
+06/26 14:39:59 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][370/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:29:34  time: 1.6369  data_time: 0.0028  memory: 6169  grad_norm: 39.8609  loss: 1.2446  loss_cls: 0.3146  loss_mask: 0.0853  loss_dice: 0.8447
+06/26 14:40:16 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][380/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:29:17  time: 1.7164  data_time: 0.0017  memory: 6316  grad_norm: 16.6335  loss: 1.1719  loss_cls: 0.2499  loss_mask: 0.0793  loss_dice: 0.8427
+06/26 14:40:33 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][390/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:28:59  time: 1.6524  data_time: 0.0069  memory: 5904  grad_norm: 11.1634  loss: 1.1409  loss_cls: 0.2516  loss_mask: 0.0803  loss_dice: 0.8091
+06/26 14:40:49 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][400/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:28:41  time: 1.6497  data_time: 0.0054  memory: 5831  grad_norm: 23.8881  loss: 1.3091  loss_cls: 0.3271  loss_mask: 0.1019  loss_dice: 0.8801
+06/26 14:41:06 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][410/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:28:23  time: 1.6600  data_time: 0.0048  memory: 6080  grad_norm: 16.5475  loss: 1.0852  loss_cls: 0.2354  loss_mask: 0.0868  loss_dice: 0.7630
+06/26 14:41:23 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][420/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:28:05  time: 1.6606  data_time: 0.0022  memory: 6139  grad_norm: 20.4416  loss: 1.1324  loss_cls: 0.2421  loss_mask: 0.0785  loss_dice: 0.8118
+06/26 14:41:39 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][430/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:27:47  time: 1.6432  data_time: 0.0033  memory: 5992  grad_norm: 28.5147  loss: 1.1530  loss_cls: 0.2452  loss_mask: 0.1400  loss_dice: 0.7678
+06/26 14:41:56 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][440/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:27:30  time: 1.6865  data_time: 0.0040  memory: 6360  grad_norm: 24.0135  loss: 1.0741  loss_cls: 0.2206  loss_mask: 0.0998  loss_dice: 0.7538
+06/26 14:42:12 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][450/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:27:12  time: 1.6644  data_time: 0.0024  memory: 5883  grad_norm: 14.2656  loss: 1.1070  loss_cls: 0.2444  loss_mask: 0.0633  loss_dice: 0.7993
+06/26 14:42:30 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][460/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:26:55  time: 1.7155  data_time: 0.0062  memory: 6617  grad_norm: 12.7206  loss: 1.2003  loss_cls: 0.2568  loss_mask: 0.0732  loss_dice: 0.8703
+06/26 14:42:46 - mmengine - [4m[97mINFO[0m - Epoch(train)  [8][470/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:26:38  time: 1.6785  data_time: 0.0032  memory: 6161  grad_norm: 21.4383  loss: 1.2139  loss_cls: 0.2618  loss_mask: 0.0847  loss_dice: 0.8673
+06/26 14:42:48 - mmengine - [4m[97mINFO[0m - Exp name: mask2former_r50_kazgisa-kostanai_20250626_142901
+06/26 14:42:49 - mmengine - [4m[97mINFO[0m - Saving checkpoint at 8 epochs
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:625: UserWarning: The GeoDataFrame you are attempting to plot is empty. Nothing has been displayed.
+  ax = gdf.plot(color=face_colors, edgecolor=edge_colors, linewidth=1)
+06/26 14:43:28 - mmengine - [4m[97mINFO[0m - Epoch(val)  [8][10/53]    eta: 0:01:41  time: 2.3667  data_time: 1.3800  memory: 5519
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 14:43:41 - mmengine - [4m[97mINFO[0m - Epoch(val)  [8][20/53]    eta: 0:01:01  time: 1.3523  data_time: 0.4006  memory: 2335
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 14:43:54 - mmengine - [4m[97mINFO[0m - Epoch(val)  [8][30/53]    eta: 0:00:38  time: 1.2846  data_time: 0.3157  memory: 2335
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 14:44:08 - mmengine - [4m[97mINFO[0m - Epoch(val)  [8][40/53]    eta: 0:00:20  time: 1.3190  data_time: 0.3501  memory: 2335
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:625: UserWarning: The GeoDataFrame you are attempting to plot is empty. Nothing has been displayed.
+  ax = gdf.plot(color=face_colors, edgecolor=edge_colors, linewidth=1)
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 14:44:20 - mmengine - [4m[97mINFO[0m - Epoch(val)  [8][50/53]    eta: 0:00:04  time: 1.3758  data_time: 0.4188  memory: 2335
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 14:44:26 - mmengine - [4m[97mINFO[0m - Evaluating segm...
+Loading and preparing results...
+DONE (t=0.18s)
+creating index...
+index created!
+Running per image evaluation...
+Evaluate annotation type *segm*
+DONE (t=4.00s).
+Accumulating evaluation results...
+DONE (t=0.30s).
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=1000 ] = 0.528
+ Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=1000 ] = 0.777
+ Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=1000 ] = 0.585
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=1000 ] = 0.314
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=1000 ] = 0.677
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=1000 ] = 0.818
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=1000 ] = 0.616
+ Average Recall     (AR) @[ IoU=0.50      | area=   all | maxDets=1000 ] = 0.867
+ Average Recall     (AR) @[ IoU=0.75      | area=   all | maxDets=1000 ] = 0.683
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=1000 ] = 0.467
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=1000 ] = 0.726
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=1000 ] = 0.852
+06/26 14:44:30 - mmengine - [4m[97mINFO[0m - segm_mAP_copypaste: 0.528 0.777 0.585 0.314 0.677 0.818
+06/26 14:44:30 - mmengine - [4m[97mINFO[0m - Epoch(val) [8][53/53]    coco/segm_mAP: 0.5280  coco/segm_mAP_50: 0.7770  coco/segm_mAP_75: 0.5850  coco/segm_mAP_s: 0.3140  coco/segm_mAP_m: 0.6770  coco/segm_mAP_l: 0.8180  data_time: 0.5583  time: 1.5045
+06/26 14:44:56 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][ 10/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:26:35  time: 2.5120  data_time: 0.8224  memory: 5666  grad_norm: 121.4155  loss: 1.1078  loss_cls: 0.2390  loss_mask: 0.0908  loss_dice: 0.7780
+06/26 14:45:12 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][ 20/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:26:18  time: 1.6843  data_time: 0.0042  memory: 6323  grad_norm: 11.1447  loss: 1.1358  loss_cls: 0.1930  loss_mask: 0.0797  loss_dice: 0.8631
+06/26 14:45:29 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][ 30/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:26:01  time: 1.7120  data_time: 0.0033  memory: 5993  grad_norm: 10.6924  loss: 1.2065  loss_cls: 0.2938  loss_mask: 0.0784  loss_dice: 0.8343
+06/26 14:45:46 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][ 40/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:25:43  time: 1.6592  data_time: 0.0031  memory: 6103  grad_norm: 21.3001  loss: 1.1283  loss_cls: 0.2248  loss_mask: 0.0790  loss_dice: 0.8245
+06/26 14:46:03 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][ 50/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:25:24  time: 1.6485  data_time: 0.0042  memory: 5889  grad_norm: 85.2548  loss: 1.0832  loss_cls: 0.2220  loss_mask: 0.0632  loss_dice: 0.7979
+06/26 14:46:19 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][ 60/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:25:07  time: 1.6884  data_time: 0.0030  memory: 6235  grad_norm: 25.0489  loss: 1.0519  loss_cls: 0.2277  loss_mask: 0.0747  loss_dice: 0.7494
+06/26 14:46:36 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][ 70/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:24:50  time: 1.6847  data_time: 0.0019  memory: 6117  grad_norm: 25.2029  loss: 1.1590  loss_cls: 0.2340  loss_mask: 0.0787  loss_dice: 0.8463
+06/26 14:46:53 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][ 80/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:24:31  time: 1.6488  data_time: 0.0020  memory: 5867  grad_norm: 12.8974  loss: 1.0520  loss_cls: 0.2393  loss_mask: 0.0816  loss_dice: 0.7310
+06/26 14:47:10 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][ 90/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:24:15  time: 1.7160  data_time: 0.0025  memory: 6477  grad_norm: 29.1893  loss: 1.1696  loss_cls: 0.2627  loss_mask: 0.0868  loss_dice: 0.8202
+06/26 14:47:27 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][100/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:23:57  time: 1.6981  data_time: 0.0047  memory: 6455  grad_norm: 16.7146  loss: 1.1862  loss_cls: 0.2728  loss_mask: 0.0645  loss_dice: 0.8490
+06/26 14:47:44 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][110/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:23:40  time: 1.6687  data_time: 0.0034  memory: 5809  grad_norm: 22.5076  loss: 1.0931  loss_cls: 0.2199  loss_mask: 0.0708  loss_dice: 0.8024
+06/26 14:48:00 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][120/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:23:22  time: 1.6565  data_time: 0.0022  memory: 6272  grad_norm: 20.0471  loss: 1.1727  loss_cls: 0.2435  loss_mask: 0.1357  loss_dice: 0.7935
+06/26 14:48:16 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][130/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:23:04  time: 1.6236  data_time: 0.0033  memory: 5654  grad_norm: 19.5293  loss: 1.1154  loss_cls: 0.2401  loss_mask: 0.0834  loss_dice: 0.7919
+06/26 14:48:33 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][140/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:22:46  time: 1.6865  data_time: 0.0029  memory: 6227  grad_norm: 23.1499  loss: 1.0803  loss_cls: 0.2354  loss_mask: 0.0949  loss_dice: 0.7501
+06/26 14:48:50 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][150/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:22:29  time: 1.6644  data_time: 0.0053  memory: 5860  grad_norm: 46.3723  loss: 1.2921  loss_cls: 0.2673  loss_mask: 0.1204  loss_dice: 0.9044
+06/26 14:49:07 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][160/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:22:12  time: 1.6804  data_time: 0.0024  memory: 5794  grad_norm: 18.8290  loss: 1.1380  loss_cls: 0.2541  loss_mask: 0.0786  loss_dice: 0.8054
+06/26 14:49:24 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][170/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:21:54  time: 1.6810  data_time: 0.0032  memory: 6029  grad_norm: 26.2722  loss: 1.2589  loss_cls: 0.3068  loss_mask: 0.0816  loss_dice: 0.8706
+06/26 14:49:40 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][180/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:21:37  time: 1.6691  data_time: 0.0034  memory: 5882  grad_norm: 25.0747  loss: 1.1800  loss_cls: 0.2589  loss_mask: 0.0835  loss_dice: 0.8375
+06/26 14:49:57 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][190/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:21:20  time: 1.6760  data_time: 0.0076  memory: 6132  grad_norm: 26.4079  loss: 1.2650  loss_cls: 0.2827  loss_mask: 0.0837  loss_dice: 0.8986
+06/26 14:50:14 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][200/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:21:02  time: 1.6724  data_time: 0.0022  memory: 6052  grad_norm: 34.1720  loss: 1.1262  loss_cls: 0.2545  loss_mask: 0.0815  loss_dice: 0.7902
+06/26 14:50:31 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][210/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:20:45  time: 1.6854  data_time: 0.0025  memory: 6120  grad_norm: 15.6136  loss: 1.0797  loss_cls: 0.2101  loss_mask: 0.0588  loss_dice: 0.8108
+06/26 14:50:47 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][220/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:20:28  time: 1.6585  data_time: 0.0050  memory: 6412  grad_norm: 11.7690  loss: 1.1678  loss_cls: 0.2229  loss_mask: 0.0701  loss_dice: 0.8748
+06/26 14:51:03 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][230/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:20:10  time: 1.6091  data_time: 0.0031  memory: 5711  grad_norm: 19.9738  loss: 0.9486  loss_cls: 0.1926  loss_mask: 0.0584  loss_dice: 0.6976
+06/26 14:51:07 - mmengine - [4m[97mINFO[0m - Exp name: mask2former_r50_kazgisa-kostanai_20250626_142901
+06/26 14:51:20 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][240/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:19:52  time: 1.6712  data_time: 0.0031  memory: 5750  grad_norm: 17.2430  loss: 1.1524  loss_cls: 0.2418  loss_mask: 0.0772  loss_dice: 0.8334
+06/26 14:51:37 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][250/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:19:35  time: 1.6598  data_time: 0.0014  memory: 6544  grad_norm: 36.7137  loss: 1.1728  loss_cls: 0.2621  loss_mask: 0.0805  loss_dice: 0.8301
+06/26 14:51:53 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][260/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:19:17  time: 1.6101  data_time: 0.0051  memory: 5618  grad_norm: 15.1063  loss: 0.9776  loss_cls: 0.1709  loss_mask: 0.1087  loss_dice: 0.6981
+06/26 14:52:09 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][270/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:19:00  time: 1.6561  data_time: 0.0007  memory: 5993  grad_norm: 20.4906  loss: 1.1993  loss_cls: 0.2253  loss_mask: 0.0991  loss_dice: 0.8749
+06/26 14:52:26 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][280/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:18:42  time: 1.6420  data_time: 0.0052  memory: 5685  grad_norm: 14.9769  loss: 1.0464  loss_cls: 0.2124  loss_mask: 0.0826  loss_dice: 0.7515
+06/26 14:52:42 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][290/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:18:25  time: 1.6842  data_time: 0.0012  memory: 6008  grad_norm: 28.4678  loss: 1.0827  loss_cls: 0.2441  loss_mask: 0.0830  loss_dice: 0.7556
+06/26 14:52:59 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][300/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:18:08  time: 1.6909  data_time: 0.0032  memory: 6103  grad_norm: 159.3069  loss: 1.3011  loss_cls: 0.3164  loss_mask: 0.0850  loss_dice: 0.8997
+06/26 14:53:17 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][310/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:17:51  time: 1.7149  data_time: 0.0029  memory: 6088  grad_norm: 31.5887  loss: 1.1296  loss_cls: 0.2536  loss_mask: 0.0856  loss_dice: 0.7904
+06/26 14:53:33 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][320/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:17:34  time: 1.6658  data_time: 0.0058  memory: 5919  grad_norm: 15.9093  loss: 1.2776  loss_cls: 0.2413  loss_mask: 0.1000  loss_dice: 0.9364
+06/26 14:53:50 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][330/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:17:17  time: 1.6390  data_time: 0.0008  memory: 6052  grad_norm: 12.8040  loss: 1.0334  loss_cls: 0.2367  loss_mask: 0.0696  loss_dice: 0.7272
+06/26 14:54:06 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][340/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:17:00  time: 1.6790  data_time: 0.0043  memory: 6066  grad_norm: 19.4734  loss: 1.1956  loss_cls: 0.2629  loss_mask: 0.0758  loss_dice: 0.8570
+06/26 14:54:23 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][350/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:16:43  time: 1.6485  data_time: 0.0049  memory: 6051  grad_norm: 23.2518  loss: 1.1345  loss_cls: 0.2302  loss_mask: 0.0928  loss_dice: 0.8115
+06/26 14:54:40 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][360/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:16:26  time: 1.6945  data_time: 0.0018  memory: 6044  grad_norm: 39.2362  loss: 1.0481  loss_cls: 0.2428  loss_mask: 0.0638  loss_dice: 0.7414
+06/26 14:54:56 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][370/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:16:08  time: 1.6539  data_time: 0.0039  memory: 6206  grad_norm: 13.5336  loss: 1.0116  loss_cls: 0.2109  loss_mask: 0.0751  loss_dice: 0.7256
+06/26 14:55:13 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][380/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:15:52  time: 1.7097  data_time: 0.0015  memory: 6352  grad_norm: 67.4580  loss: 1.2222  loss_cls: 0.2846  loss_mask: 0.0840  loss_dice: 0.8536
+06/26 14:55:30 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][390/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:15:35  time: 1.6925  data_time: 0.0019  memory: 6089  grad_norm: 50.6221  loss: 1.2388  loss_cls: 0.3173  loss_mask: 0.0857  loss_dice: 0.8358
+06/26 14:55:47 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][400/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:15:18  time: 1.6913  data_time: 0.0063  memory: 6095  grad_norm: 20.5521  loss: 1.2811  loss_cls: 0.2653  loss_mask: 0.0811  loss_dice: 0.9347
+06/26 14:56:04 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][410/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:15:01  time: 1.7117  data_time: 0.0055  memory: 6316  grad_norm: 32.9747  loss: 1.1640  loss_cls: 0.2766  loss_mask: 0.0726  loss_dice: 0.8149
+06/26 14:56:21 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][420/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:14:44  time: 1.6666  data_time: 0.0048  memory: 5926  grad_norm: 21.9709  loss: 1.2527  loss_cls: 0.2659  loss_mask: 0.0879  loss_dice: 0.8989
+06/26 14:56:38 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][430/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:14:27  time: 1.7144  data_time: 0.0030  memory: 6434  grad_norm: 15.5807  loss: 1.1196  loss_cls: 0.2534  loss_mask: 0.0787  loss_dice: 0.7875
+06/26 14:56:55 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][440/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:14:10  time: 1.7002  data_time: 0.0047  memory: 6176  grad_norm: 14.5900  loss: 1.1726  loss_cls: 0.2660  loss_mask: 0.0683  loss_dice: 0.8383
+06/26 14:57:12 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][450/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:13:53  time: 1.6598  data_time: 0.0054  memory: 6119  grad_norm: 42.4054  loss: 1.1018  loss_cls: 0.2451  loss_mask: 0.0717  loss_dice: 0.7851
+06/26 14:57:29 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][460/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:13:36  time: 1.6828  data_time: 0.0035  memory: 6411  grad_norm: 19.3002  loss: 1.1772  loss_cls: 0.2839  loss_mask: 0.0670  loss_dice: 0.8263
+06/26 14:57:45 - mmengine - [4m[97mINFO[0m - Epoch(train)  [9][470/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:13:19  time: 1.6357  data_time: 0.0043  memory: 5816  grad_norm: 12.0193  loss: 1.1809  loss_cls: 0.2438  loss_mask: 0.0859  loss_dice: 0.8512
+06/26 14:57:47 - mmengine - [4m[97mINFO[0m - Exp name: mask2former_r50_kazgisa-kostanai_20250626_142901
+06/26 14:57:47 - mmengine - [4m[97mINFO[0m - Saving checkpoint at 9 epochs
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:625: UserWarning: The GeoDataFrame you are attempting to plot is empty. Nothing has been displayed.
+  ax = gdf.plot(color=face_colors, edgecolor=edge_colors, linewidth=1)
+06/26 14:58:19 - mmengine - [4m[97mINFO[0m - Epoch(val)  [9][10/53]    eta: 0:01:33  time: 2.1678  data_time: 1.1760  memory: 5245
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 14:58:32 - mmengine - [4m[97mINFO[0m - Epoch(val)  [9][20/53]    eta: 0:00:58  time: 1.3482  data_time: 0.3657  memory: 2335
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 14:58:45 - mmengine - [4m[97mINFO[0m - Epoch(val)  [9][30/53]    eta: 0:00:36  time: 1.2639  data_time: 0.3140  memory: 2335
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 14:58:58 - mmengine - [4m[97mINFO[0m - Epoch(val)  [9][40/53]    eta: 0:00:19  time: 1.2794  data_time: 0.3342  memory: 2335
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:625: UserWarning: The GeoDataFrame you are attempting to plot is empty. Nothing has been displayed.
+  ax = gdf.plot(color=face_colors, edgecolor=edge_colors, linewidth=1)
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 14:59:11 - mmengine - [4m[97mINFO[0m - Epoch(val)  [9][50/53]    eta: 0:00:04  time: 1.3391  data_time: 0.3686  memory: 2335
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 14:59:16 - mmengine - [4m[97mINFO[0m - Evaluating segm...
+Loading and preparing results...
+DONE (t=0.19s)
+creating index...
+index created!
+Running per image evaluation...
+Evaluate annotation type *segm*
+DONE (t=4.27s).
+Accumulating evaluation results...
+DONE (t=0.41s).
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=1000 ] = 0.531
+ Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=1000 ] = 0.780
+ Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=1000 ] = 0.589
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=1000 ] = 0.318
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=1000 ] = 0.679
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=1000 ] = 0.821
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=1000 ] = 0.617
+ Average Recall     (AR) @[ IoU=0.50      | area=   all | maxDets=1000 ] = 0.866
+ Average Recall     (AR) @[ IoU=0.75      | area=   all | maxDets=1000 ] = 0.686
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=1000 ] = 0.469
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=1000 ] = 0.726
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=1000 ] = 0.860
+06/26 14:59:21 - mmengine - [4m[97mINFO[0m - segm_mAP_copypaste: 0.531 0.780 0.589 0.318 0.679 0.821
+06/26 14:59:21 - mmengine - [4m[97mINFO[0m - Epoch(val) [9][53/53]    coco/segm_mAP: 0.5310  coco/segm_mAP_50: 0.7800  coco/segm_mAP_75: 0.5890  coco/segm_mAP_s: 0.3180  coco/segm_mAP_m: 0.6790  coco/segm_mAP_l: 0.8210  data_time: 0.5283  time: 1.4757
+06/26 14:59:47 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][ 10/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:13:04  time: 2.6174  data_time: 0.8877  memory: 6132  grad_norm: 33.1280  loss: 1.1901  loss_cls: 0.2663  loss_mask: 0.0845  loss_dice: 0.8393
+06/26 15:00:04 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][ 20/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:12:47  time: 1.6618  data_time: 0.0024  memory: 6220  grad_norm: 42.3340  loss: 1.0342  loss_cls: 0.2228  loss_mask: 0.0731  loss_dice: 0.7383
+06/26 15:00:21 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][ 30/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:12:30  time: 1.6669  data_time: 0.0041  memory: 6060  grad_norm: 78.6949  loss: 1.1959  loss_cls: 0.2391  loss_mask: 0.0841  loss_dice: 0.8727
+06/26 15:00:37 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][ 40/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:12:13  time: 1.6224  data_time: 0.0024  memory: 5728  grad_norm: 18.5661  loss: 1.0839  loss_cls: 0.2590  loss_mask: 0.0822  loss_dice: 0.7427
+06/26 15:00:53 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][ 50/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:11:55  time: 1.6489  data_time: 0.0029  memory: 5578  grad_norm: 11.7241  loss: 1.1049  loss_cls: 0.2537  loss_mask: 0.0771  loss_dice: 0.7741
+06/26 15:01:11 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][ 60/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:11:39  time: 1.7227  data_time: 0.0026  memory: 5612  grad_norm: 11.8817  loss: 1.1586  loss_cls: 0.2337  loss_mask: 0.0873  loss_dice: 0.8375
+06/26 15:01:27 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][ 70/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:11:21  time: 1.6861  data_time: 0.0042  memory: 6073  grad_norm: 33.9808  loss: 1.0767  loss_cls: 0.2280  loss_mask: 0.0720  loss_dice: 0.7767
+06/26 15:01:44 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][ 80/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:11:04  time: 1.6971  data_time: 0.0037  memory: 6073  grad_norm: 18.2666  loss: 1.1296  loss_cls: 0.2460  loss_mask: 0.1022  loss_dice: 0.7814
+06/26 15:02:01 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][ 90/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:10:47  time: 1.6912  data_time: 0.0035  memory: 5948  grad_norm: 23.4528  loss: 1.1897  loss_cls: 0.2699  loss_mask: 0.0905  loss_dice: 0.8292
+06/26 15:02:18 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][100/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:10:30  time: 1.6807  data_time: 0.0032  memory: 6198  grad_norm: 55.3074  loss: 1.1707  loss_cls: 0.2685  loss_mask: 0.0880  loss_dice: 0.8142
+06/26 15:02:35 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][110/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:10:13  time: 1.6971  data_time: 0.0020  memory: 6089  grad_norm: 26.3820  loss: 1.1523  loss_cls: 0.2611  loss_mask: 0.0941  loss_dice: 0.7970
+06/26 15:02:52 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][120/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:09:56  time: 1.7089  data_time: 0.0035  memory: 6096  grad_norm: 21.8761  loss: 1.1125  loss_cls: 0.2465  loss_mask: 0.0657  loss_dice: 0.8003
+06/26 15:03:09 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][130/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:09:39  time: 1.6395  data_time: 0.0061  memory: 5985  grad_norm: 55.4645  loss: 1.1994  loss_cls: 0.2705  loss_mask: 0.0811  loss_dice: 0.8478
+06/26 15:03:26 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][140/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:09:22  time: 1.7189  data_time: 0.0016  memory: 6008  grad_norm: 54.1506  loss: 1.1140  loss_cls: 0.2512  loss_mask: 0.0688  loss_dice: 0.7940
+06/26 15:03:43 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][150/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:09:05  time: 1.7052  data_time: 0.0028  memory: 5897  grad_norm: 31.6809  loss: 1.1289  loss_cls: 0.2567  loss_mask: 0.1072  loss_dice: 0.7650
+06/26 15:04:00 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][160/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:08:48  time: 1.7242  data_time: 0.0042  memory: 6191  grad_norm: 16.9243  loss: 1.1188  loss_cls: 0.2486  loss_mask: 0.0690  loss_dice: 0.8012
+06/26 15:04:17 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][170/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:08:31  time: 1.6581  data_time: 0.0038  memory: 5941  grad_norm: 48.1135  loss: 1.1001  loss_cls: 0.2574  loss_mask: 0.0841  loss_dice: 0.7587
+06/26 15:04:34 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][180/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:08:14  time: 1.7465  data_time: 0.0031  memory: 6441  grad_norm: 15.9192  loss: 1.2282  loss_cls: 0.2627  loss_mask: 0.0704  loss_dice: 0.8952
+06/26 15:04:51 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][190/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:07:57  time: 1.7002  data_time: 0.0033  memory: 5926  grad_norm: 17.2197  loss: 1.2290  loss_cls: 0.2884  loss_mask: 0.0975  loss_dice: 0.8431
+06/26 15:05:08 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][200/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:07:40  time: 1.6900  data_time: 0.0042  memory: 5993  grad_norm: 19.7715  loss: 1.0577  loss_cls: 0.2258  loss_mask: 0.0762  loss_dice: 0.7557
+06/26 15:05:25 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][210/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:07:23  time: 1.7066  data_time: 0.0057  memory: 5716  grad_norm: 84.0609  loss: 1.2142  loss_cls: 0.2356  loss_mask: 0.0956  loss_dice: 0.8830
+06/26 15:05:42 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][220/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:07:06  time: 1.7225  data_time: 0.0030  memory: 6338  grad_norm: 32.6650  loss: 1.2218  loss_cls: 0.2728  loss_mask: 0.0801  loss_dice: 0.8689
+06/26 15:06:00 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][230/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:06:49  time: 1.7412  data_time: 0.0045  memory: 6176  grad_norm: 30.4806  loss: 1.2499  loss_cls: 0.2840  loss_mask: 0.0892  loss_dice: 0.8767
+06/26 15:06:16 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][240/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:06:32  time: 1.6761  data_time: 0.0062  memory: 6044  grad_norm: 50.7961  loss: 1.0263  loss_cls: 0.1981  loss_mask: 0.0598  loss_dice: 0.7683
+06/26 15:06:33 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][250/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:06:15  time: 1.6516  data_time: 0.0043  memory: 5941  grad_norm: 10.1561  loss: 1.0880  loss_cls: 0.2164  loss_mask: 0.0641  loss_dice: 0.8075
+06/26 15:06:49 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][260/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:05:58  time: 1.6449  data_time: 0.0013  memory: 5763  grad_norm: 12.1224  loss: 1.2217  loss_cls: 0.2474  loss_mask: 0.0916  loss_dice: 0.8828
+06/26 15:07:07 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][270/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:05:41  time: 1.7439  data_time: 0.0016  memory: 6668  grad_norm: 33.5052  loss: 1.2328  loss_cls: 0.2983  loss_mask: 0.0869  loss_dice: 0.8476
+06/26 15:07:24 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][280/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:05:24  time: 1.7347  data_time: 0.0074  memory: 6721  grad_norm: 18.1961  loss: 1.1364  loss_cls: 0.2681  loss_mask: 0.0874  loss_dice: 0.7810
+06/26 15:07:41 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][290/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:05:07  time: 1.6984  data_time: 0.0037  memory: 5786  grad_norm: 9.7392  loss: 1.1726  loss_cls: 0.2482  loss_mask: 0.0828  loss_dice: 0.8416
+06/26 15:07:58 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][300/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:04:50  time: 1.6606  data_time: 0.0013  memory: 5809  grad_norm: 11.2294  loss: 1.1660  loss_cls: 0.2421  loss_mask: 0.0941  loss_dice: 0.8297
+06/26 15:08:14 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][310/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:04:33  time: 1.6649  data_time: 0.0024  memory: 6014  grad_norm: 17.4191  loss: 1.0359  loss_cls: 0.2334  loss_mask: 0.0621  loss_dice: 0.7405
+06/26 15:08:31 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][320/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:04:16  time: 1.6842  data_time: 0.0030  memory: 6103  grad_norm: 21.1532  loss: 1.2724  loss_cls: 0.2645  loss_mask: 0.0812  loss_dice: 0.9266
+06/26 15:08:49 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][330/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:03:59  time: 1.7605  data_time: 0.0029  memory: 6551  grad_norm: 12.6153  loss: 1.1968  loss_cls: 0.2834  loss_mask: 0.0820  loss_dice: 0.8315
+06/26 15:09:06 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][340/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:03:42  time: 1.7389  data_time: 0.0027  memory: 6080  grad_norm: 53.3099  loss: 1.1709  loss_cls: 0.2678  loss_mask: 0.0727  loss_dice: 0.8304
+06/26 15:09:23 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][350/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:03:25  time: 1.7058  data_time: 0.0012  memory: 5867  grad_norm: 15.3355  loss: 1.0762  loss_cls: 0.2188  loss_mask: 0.0648  loss_dice: 0.7926
+06/26 15:09:40 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][360/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:03:08  time: 1.6577  data_time: 0.0029  memory: 5684  grad_norm: 34.7167  loss: 1.0422  loss_cls: 0.2164  loss_mask: 0.0946  loss_dice: 0.7311
+06/26 15:09:57 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][370/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:02:51  time: 1.6664  data_time: 0.0031  memory: 6183  grad_norm: 38.7366  loss: 1.0167  loss_cls: 0.2301  loss_mask: 0.0701  loss_dice: 0.7165
+06/26 15:10:14 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][380/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:02:34  time: 1.6957  data_time: 0.0045  memory: 6405  grad_norm: 11.8817  loss: 1.1457  loss_cls: 0.2541  loss_mask: 0.0854  loss_dice: 0.8062
+06/26 15:10:30 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][390/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:02:17  time: 1.6749  data_time: 0.0026  memory: 6015  grad_norm: 9.9702  loss: 1.0107  loss_cls: 0.1708  loss_mask: 0.0832  loss_dice: 0.7566
+06/26 15:10:47 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][400/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:02:00  time: 1.6484  data_time: 0.0037  memory: 5846  grad_norm: 8.8690  loss: 1.0977  loss_cls: 0.1956  loss_mask: 0.0768  loss_dice: 0.8253
+06/26 15:11:03 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][410/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:01:43  time: 1.6450  data_time: 0.0017  memory: 6022  grad_norm: 27.0995  loss: 1.1756  loss_cls: 0.2540  loss_mask: 0.0676  loss_dice: 0.8539
+06/26 15:11:20 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][420/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:01:26  time: 1.6982  data_time: 0.0042  memory: 6097  grad_norm: 77.7900  loss: 0.9683  loss_cls: 0.1764  loss_mask: 0.0752  loss_dice: 0.7167
+06/26 15:11:37 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][430/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:01:09  time: 1.6688  data_time: 0.0027  memory: 5889  grad_norm: 11.8183  loss: 1.1856  loss_cls: 0.2654  loss_mask: 0.0714  loss_dice: 0.8489
+06/26 15:11:54 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][440/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:00:52  time: 1.7554  data_time: 0.0030  memory: 6176  grad_norm: 15.3154  loss: 1.3129  loss_cls: 0.3064  loss_mask: 0.0803  loss_dice: 0.9262
+06/26 15:12:11 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][450/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:00:35  time: 1.6725  data_time: 0.0062  memory: 6000  grad_norm: 20.5205  loss: 1.1429  loss_cls: 0.2206  loss_mask: 0.0864  loss_dice: 0.8359
+06/26 15:12:28 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][460/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:00:18  time: 1.6522  data_time: 0.0035  memory: 5605  grad_norm: 19.9554  loss: 0.9873  loss_cls: 0.1813  loss_mask: 0.0701  loss_dice: 0.7359
+06/26 15:12:45 - mmengine - [4m[97mINFO[0m - Epoch(train) [10][470/471]  base_lr: 1.0000e-05 lr: 1.0000e-07  eta: 0:00:01  time: 1.7004  data_time: 0.0028  memory: 6111  grad_norm: 15.3704  loss: 1.0321  loss_cls: 0.2142  loss_mask: 0.0729  loss_dice: 0.7450
+06/26 15:12:46 - mmengine - [4m[97mINFO[0m - Exp name: mask2former_r50_kazgisa-kostanai_20250626_142901
+06/26 15:12:47 - mmengine - [4m[97mINFO[0m - Saving checkpoint at 10 epochs
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:625: UserWarning: The GeoDataFrame you are attempting to plot is empty. Nothing has been displayed.
+  ax = gdf.plot(color=face_colors, edgecolor=edge_colors, linewidth=1)
+06/26 15:13:24 - mmengine - [4m[97mINFO[0m - Epoch(val) [10][10/53]    eta: 0:01:37  time: 2.2712  data_time: 1.2915  memory: 5577
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 15:13:36 - mmengine - [4m[97mINFO[0m - Epoch(val) [10][20/53]    eta: 0:00:59  time: 1.3134  data_time: 0.3620  memory: 2335
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 15:13:49 - mmengine - [4m[97mINFO[0m - Epoch(val) [10][30/53]    eta: 0:00:37  time: 1.2951  data_time: 0.3183  memory: 2335
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 15:14:03 - mmengine - [4m[97mINFO[0m - Epoch(val) [10][40/53]    eta: 0:00:20  time: 1.2853  data_time: 0.3321  memory: 2335
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:625: UserWarning: The GeoDataFrame you are attempting to plot is empty. Nothing has been displayed.
+  ax = gdf.plot(color=face_colors, edgecolor=edge_colors, linewidth=1)
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 15:14:15 - mmengine - [4m[97mINFO[0m - Epoch(val) [10][50/53]    eta: 0:00:04  time: 1.3239  data_time: 0.3706  memory: 2335
+D:\Sagi\GCP\GCP\mmdet\visualization\tanmlh_visualizer.py:729: UserWarning: Warning: The bbox is out of bounds, the drawn bbox may not be in the image
+  warnings.warn(
+C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py:831: UserWarning: Warning: The polygon is out of bounds, the drawn polygon may not be in the image
+  warnings.warn(
+06/26 15:14:20 - mmengine - [4m[97mINFO[0m - Evaluating segm...
+Loading and preparing results...
+DONE (t=0.18s)
+creating index...
+index created!
+Running per image evaluation...
+Evaluate annotation type *segm*
+DONE (t=3.99s).
+Accumulating evaluation results...
+DONE (t=0.31s).
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=1000 ] = 0.528
+ Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=1000 ] = 0.784
+ Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=1000 ] = 0.586
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=1000 ] = 0.309
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=1000 ] = 0.684
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=1000 ] = 0.824
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=1000 ] = 0.614
+ Average Recall     (AR) @[ IoU=0.50      | area=   all | maxDets=1000 ] = 0.870
+ Average Recall     (AR) @[ IoU=0.75      | area=   all | maxDets=1000 ] = 0.680
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=1000 ] = 0.456
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=1000 ] = 0.735
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=1000 ] = 0.853
+06/26 15:14:25 - mmengine - [4m[97mINFO[0m - segm_mAP_copypaste: 0.528 0.784 0.586 0.309 0.684 0.824
+06/26 15:14:25 - mmengine - [4m[97mINFO[0m - Epoch(val) [10][53/53]    coco/segm_mAP: 0.5280  coco/segm_mAP_50: 0.7840  coco/segm_mAP_75: 0.5860  coco/segm_mAP_s: 0.3090  coco/segm_mAP_m: 0.6840  coco/segm_mAP_l: 0.8240  data_time: 0.5499  time: 1.4931

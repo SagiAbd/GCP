@@ -93,7 +93,7 @@ def main():
                 'group': args.wandb_group,
                 'resume': 'never',
                 'allow_val_change': True,
-                # 'id': "uyfqo770"
+                # 'id': "uyfqo770"git
             },
             'save_dir': wandb_dir
         }

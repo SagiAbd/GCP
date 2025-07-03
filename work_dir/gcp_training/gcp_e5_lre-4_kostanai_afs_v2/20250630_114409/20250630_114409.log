@@ -1,0 +1,1263 @@
+2025/06/30 11:44:14 - mmengine - INFO - 
+------------------------------------------------------------
+System environment:
+    sys.platform: win32
+    Python: 3.10.18 | packaged by Anaconda, Inc. | (main, Jun  5 2025, 13:08:55) [MSC v.1929 64 bit (AMD64)]
+    CUDA available: True
+    MUSA available: False
+    numpy_random_seed: 733711484
+    GPU 0: NVIDIA GeForce GTX 1660
+    CUDA_HOME: C:\Users\Sagi\Miniconda3\envs\gcp-env\Library
+    NVCC: Not Available
+    MSVC: Оптимизирующий компилятор Microsoft (R) C/C++ версии 19.43.34810 для x64
+    GCC: n/a
+    PyTorch: 2.2.2+cu118
+    PyTorch compiling details: PyTorch built with:
+  - C++ Version: 201703
+  - MSVC 192930151
+  - Intel(R) Math Kernel Library Version 2020.0.2 Product Build 20200624 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v3.3.2 (Git Hash 2dc95a2ad0841e29db8b22fbccaf3e5da7992b01)
+  - OpenMP 2019
+  - LAPACK is enabled (usually provided by MKL)
+  - CPU capability usage: AVX2
+  - CUDA Runtime 11.8
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_90,code=sm_90;-gencode;arch=compute_37,code=compute_37
+  - CuDNN 8.7
+  - Magma 2.5.4
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.8, CUDNN_VERSION=8.7.0, CXX_COMPILER=C:/actions-runner/_work/pytorch/pytorch/builder/windows/tmp_bin/sccache-cl.exe, CXX_FLAGS=/DWIN32 /D_WINDOWS /GR /EHsc /Zc:__cplusplus /bigobj /FS /utf-8 -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DUSE_FBGEMM -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE /wd4624 /wd4068 /wd4067 /wd4267 /wd4661 /wd4717 /wd4244 /wd4804 /wd4273, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=2.2.2, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=OFF, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, 
+
+    TorchVision: 0.17.2+cu118
+    OpenCV: 4.11.0
+    MMEngine: 0.10.7
+
+Runtime environment:
+    cudnn_benchmark: False
+    mp_cfg: {'mp_start_method': 'fork', 'opencv_num_threads': 0}
+    dist_cfg: {'backend': 'nccl'}
+    seed: 733711484
+    Distributed launcher: none
+    Distributed training: False
+    GPU number: 1
+------------------------------------------------------------
+
+2025/06/30 11:44:15 - mmengine - INFO - Config:
+auto_scale_lr = dict(base_batch_size=4, enable=False)
+backend_args = None
+batch_augments = [
+    dict(
+        img_pad_value=0,
+        mask_pad_value=0,
+        pad_mask=True,
+        pad_seg=True,
+        seg_pad_value=255,
+        size=(
+            512,
+            512,
+        ),
+        type='BatchFixedSizePad'),
+]
+crop_size = (
+    512,
+    512,
+)
+data_preprocessor = dict(
+    batch_augments=[
+        dict(
+            img_pad_value=0,
+            mask_pad_value=0,
+            pad_mask=True,
+            pad_seg=True,
+            seg_pad_value=255,
+            size=(
+                512,
+                512,
+            ),
+            type='BatchFixedSizePad'),
+    ],
+    bgr_to_rgb=True,
+    mask_pad_value=0,
+    mean=[
+        123.675,
+        116.28,
+        103.53,
+    ],
+    pad_mask=True,
+    pad_seg=True,
+    pad_size_divisor=32,
+    seg_pad_value=255,
+    std=[
+        58.395,
+        57.12,
+        57.375,
+    ],
+    type='DetDataPreprocessor')
+data_root = 'data/kostanai'
+dataset_type = 'WHUMixVectorDataset'
+default_hooks = dict(
+    checkpoint=dict(
+        by_epoch=True,
+        interval=1,
+        max_keep_ckpts=3,
+        save_last=True,
+        type='CheckpointHook'),
+    logger=dict(interval=50, type='LoggerHook'),
+    param_scheduler=dict(type='ParamSchedulerHook'),
+    sampler_seed=dict(type='DistSamplerSeedHook'),
+    timer=dict(type='IterTimerHook'),
+    visualization=dict(
+        draw=True, interval=3, score_thr=0.6, type='TanmlhVisualizationHook'))
+default_scope = 'mmdet'
+embed_multi = dict(decay_mult=0.0, lr_mult=1.0)
+env_cfg = dict(
+    cudnn_benchmark=False,
+    dist_cfg=dict(backend='nccl'),
+    mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0))
+img_norm_cfg = dict(
+    mean=[
+        123.675,
+        116.28,
+        103.53,
+    ],
+    std=[
+        58.395,
+        57.12,
+        57.375,
+    ],
+    to_rgb=True)
+launcher = 'none'
+load_from = None
+log_level = 'INFO'
+log_processor = dict(by_epoch=True, type='LogProcessor', window_size=10)
+max_epochs = 8
+model = dict(
+    backbone=dict(
+        depth=50,
+        frozen_stages=-1,
+        init_cfg=dict(checkpoint='torchvision://resnet50', type='Pretrained'),
+        norm_cfg=dict(requires_grad=False, type='BN'),
+        norm_eval=True,
+        num_stages=4,
+        out_indices=(
+            0,
+            1,
+            2,
+            3,
+        ),
+        style='pytorch',
+        type='ResNet'),
+    data_preprocessor=dict(
+        bgr_to_rgb=True,
+        mask_pad_value=0,
+        mean=[
+            123.675,
+            116.28,
+            103.53,
+        ],
+        pad_mask=True,
+        pad_seg=True,
+        pad_size_divisor=32,
+        seg_pad_value=255,
+        std=[
+            58.395,
+            57.12,
+            57.375,
+        ],
+        type='DetDataPreprocessor'),
+    frozen_parameters=[
+        'backbone',
+        'panoptic_head.pixel_decoder',
+        'panoptic_head.transformer_decoder',
+        'panoptic_head.decoder_input_projs',
+        'panoptic_head.query_embed',
+        'panoptic_head.query_feat',
+        'panoptic_head.level_embed',
+        'panoptic_head.cls_embed',
+        'panoptic_head.mask_embed',
+    ],
+    init_cfg=None,
+    panoptic_fusion_head=dict(
+        init_cfg=None,
+        loss_panoptic=None,
+        num_stuff_classes=0,
+        num_things_classes=1,
+        type='PolyFormerFusionHeadV2'),
+    panoptic_head=dict(
+        dp_polygonize_head=dict(
+            init_cfg=None,
+            layer_cfg=dict(
+                cross_attn_cfg=dict(
+                    batch_first=True, dropout=0.0, embed_dims=256,
+                    num_heads=8),
+                ffn_cfg=dict(
+                    act_cfg=dict(inplace=True, type='ReLU'),
+                    embed_dims=256,
+                    feedforward_channels=2048,
+                    ffn_drop=0.0,
+                    num_fcs=2),
+                self_attn_cfg=dict(
+                    batch_first=True, dropout=0.0, embed_dims=256,
+                    num_heads=8)),
+            num_layers=3,
+            return_intermediate=True),
+        enforce_decoder_input_project=False,
+        feat_channels=256,
+        in_channels=[
+            256,
+            512,
+            1024,
+            2048,
+        ],
+        loss_cls=dict(
+            class_weight=[
+                1.0,
+                0.1,
+            ],
+            loss_weight=2.0,
+            reduction='mean',
+            type='CrossEntropyLoss',
+            use_sigmoid=False),
+        loss_dice=dict(
+            activate=True,
+            eps=1.0,
+            loss_weight=5.0,
+            naive_dice=True,
+            reduction='mean',
+            type='DiceLoss',
+            use_sigmoid=True),
+        loss_mask=dict(
+            loss_weight=5.0,
+            reduction='mean',
+            type='CrossEntropyLoss',
+            use_sigmoid=True),
+        loss_poly_ang=dict(
+            loss_weight=1.0, reduction='mean', type='SmoothL1Loss'),
+        loss_poly_reg=dict(
+            loss_weight=1.0, reduction='mean', type='SmoothL1Loss'),
+        num_queries=300,
+        num_stuff_classes=0,
+        num_things_classes=1,
+        num_transformer_feat_level=3,
+        out_channels=256,
+        pixel_decoder=dict(
+            act_cfg=dict(type='ReLU'),
+            encoder=dict(
+                layer_cfg=dict(
+                    ffn_cfg=dict(
+                        act_cfg=dict(inplace=True, type='ReLU'),
+                        embed_dims=256,
+                        feedforward_channels=1024,
+                        ffn_drop=0.0,
+                        num_fcs=2),
+                    self_attn_cfg=dict(
+                        batch_first=True,
+                        dropout=0.0,
+                        embed_dims=256,
+                        num_heads=8,
+                        num_levels=3,
+                        num_points=4)),
+                num_layers=6),
+            norm_cfg=dict(num_groups=32, type='GN'),
+            num_outs=3,
+            positional_encoding=dict(normalize=True, num_feats=128),
+            type='MSDeformAttnPixelDecoder'),
+        poly_cfg=dict(
+            align_iou_thre=0.5,
+            apply_angle_loss=True,
+            apply_prim_pred=True,
+            lam=4,
+            loss_weight_dp=0.01,
+            map_features=True,
+            mask_cls_thre=0.0,
+            max_align_dis=15,
+            max_match_dis=10,
+            max_offsets=5,
+            max_step_size=128,
+            num_cls_channels=2,
+            num_inter_points=64,
+            num_min_bins=32,
+            point_as_prim=True,
+            poly_decode_type='dp',
+            polygonize_mode='cv2_single_mask',
+            polygonized_scale=4.0,
+            pred_angle=False,
+            prim_cls_thre=0.1,
+            proj_gt=False,
+            reg_targets_type='vertice',
+            return_poly_json=False,
+            sample_points=True,
+            step_size=4,
+            stride_size=64,
+            use_coords_in_poly_feat=True,
+            use_decoded_feat_in_poly_feat=True,
+            use_gt_jsons=False,
+            use_ind_offset=True,
+            use_point_feat_in_poly_feat=True,
+            use_ref_rings=False),
+        positional_encoding=dict(normalize=True, num_feats=128),
+        strides=[
+            4,
+            8,
+            16,
+            32,
+        ],
+        transformer_decoder=dict(
+            init_cfg=None,
+            layer_cfg=dict(
+                cross_attn_cfg=dict(
+                    batch_first=True, dropout=0.0, embed_dims=256,
+                    num_heads=8),
+                ffn_cfg=dict(
+                    act_cfg=dict(inplace=True, type='ReLU'),
+                    embed_dims=256,
+                    feedforward_channels=2048,
+                    ffn_drop=0.0,
+                    num_fcs=2),
+                self_attn_cfg=dict(
+                    batch_first=True, dropout=0.0, embed_dims=256,
+                    num_heads=8)),
+            num_layers=9,
+            return_intermediate=True),
+        type='PolygonizerHead'),
+    test_cfg=dict(
+        filter_low_score=True,
+        instance_on=True,
+        iou_thr=0.8,
+        max_per_image=300,
+        panoptic_on=False,
+        score_thr=0.6,
+        semantic_on=False),
+    train_cfg=dict(
+        add_target_to_data_samples=True,
+        assigner=dict(
+            match_costs=[
+                dict(type='ClassificationCost', weight=2.0),
+                dict(
+                    type='CrossEntropyLossCost', use_sigmoid=True, weight=5.0),
+                dict(eps=1.0, pred_act=True, type='DiceCost', weight=5.0),
+            ],
+            type='HungarianAssigner'),
+        importance_sample_ratio=0.75,
+        num_points=12544,
+        oversample_ratio=3.0,
+        prim_assigner=dict(
+            match_costs=[
+                dict(type='PointL1Cost', weight=0.1),
+            ],
+            type='HungarianAssigner'),
+        sampler=dict(type='MaskPseudoSampler')),
+    type='PolyFormerV2')
+num_classes = 1
+num_stuff_classes = 0
+num_things_classes = 1
+optim_wrapper = dict(
+    clip_grad=dict(max_norm=0.01, norm_type=2),
+    optimizer=dict(
+        betas=(
+            0.9,
+            0.999,
+        ),
+        eps=1e-08,
+        lr=0.0001,
+        type='AdamW',
+        weight_decay=0.05),
+    paramwise_cfg=dict(
+        custom_keys=dict(
+            backbone=dict(decay_mult=1.0, lr_mult=0.1),
+            level_embed=dict(decay_mult=0.0, lr_mult=1.0),
+            query_embed=dict(decay_mult=0.0, lr_mult=1.0),
+            query_feat=dict(decay_mult=0.0, lr_mult=1.0)),
+        norm_decay_mult=0.0),
+    type='OptimWrapper')
+param_scheduler = [
+    dict(
+        begin=0,
+        by_epoch=True,
+        end=8,
+        gamma=0.1,
+        milestones=[
+            9,
+        ],
+        type='MultiStepLR'),
+]
+resume = True
+test_cfg = dict(type='TestLoop')
+test_dataloader = dict(
+    batch_size=1,
+    dataset=dict(
+        ann_file='test/test.json',
+        backend_args=None,
+        data_prefix=dict(img='test/images'),
+        data_root='data/kostanai',
+        pipeline=[
+            dict(backend_args=None, type='LoadImageFromFile'),
+            dict(keep_ratio=True, scale=(
+                512,
+                512,
+            ), type='Resize'),
+            dict(
+                poly2mask=False,
+                type='LoadAnnotations',
+                with_bbox=False,
+                with_mask=True,
+                with_poly_json=False),
+            dict(
+                meta_keys=(
+                    'img_id',
+                    'img_path',
+                    'ori_shape',
+                    'img_shape',
+                    'scale_factor',
+                ),
+                type='PackDetInputs'),
+        ],
+        test_mode=True,
+        type='WHUMixVectorDataset'),
+    drop_last=False,
+    num_workers=1,
+    persistent_workers=False,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+test_evaluator = [
+    dict(
+        ann_file='data/kostanai/test/test.json',
+        backend_args=None,
+        calculate_iou_ciou=True,
+        calculate_mta=True,
+        mask_type='polygon',
+        metric=[
+            'segm',
+        ],
+        score_thre=0.5,
+        type='CocoMetric'),
+]
+test_pipeline = [
+    dict(backend_args=None, type='LoadImageFromFile'),
+    dict(keep_ratio=True, scale=(
+        512,
+        512,
+    ), type='Resize'),
+    dict(
+        poly2mask=False,
+        type='LoadAnnotations',
+        with_bbox=False,
+        with_mask=True,
+        with_poly_json=False),
+    dict(
+        meta_keys=(
+            'img_id',
+            'img_path',
+            'ori_shape',
+            'img_shape',
+            'scale_factor',
+        ),
+        type='PackDetInputs'),
+]
+train_cfg = dict(max_epochs=8, type='EpochBasedTrainLoop', val_interval=1)
+train_dataloader = dict(
+    batch_sampler=dict(type='AspectRatioBatchSampler'),
+    batch_size=2,
+    dataset=dict(
+        ann_file='train/train.json',
+        backend_args=None,
+        data_prefix=dict(img='train/images'),
+        data_root='data/kostanai',
+        pipeline=[
+            dict(backend_args=None, type='LoadImageFromFile'),
+            dict(
+                poly2mask=False,
+                type='LoadAnnotations',
+                with_bbox=True,
+                with_mask=True,
+                with_poly_json=False),
+            dict(keep_ratio=True, scale=(
+                512,
+                512,
+            ), type='Resize'),
+            dict(
+                direction=[
+                    'horizontal',
+                    'vertical',
+                    'diagonal',
+                ],
+                prob=0.75,
+                type='RandomFlip'),
+            dict(prob=0.75, type='Rotate90'),
+            dict(
+                meta_keys=(
+                    'img_id',
+                    'img_path',
+                    'ori_shape',
+                    'img_shape',
+                    'scale_factor',
+                ),
+                type='PackDetInputs'),
+        ],
+        type='WHUMixVectorDataset'),
+    num_workers=2,
+    persistent_workers=False,
+    sampler=dict(shuffle=True, type='DefaultSampler'))
+train_pipeline = [
+    dict(backend_args=None, type='LoadImageFromFile'),
+    dict(
+        poly2mask=False,
+        type='LoadAnnotations',
+        with_bbox=True,
+        with_mask=True,
+        with_poly_json=False),
+    dict(keep_ratio=True, scale=(
+        512,
+        512,
+    ), type='Resize'),
+    dict(
+        direction=[
+            'horizontal',
+            'vertical',
+            'diagonal',
+        ],
+        prob=0.75,
+        type='RandomFlip'),
+    dict(prob=0.75, type='Rotate90'),
+    dict(
+        meta_keys=(
+            'img_id',
+            'img_path',
+            'ori_shape',
+            'img_shape',
+            'scale_factor',
+        ),
+        type='PackDetInputs'),
+]
+val_cfg = dict(type='ValLoop')
+val_dataloader = dict(
+    batch_size=2,
+    dataset=dict(
+        ann_file='val/val.json',
+        backend_args=None,
+        data_prefix=dict(img='val/images'),
+        data_root='data/kostanai',
+        pipeline=[
+            dict(backend_args=None, type='LoadImageFromFile'),
+            dict(keep_ratio=True, scale=(
+                512,
+                512,
+            ), type='Resize'),
+            dict(
+                poly2mask=False,
+                type='LoadAnnotations',
+                with_bbox=False,
+                with_mask=True,
+                with_poly_json=False),
+            dict(
+                meta_keys=(
+                    'img_id',
+                    'img_path',
+                    'ori_shape',
+                    'img_shape',
+                    'scale_factor',
+                ),
+                type='PackDetInputs'),
+        ],
+        test_mode=True,
+        type='WHUMixVectorDataset'),
+    drop_last=False,
+    num_workers=2,
+    persistent_workers=False,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+val_evaluator = [
+    dict(
+        ann_file='data/kostanai/val/val.json',
+        backend_args=None,
+        calculate_iou_ciou=True,
+        calculate_mta=True,
+        mask_type='polygon',
+        metric=[
+            'segm',
+        ],
+        score_thre=0.5,
+        type='CocoMetric'),
+]
+vis_backends = [
+    dict(
+        init_kwargs=dict(
+            allow_val_change=True,
+            group='gcp_training',
+            id='uyfqo770',
+            name='gcp_e5_lre-4_kostanai_afs_v2',
+            project='building-segmentation-gcp',
+            resume='must'),
+        save_dir='work_dir\\gcp_training\\gcp_e5_lre-4_kostanai_afs_v2\\wandb',
+        type='WandbVisBackend'),
+]
+visualizer = dict(
+    name='visualizer',
+    type='TanmlhVisualizer',
+    vis_backends=[
+        dict(
+            init_kwargs=dict(
+                allow_val_change=True,
+                group='gcp_training',
+                id='uyfqo770',
+                name='gcp_e5_lre-4_kostanai_afs_v2',
+                project='building-segmentation-gcp',
+                resume='must'),
+            save_dir=
+            'work_dir\\gcp_training\\gcp_e5_lre-4_kostanai_afs_v2\\wandb',
+            type='WandbVisBackend'),
+    ])
+work_dir = 'work_dir\\gcp_training\\gcp_e5_lre-4_kostanai_afs_v2'
+
+2025/06/30 11:44:21 - mmengine - INFO - Distributed training is not used, all SyncBatchNorm (SyncBN) layers in the model will be automatically reverted to BatchNormXd layers if they are used.
+2025/06/30 11:44:21 - mmengine - INFO - Hooks will be executed in the following order:
+before_run:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+before_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_train_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DistSamplerSeedHook                
+ -------------------- 
+before_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_train_epoch:
+(NORMAL      ) IterTimerHook                      
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_val_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_val_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_val_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) TanmlhVisualizationHook            
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_val_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_test_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_test_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_test_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) TanmlhVisualizationHook            
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_run:
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.0.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.0.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.0.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.0.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.0.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.0.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.downsample.0.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.downsample.0.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.downsample.0.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.0.downsample.0.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.0.downsample.1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.0.downsample.1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.1.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.1.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.1.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.1.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.1.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.1.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.1.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.1.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.1.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.1.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.1.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.1.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.1.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.1.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.1.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.1.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.1.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.1.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.2.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.2.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.2.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.2.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.2.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.2.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.2.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.2.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.2.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.2.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.2.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.2.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.2.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.2.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.2.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer1.2.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.2.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer1.2.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.0.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.0.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.0.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.0.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.0.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.0.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.downsample.0.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.downsample.0.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.downsample.0.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.0.downsample.0.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.0.downsample.1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.0.downsample.1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.1.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.1.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.1.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.1.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.1.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.1.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.1.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.1.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.1.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.1.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.1.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.1.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.1.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.1.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.1.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.1.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.1.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.1.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.2.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.2.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.2.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.2.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.2.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.2.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.2.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.2.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.2.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.2.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.2.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.2.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.2.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.2.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.2.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.2.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.2.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.2.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.3.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.3.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.3.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.3.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.3.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.3.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.3.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.3.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.3.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.3.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.3.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.3.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.3.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.3.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.3.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer2.3.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.3.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer2.3.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.0.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.0.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.0.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.0.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.0.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.0.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.downsample.0.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.downsample.0.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.downsample.0.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.0.downsample.0.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.0.downsample.1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.0.downsample.1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.1.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.1.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.1.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.1.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.1.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.1.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.1.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.1.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.1.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.1.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.1.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.1.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.1.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.1.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.1.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.1.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.1.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.1.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.2.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.2.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.2.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.2.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.2.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.2.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.2.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.2.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.2.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.2.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.2.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.2.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.2.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.2.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.2.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.2.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.2.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.2.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.3.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.3.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.3.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.3.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.3.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.3.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.3.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.3.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.3.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.3.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.3.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.3.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.3.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.3.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.3.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.3.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.3.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.3.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.4.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.4.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.4.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.4.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.4.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.4.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.4.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.4.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.4.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.4.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.4.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.4.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.4.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.4.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.4.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.4.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.4.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.4.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.5.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.5.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.5.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.5.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.5.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.5.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.5.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.5.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.5.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.5.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.5.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.5.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.5.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.5.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.5.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer3.5.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.5.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer3.5.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.0.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.0.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.0.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.0.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.0.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.0.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.downsample.0.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.downsample.0.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.downsample.0.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.0.downsample.0.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.0.downsample.1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.0.downsample.1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.1.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.1.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.1.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.1.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.1.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.1.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.1.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.1.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.1.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.1.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.1.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.1.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.1.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.1.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.1.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.1.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.1.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.1.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.2.conv1.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.2.conv1.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.2.conv1.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.2.conv1.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.2.bn1.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.2.bn1.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.2.conv2.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.2.conv2.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.2.conv2.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.2.conv2.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.2.bn2.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.2.bn2.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.2.conv3.weight:lr=1e-05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.2.conv3.weight:weight_decay=0.05
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.2.conv3.weight:lr_mult=0.1
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- backbone.layer4.2.conv3.weight:decay_mult=1.0
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.2.bn3.weight is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - WARNING - backbone.layer4.2.bn3.bias is skipped since its requires_grad=False
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.input_convs.0.gn.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.input_convs.0.gn.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.input_convs.1.gn.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.input_convs.1.gn.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.input_convs.2.gn.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.input_convs.2.gn.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.0.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.0.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.0.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.0.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.1.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.1.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.1.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.1.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.2.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.2.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.2.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.2.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.3.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.3.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.3.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.3.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.4.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.4.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.4.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.4.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.5.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.5.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.5.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.encoder.layers.5.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.lateral_convs.0.gn.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.lateral_convs.0.gn.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.output_convs.0.gn.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.pixel_decoder.output_convs.0.gn.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.0.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.0.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.0.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.0.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.0.norms.2.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.0.norms.2.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.1.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.1.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.1.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.1.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.1.norms.2.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.1.norms.2.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.2.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.2.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.2.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.2.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.2.norms.2.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.2.norms.2.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.3.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.3.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.3.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.3.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.3.norms.2.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.3.norms.2.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.4.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.4.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.4.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.4.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.4.norms.2.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.4.norms.2.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.5.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.5.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.5.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.5.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.5.norms.2.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.5.norms.2.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.6.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.6.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.6.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.6.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.6.norms.2.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.6.norms.2.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.7.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.7.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.7.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.7.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.7.norms.2.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.7.norms.2.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.8.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.8.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.8.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.8.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.8.norms.2.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.layers.8.norms.2.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.post_norm.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.transformer_decoder.post_norm.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.query_embed.weight:lr=0.0001
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.query_embed.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.query_embed.weight:lr_mult=1.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.query_embed.weight:decay_mult=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.query_feat.weight:lr=0.0001
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.query_feat.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.query_feat.weight:lr_mult=1.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.query_feat.weight:decay_mult=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.level_embed.weight:lr=0.0001
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.level_embed.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.level_embed.weight:lr_mult=1.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.level_embed.weight:decay_mult=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.mask_feat_proj.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.mask_feat_proj.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.mask_feat_proj.4.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.mask_feat_proj.4.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.0.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.0.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.0.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.0.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.0.norms.2.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.0.norms.2.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.1.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.1.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.1.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.1.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.1.norms.2.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.1.norms.2.bias:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.2.norms.0.weight:weight_decay=0.0
+2025/06/30 11:44:22 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.2.norms.0.bias:weight_decay=0.0
+2025/06/30 11:44:23 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.2.norms.1.weight:weight_decay=0.0
+2025/06/30 11:44:23 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.2.norms.1.bias:weight_decay=0.0
+2025/06/30 11:44:23 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.2.norms.2.weight:weight_decay=0.0
+2025/06/30 11:44:23 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.layers.2.norms.2.bias:weight_decay=0.0
+2025/06/30 11:44:23 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.post_norm.weight:weight_decay=0.0
+2025/06/30 11:44:23 - mmengine - INFO - paramwise_options -- panoptic_head.dp_polygonize_head.decoder.post_norm.bias:weight_decay=0.0
+2025/06/30 11:44:23 - mmengine - INFO - Frozen parameters: ['backbone', 'panoptic_head.pixel_decoder', 'panoptic_head.transformer_decoder', 'panoptic_head.decoder_input_projs', 'panoptic_head.query_embed', 'panoptic_head.query_feat', 'panoptic_head.level_embed', 'panoptic_head.cls_embed', 'panoptic_head.mask_embed']
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.mask_feat_proj.0.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.mask_feat_proj.0.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.mask_feat_proj.1.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.mask_feat_proj.1.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.mask_feat_proj.3.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.mask_feat_proj.3.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.mask_feat_proj.4.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.mask_feat_proj.4.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.mask_feat_proj.6.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.mask_feat_proj.6.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.self_attn.attn.in_proj_weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.self_attn.attn.in_proj_bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.self_attn.attn.out_proj.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.self_attn.attn.out_proj.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.cross_attn.attn.in_proj_weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.cross_attn.attn.in_proj_bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.cross_attn.attn.out_proj.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.cross_attn.attn.out_proj.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.ffn.layers.0.0.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.ffn.layers.0.0.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.ffn.layers.1.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.ffn.layers.1.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.norms.0.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.norms.0.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.norms.1.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.norms.1.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.norms.2.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.0.norms.2.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.self_attn.attn.in_proj_weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.self_attn.attn.in_proj_bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.self_attn.attn.out_proj.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.self_attn.attn.out_proj.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.cross_attn.attn.in_proj_weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.cross_attn.attn.in_proj_bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.cross_attn.attn.out_proj.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.cross_attn.attn.out_proj.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.ffn.layers.0.0.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.ffn.layers.0.0.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.ffn.layers.1.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.ffn.layers.1.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.norms.0.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.norms.0.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.norms.1.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.norms.1.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.norms.2.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.1.norms.2.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.self_attn.attn.in_proj_weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.self_attn.attn.in_proj_bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.self_attn.attn.out_proj.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.self_attn.attn.out_proj.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.cross_attn.attn.in_proj_weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.cross_attn.attn.in_proj_bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.cross_attn.attn.out_proj.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.cross_attn.attn.out_proj.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.ffn.layers.0.0.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.ffn.layers.0.0.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.ffn.layers.1.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.ffn.layers.1.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.norms.0.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.norms.0.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.norms.1.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.norms.1.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.norms.2.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.layers.2.norms.2.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.post_norm.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.decoder.post_norm.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.poly_reg_head.0.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.poly_reg_head.0.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.poly_reg_head.2.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.poly_reg_head.2.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.poly_reg_head.4.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.poly_reg_head.4.bias
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.poly_embed.weight
+2025/06/30 11:44:23 - mmengine - INFO - Training parameters: panoptic_head.dp_polygonize_head.poly_embed.bias
+2025/06/30 11:44:23 - mmengine - INFO - Auto resumed from the latest checkpoint D:\Sagi\GCP\GCP\work_dir\gcp_training\gcp_e5_lre-4_kostanai_afs_v2\epoch_1.pth.
+2025/06/30 11:44:27 - mmengine - INFO - Load checkpoint from D:\Sagi\GCP\GCP\work_dir\gcp_training\gcp_e5_lre-4_kostanai_afs_v2\epoch_1.pth
+2025/06/30 11:44:27 - mmengine - INFO - resumed epoch: 1, iter: 942
+2025/06/30 11:44:27 - mmengine - WARNING - "FileClient" will be deprecated in future. Please use io functions in https://mmengine.readthedocs.io/en/latest/api/fileio.html#file-io
+2025/06/30 11:44:27 - mmengine - WARNING - "HardDiskBackend" is the alias of "LocalBackend" and the former will be deprecated in future.
+2025/06/30 11:44:27 - mmengine - INFO - Checkpoints will be saved to D:\Sagi\GCP\GCP\work_dir\gcp_training\gcp_e5_lre-4_kostanai_afs_v2.
+2025/06/30 11:45:40 - mmengine - INFO - Epoch(train) [2][ 50/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:40:43  time: 1.5356  data_time: 0.0033  memory: 7974  grad_norm: 2.6045  loss: 17.9232  loss_cls: 0.2362  loss_mask: 0.0615  loss_dice: 0.8697  loss_poly_reg: 1.0870  loss_poly_ang: 0.9449  loss_dp: 0.4007  d0.loss_cls: 1.4147  d0.loss_mask: 0.1023  d0.loss_dice: 1.0635  d1.loss_cls: 0.4729  d1.loss_mask: 0.0843  d1.loss_dice: 1.0270  d2.loss_cls: 0.4418  d2.loss_mask: 0.0790  d2.loss_dice: 0.9719  d3.loss_cls: 0.3522  d3.loss_mask: 0.0672  d3.loss_dice: 0.9653  d4.loss_cls: 0.3198  d4.loss_mask: 0.0692  d4.loss_dice: 0.9596  d5.loss_cls: 0.2783  d5.loss_mask: 0.0650  d5.loss_dice: 0.9035  d6.loss_cls: 0.2694  d6.loss_mask: 0.0613  d6.loss_dice: 0.8416  d7.loss_cls: 0.2325  d7.loss_mask: 0.0612  d7.loss_dice: 0.8565  d8.loss_cls: 0.2605  d8.loss_mask: 0.0615  d8.loss_dice: 0.8736  d9.loss_cls: 0.2362  d9.loss_mask: 0.0615  d9.loss_dice: 0.8697
+2025/06/30 11:45:50 - mmengine - INFO - Exp name: gcp_r50_kazgisa-kostanai_20250630_114409
+2025/06/30 11:46:44 - mmengine - INFO - Epoch(train) [2][100/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:29:00  time: 1.0107  data_time: 0.0039  memory: 7257  grad_norm: 2.5393  loss: 15.1008  loss_cls: 0.2474  loss_mask: 0.0738  loss_dice: 0.7099  loss_poly_reg: 1.1586  loss_poly_ang: 0.8023  loss_dp: 0.4205  d0.loss_cls: 0.7210  d0.loss_mask: 0.0926  d0.loss_dice: 0.8130  d1.loss_cls: 0.4145  d1.loss_mask: 0.0919  d1.loss_dice: 0.7629  d2.loss_cls: 0.3812  d2.loss_mask: 0.0875  d2.loss_dice: 0.7451  d3.loss_cls: 0.3475  d3.loss_mask: 0.0809  d3.loss_dice: 0.7438  d4.loss_cls: 0.3290  d4.loss_mask: 0.0763  d4.loss_dice: 0.7374  d5.loss_cls: 0.2737  d5.loss_mask: 0.0788  d5.loss_dice: 0.7926  d6.loss_cls: 0.2438  d6.loss_mask: 0.0800  d6.loss_dice: 0.7030  d7.loss_cls: 0.2319  d7.loss_mask: 0.0767  d7.loss_dice: 0.7233  d8.loss_cls: 0.2587  d8.loss_mask: 0.0756  d8.loss_dice: 0.6944  d9.loss_cls: 0.2474  d9.loss_mask: 0.0738  d9.loss_dice: 0.7099
+2025/06/30 11:47:51 - mmengine - INFO - Epoch(train) [2][150/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:26:16  time: 1.3043  data_time: 0.0020  memory: 8203  grad_norm: 1.9804  loss: 15.3005  loss_cls: 0.1982  loss_mask: 0.0698  loss_dice: 0.7226  loss_poly_reg: 1.2368  loss_poly_ang: 0.9143  loss_dp: 0.4202  d0.loss_cls: 1.2171  d0.loss_mask: 0.1327  d0.loss_dice: 0.9013  d1.loss_cls: 0.3863  d1.loss_mask: 0.0977  d1.loss_dice: 0.8120  d2.loss_cls: 0.3288  d2.loss_mask: 0.0947  d2.loss_dice: 0.8280  d3.loss_cls: 0.2896  d3.loss_mask: 0.0826  d3.loss_dice: 0.7835  d4.loss_cls: 0.2453  d4.loss_mask: 0.0823  d4.loss_dice: 0.7684  d5.loss_cls: 0.2159  d5.loss_mask: 0.0767  d5.loss_dice: 0.7397  d6.loss_cls: 0.2011  d6.loss_mask: 0.0727  d6.loss_dice: 0.7044  d7.loss_cls: 0.1924  d7.loss_mask: 0.0710  d7.loss_dice: 0.7323  d8.loss_cls: 0.1782  d8.loss_mask: 0.0725  d8.loss_dice: 0.7405  d9.loss_cls: 0.1982  d9.loss_mask: 0.0698  d9.loss_dice: 0.7226
+2025/06/30 11:48:52 - mmengine - INFO - Epoch(train) [2][200/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:21:33  time: 1.1197  data_time: 0.0034  memory: 6873  grad_norm: 2.7389  loss: 15.0507  loss_cls: 0.2075  loss_mask: 0.0846  loss_dice: 0.7331  loss_poly_reg: 1.1047  loss_poly_ang: 0.7791  loss_dp: 0.4099  d0.loss_cls: 0.7776  d0.loss_mask: 0.1222  d0.loss_dice: 0.9340  d1.loss_cls: 0.3276  d1.loss_mask: 0.0935  d1.loss_dice: 0.8790  d2.loss_cls: 0.2827  d2.loss_mask: 0.0919  d2.loss_dice: 0.8188  d3.loss_cls: 0.2731  d3.loss_mask: 0.0903  d3.loss_dice: 0.7041  d4.loss_cls: 0.2550  d4.loss_mask: 0.0953  d4.loss_dice: 0.7463  d5.loss_cls: 0.2105  d5.loss_mask: 0.0897  d5.loss_dice: 0.7772  d6.loss_cls: 0.1874  d6.loss_mask: 0.0857  d6.loss_dice: 0.7722  d7.loss_cls: 0.2206  d7.loss_mask: 0.0847  d7.loss_dice: 0.7493  d8.loss_cls: 0.2199  d8.loss_mask: 0.0858  d8.loss_dice: 0.7323  d9.loss_cls: 0.2075  d9.loss_mask: 0.0846  d9.loss_dice: 0.7331
+2025/06/30 11:50:10 - mmengine - INFO - Epoch(train) [2][250/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:25:22  time: 2.1915  data_time: 0.0007  memory: 9294  grad_norm: 2.1204  loss: 19.0549  loss_cls: 0.3015  loss_mask: 0.0819  loss_dice: 0.9135  loss_poly_reg: 1.1584  loss_poly_ang: 0.9130  loss_dp: 0.4118  d0.loss_cls: 1.2556  d0.loss_mask: 0.1095  d0.loss_dice: 1.1453  d1.loss_cls: 0.4557  d1.loss_mask: 0.0943  d1.loss_dice: 1.0777  d2.loss_cls: 0.4363  d2.loss_mask: 0.0923  d2.loss_dice: 1.0440  d3.loss_cls: 0.3999  d3.loss_mask: 0.0943  d3.loss_dice: 1.0301  d4.loss_cls: 0.3717  d4.loss_mask: 0.0982  d4.loss_dice: 0.9781  d5.loss_cls: 0.3475  d5.loss_mask: 0.0833  d5.loss_dice: 0.9792  d6.loss_cls: 0.2926  d6.loss_mask: 0.0896  d6.loss_dice: 0.9451  d7.loss_cls: 0.2785  d7.loss_mask: 0.0812  d7.loss_dice: 0.9162  d8.loss_cls: 0.3086  d8.loss_mask: 0.0801  d8.loss_dice: 0.8929  d9.loss_cls: 0.3015  d9.loss_mask: 0.0819  d9.loss_dice: 0.9135
+2025/06/30 11:51:16 - mmengine - INFO - Epoch(train) [2][300/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:23:12  time: 1.3456  data_time: 0.0021  memory: 6595  grad_norm: 3.1792  loss: 15.0753  loss_cls: 0.2099  loss_mask: 0.0764  loss_dice: 0.7338  loss_poly_reg: 1.0651  loss_poly_ang: 0.9125  loss_dp: 0.4299  d0.loss_cls: 0.9612  d0.loss_mask: 0.1020  d0.loss_dice: 0.8295  d1.loss_cls: 0.3705  d1.loss_mask: 0.0981  d1.loss_dice: 0.8545  d2.loss_cls: 0.2799  d2.loss_mask: 0.0992  d2.loss_dice: 0.8148  d3.loss_cls: 0.2758  d3.loss_mask: 0.0871  d3.loss_dice: 0.7710  d4.loss_cls: 0.2310  d4.loss_mask: 0.0843  d4.loss_dice: 0.7597  d5.loss_cls: 0.2434  d5.loss_mask: 0.0853  d5.loss_dice: 0.7223  d6.loss_cls: 0.2309  d6.loss_mask: 0.0852  d6.loss_dice: 0.6638  d7.loss_cls: 0.2327  d7.loss_mask: 0.0772  d7.loss_dice: 0.6762  d8.loss_cls: 0.2043  d8.loss_mask: 0.0790  d8.loss_dice: 0.7087  d9.loss_cls: 0.2099  d9.loss_mask: 0.0764  d9.loss_dice: 0.7338
+2025/06/30 11:52:32 - mmengine - INFO - Epoch(train) [2][350/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:24:26  time: 1.5895  data_time: 0.0009  memory: 7240  grad_norm: 1.9387  loss: 15.2471  loss_cls: 0.2293  loss_mask: 0.0625  loss_dice: 0.7207  loss_poly_reg: 1.1183  loss_poly_ang: 0.8071  loss_dp: 0.4101  d0.loss_cls: 1.0844  d0.loss_mask: 0.0919  d0.loss_dice: 0.9082  d1.loss_cls: 0.3853  d1.loss_mask: 0.0737  d1.loss_dice: 0.8445  d2.loss_cls: 0.3351  d2.loss_mask: 0.0754  d2.loss_dice: 0.8344  d3.loss_cls: 0.3196  d3.loss_mask: 0.0676  d3.loss_dice: 0.7826  d4.loss_cls: 0.2726  d4.loss_mask: 0.0678  d4.loss_dice: 0.7669  d5.loss_cls: 0.2481  d5.loss_mask: 0.0665  d5.loss_dice: 0.8235  d6.loss_cls: 0.2332  d6.loss_mask: 0.0644  d6.loss_dice: 0.7345  d7.loss_cls: 0.2414  d7.loss_mask: 0.0633  d7.loss_dice: 0.7257  d8.loss_cls: 0.2556  d8.loss_mask: 0.0644  d8.loss_dice: 0.7392  d9.loss_cls: 0.2293  d9.loss_mask: 0.0625  d9.loss_dice: 0.7207
+2025/06/30 11:53:32 - mmengine - INFO - Epoch(train) [2][400/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:20:42  time: 0.9451  data_time: 0.0020  memory: 6805  grad_norm: 3.0993  loss: 16.2625  loss_cls: 0.1877  loss_mask: 0.1688  loss_dice: 0.8058  loss_poly_reg: 1.1368  loss_poly_ang: 0.7427  loss_dp: 0.3723  d0.loss_cls: 0.7329  d0.loss_mask: 0.1559  d0.loss_dice: 0.9509  d1.loss_cls: 0.3392  d1.loss_mask: 0.1607  d1.loss_dice: 0.9079  d2.loss_cls: 0.2734  d2.loss_mask: 0.1635  d2.loss_dice: 0.8428  d3.loss_cls: 0.2847  d3.loss_mask: 0.1376  d3.loss_dice: 0.8611  d4.loss_cls: 0.2584  d4.loss_mask: 0.1522  d4.loss_dice: 0.8143  d5.loss_cls: 0.2152  d5.loss_mask: 0.1394  d5.loss_dice: 0.8228  d6.loss_cls: 0.2194  d6.loss_mask: 0.1568  d6.loss_dice: 0.7508  d7.loss_cls: 0.1778  d7.loss_mask: 0.1691  d7.loss_dice: 0.8044  d8.loss_cls: 0.1786  d8.loss_mask: 0.1702  d8.loss_dice: 0.8461  d9.loss_cls: 0.1877  d9.loss_mask: 0.1688  d9.loss_dice: 0.8058
+2025/06/30 11:54:36 - mmengine - INFO - Epoch(train) [2][450/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:18:33  time: 1.6825  data_time: 0.0000  memory: 7553  grad_norm: 1.9807  loss: 17.1224  loss_cls: 0.2401  loss_mask: 0.0739  loss_dice: 0.8243  loss_poly_reg: 1.1398  loss_poly_ang: 0.8902  loss_dp: 0.3877  d0.loss_cls: 1.1096  d0.loss_mask: 0.0937  d0.loss_dice: 0.9856  d1.loss_cls: 0.3984  d1.loss_mask: 0.0912  d1.loss_dice: 0.9060  d2.loss_cls: 0.3702  d2.loss_mask: 0.1027  d2.loss_dice: 0.9131  d3.loss_cls: 0.3903  d3.loss_mask: 0.0855  d3.loss_dice: 0.9173  d4.loss_cls: 0.3047  d4.loss_mask: 0.0895  d4.loss_dice: 0.8930  d5.loss_cls: 0.2672  d5.loss_mask: 0.0858  d5.loss_dice: 0.8650  d6.loss_cls: 0.2589  d6.loss_mask: 0.0738  d6.loss_dice: 0.8403  d7.loss_cls: 0.2456  d7.loss_mask: 0.0746  d7.loss_dice: 0.8579  d8.loss_cls: 0.2281  d8.loss_mask: 0.0752  d8.loss_dice: 0.9050  d9.loss_cls: 0.2401  d9.loss_mask: 0.0739  d9.loss_dice: 0.8243
+2025/06/30 11:55:45 - mmengine - INFO - Epoch(train) [2][500/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:17:42  time: 0.9829  data_time: 0.0004  memory: 7449  grad_norm: 2.9909  loss: 12.5761  loss_cls: 0.1497  loss_mask: 0.0513  loss_dice: 0.5913  loss_poly_reg: 1.0346  loss_poly_ang: 0.7392  loss_dp: 0.3645  d0.loss_cls: 0.7423  d0.loss_mask: 0.0765  d0.loss_dice: 0.8265  d1.loss_cls: 0.2822  d1.loss_mask: 0.0618  d1.loss_dice: 0.6856  d2.loss_cls: 0.2517  d2.loss_mask: 0.0593  d2.loss_dice: 0.6628  d3.loss_cls: 0.2059  d3.loss_mask: 0.0557  d3.loss_dice: 0.6459  d4.loss_cls: 0.1931  d4.loss_mask: 0.0576  d4.loss_dice: 0.6389  d5.loss_cls: 0.1740  d5.loss_mask: 0.0570  d5.loss_dice: 0.6051  d6.loss_cls: 0.1544  d6.loss_mask: 0.0553  d6.loss_dice: 0.6461  d7.loss_cls: 0.1481  d7.loss_mask: 0.0549  d7.loss_dice: 0.6362  d8.loss_cls: 0.1518  d8.loss_mask: 0.0566  d8.loss_dice: 0.6679  d9.loss_cls: 0.1497  d9.loss_mask: 0.0513  d9.loss_dice: 0.5913
+2025/06/30 11:56:44 - mmengine - INFO - Epoch(train) [2][550/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:15:05  time: 1.1902  data_time: 0.0032  memory: 6280  grad_norm: 2.6954  loss: 18.4756  loss_cls: 0.2901  loss_mask: 0.0799  loss_dice: 0.9118  loss_poly_reg: 1.1616  loss_poly_ang: 0.8974  loss_dp: 0.3943  d0.loss_cls: 1.0079  d0.loss_mask: 0.1255  d0.loss_dice: 1.0923  d1.loss_cls: 0.4506  d1.loss_mask: 0.1006  d1.loss_dice: 1.0811  d2.loss_cls: 0.4113  d2.loss_mask: 0.1356  d2.loss_dice: 1.0853  d3.loss_cls: 0.3632  d3.loss_mask: 0.0892  d3.loss_dice: 1.0178  d4.loss_cls: 0.3428  d4.loss_mask: 0.0987  d4.loss_dice: 0.9931  d5.loss_cls: 0.3224  d5.loss_mask: 0.0897  d5.loss_dice: 0.9686  d6.loss_cls: 0.3267  d6.loss_mask: 0.0813  d6.loss_dice: 0.8020  d7.loss_cls: 0.2952  d7.loss_mask: 0.0802  d7.loss_dice: 0.8859  d8.loss_cls: 0.3109  d8.loss_mask: 0.0837  d8.loss_dice: 0.8172  d9.loss_cls: 0.2901  d9.loss_mask: 0.0799  d9.loss_dice: 0.9118
+2025/06/30 11:57:50 - mmengine - INFO - Epoch(train) [2][600/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:13:40  time: 0.8950  data_time: 0.0016  memory: 7554  grad_norm: 2.1955  loss: 13.1957  loss_cls: 0.1524  loss_mask: 0.0764  loss_dice: 0.6213  loss_poly_reg: 1.2756  loss_poly_ang: 0.9968  loss_dp: 0.4109  d0.loss_cls: 0.7486  d0.loss_mask: 0.0856  d0.loss_dice: 0.7340  d1.loss_cls: 0.3425  d1.loss_mask: 0.0738  d1.loss_dice: 0.6870  d2.loss_cls: 0.2524  d2.loss_mask: 0.0948  d2.loss_dice: 0.7188  d3.loss_cls: 0.2339  d3.loss_mask: 0.0729  d3.loss_dice: 0.6714  d4.loss_cls: 0.2043  d4.loss_mask: 0.0671  d4.loss_dice: 0.6141  d5.loss_cls: 0.1765  d5.loss_mask: 0.0636  d5.loss_dice: 0.6361  d6.loss_cls: 0.1542  d6.loss_mask: 0.0800  d6.loss_dice: 0.6344  d7.loss_cls: 0.1676  d7.loss_mask: 0.0780  d7.loss_dice: 0.6460  d8.loss_cls: 0.1441  d8.loss_mask: 0.0757  d8.loss_dice: 0.6483  d9.loss_cls: 0.1524  d9.loss_mask: 0.0764  d9.loss_dice: 0.6213
+2025/06/30 11:58:52 - mmengine - INFO - Epoch(train) [2][650/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:11:51  time: 1.1373  data_time: 0.0016  memory: 6123  grad_norm: 2.6809  loss: 14.7052  loss_cls: 0.2334  loss_mask: 0.0824  loss_dice: 0.6342  loss_poly_reg: 1.1578  loss_poly_ang: 0.8802  loss_dp: 0.4000  d0.loss_cls: 0.9654  d0.loss_mask: 0.1355  d0.loss_dice: 0.7957  d1.loss_cls: 0.3774  d1.loss_mask: 0.1085  d1.loss_dice: 0.7709  d2.loss_cls: 0.3356  d2.loss_mask: 0.1061  d2.loss_dice: 0.7375  d3.loss_cls: 0.2887  d3.loss_mask: 0.1010  d3.loss_dice: 0.6978  d4.loss_cls: 0.2495  d4.loss_mask: 0.0974  d4.loss_dice: 0.7191  d5.loss_cls: 0.2166  d5.loss_mask: 0.0940  d5.loss_dice: 0.7028  d6.loss_cls: 0.2092  d6.loss_mask: 0.0806  d6.loss_dice: 0.6515  d7.loss_cls: 0.2451  d7.loss_mask: 0.0845  d7.loss_dice: 0.6412  d8.loss_cls: 0.2469  d8.loss_mask: 0.0843  d8.loss_dice: 0.6245  d9.loss_cls: 0.2334  d9.loss_mask: 0.0824  d9.loss_dice: 0.6342
+2025/06/30 11:59:47 - mmengine - INFO - Epoch(train) [2][700/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:09:12  time: 0.9206  data_time: 0.0018  memory: 6822  grad_norm: 2.4453  loss: 14.9379  loss_cls: 0.2239  loss_mask: 0.0672  loss_dice: 0.6802  loss_poly_reg: 1.1910  loss_poly_ang: 0.8466  loss_dp: 0.4058  d0.loss_cls: 0.7068  d0.loss_mask: 0.1133  d0.loss_dice: 0.8654  d1.loss_cls: 0.3608  d1.loss_mask: 0.0804  d1.loss_dice: 0.8079  d2.loss_cls: 0.3092  d2.loss_mask: 0.0810  d2.loss_dice: 0.7941  d3.loss_cls: 0.3302  d3.loss_mask: 0.0784  d3.loss_dice: 0.7783  d4.loss_cls: 0.2903  d4.loss_mask: 0.0769  d4.loss_dice: 0.7777  d5.loss_cls: 0.2262  d5.loss_mask: 0.0706  d5.loss_dice: 0.7510  d6.loss_cls: 0.2154  d6.loss_mask: 0.0709  d6.loss_dice: 0.7307  d7.loss_cls: 0.2177  d7.loss_mask: 0.0696  d7.loss_dice: 0.7265  d8.loss_cls: 0.2397  d8.loss_mask: 0.0705  d8.loss_dice: 0.7123  d9.loss_cls: 0.2239  d9.loss_mask: 0.0672  d9.loss_dice: 0.6802
+2025/06/30 12:01:08 - mmengine - INFO - Epoch(train) [2][750/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:10:00  time: 2.0407  data_time: 0.0022  memory: 7397  grad_norm: 2.0196  loss: 15.4938  loss_cls: 0.2783  loss_mask: 0.0587  loss_dice: 0.6449  loss_poly_reg: 1.2048  loss_poly_ang: 0.8782  loss_dp: 0.4152  d0.loss_cls: 1.2562  d0.loss_mask: 0.0994  d0.loss_dice: 0.8853  d1.loss_cls: 0.4168  d1.loss_mask: 0.0830  d1.loss_dice: 0.8496  d2.loss_cls: 0.4064  d2.loss_mask: 0.0830  d2.loss_dice: 0.7844  d3.loss_cls: 0.3618  d3.loss_mask: 0.0733  d3.loss_dice: 0.7708  d4.loss_cls: 0.3229  d4.loss_mask: 0.0688  d4.loss_dice: 0.7417  d5.loss_cls: 0.2918  d5.loss_mask: 0.0630  d5.loss_dice: 0.7286  d6.loss_cls: 0.2908  d6.loss_mask: 0.0613  d6.loss_dice: 0.6775  d7.loss_cls: 0.2760  d7.loss_mask: 0.0613  d7.loss_dice: 0.6600  d8.loss_cls: 0.2622  d8.loss_mask: 0.0613  d8.loss_dice: 0.6834  d9.loss_cls: 0.2783  d9.loss_mask: 0.0587  d9.loss_dice: 0.6449
+2025/06/30 12:02:13 - mmengine - INFO - Epoch(train) [2][800/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:08:40  time: 1.0587  data_time: 0.0013  memory: 6053  grad_norm: 2.8618  loss: 15.5760  loss_cls: 0.2331  loss_mask: 0.0726  loss_dice: 0.7386  loss_poly_reg: 1.0644  loss_poly_ang: 0.7743  loss_dp: 0.3791  d0.loss_cls: 0.8061  d0.loss_mask: 0.0998  d0.loss_dice: 0.8790  d1.loss_cls: 0.3921  d1.loss_mask: 0.1004  d1.loss_dice: 0.9154  d2.loss_cls: 0.3402  d2.loss_mask: 0.0878  d2.loss_dice: 0.8671  d3.loss_cls: 0.3538  d3.loss_mask: 0.0820  d3.loss_dice: 0.8463  d4.loss_cls: 0.2784  d4.loss_mask: 0.0763  d4.loss_dice: 0.7699  d5.loss_cls: 0.2610  d5.loss_mask: 0.0797  d5.loss_dice: 0.7512  d6.loss_cls: 0.2630  d6.loss_mask: 0.0745  d6.loss_dice: 0.7585  d7.loss_cls: 0.2305  d7.loss_mask: 0.0755  d7.loss_dice: 0.7928  d8.loss_cls: 0.2449  d8.loss_mask: 0.0747  d8.loss_dice: 0.7686  d9.loss_cls: 0.2331  d9.loss_mask: 0.0726  d9.loss_dice: 0.7386
+2025/06/30 12:03:17 - mmengine - INFO - Epoch(train) [2][850/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:07:20  time: 1.1522  data_time: 0.0024  memory: 6174  grad_norm: 2.4763  loss: 15.8564  loss_cls: 0.2410  loss_mask: 0.0701  loss_dice: 0.7307  loss_poly_reg: 1.1837  loss_poly_ang: 0.9456  loss_dp: 0.4117  d0.loss_cls: 1.0054  d0.loss_mask: 0.0928  d0.loss_dice: 0.8866  d1.loss_cls: 0.4150  d1.loss_mask: 0.0817  d1.loss_dice: 0.8616  d2.loss_cls: 0.3827  d2.loss_mask: 0.0801  d2.loss_dice: 0.8159  d3.loss_cls: 0.3247  d3.loss_mask: 0.0807  d3.loss_dice: 0.7793  d4.loss_cls: 0.3105  d4.loss_mask: 0.0798  d4.loss_dice: 0.7490  d5.loss_cls: 0.2647  d5.loss_mask: 0.0777  d5.loss_dice: 0.7874  d6.loss_cls: 0.2531  d6.loss_mask: 0.0732  d6.loss_dice: 0.7338  d7.loss_cls: 0.2448  d7.loss_mask: 0.0706  d7.loss_dice: 0.7223  d8.loss_cls: 0.2406  d8.loss_mask: 0.0728  d8.loss_dice: 0.7449  d9.loss_cls: 0.2410  d9.loss_mask: 0.0701  d9.loss_dice: 0.7307
+2025/06/30 12:04:26 - mmengine - INFO - Epoch(train) [2][900/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:06:26  time: 1.5257  data_time: 0.0017  memory: 7931  grad_norm: 2.4871  loss: 18.3999  loss_cls: 0.3250  loss_mask: 0.0989  loss_dice: 0.7912  loss_poly_reg: 1.1107  loss_poly_ang: 0.9193  loss_dp: 0.3787  d0.loss_cls: 1.1353  d0.loss_mask: 0.1540  d0.loss_dice: 1.0559  d1.loss_cls: 0.4778  d1.loss_mask: 0.1357  d1.loss_dice: 1.0249  d2.loss_cls: 0.4658  d2.loss_mask: 0.1193  d2.loss_dice: 0.9401  d3.loss_cls: 0.3879  d3.loss_mask: 0.1229  d3.loss_dice: 0.9692  d4.loss_cls: 0.3943  d4.loss_mask: 0.1165  d4.loss_dice: 0.9189  d5.loss_cls: 0.3399  d5.loss_mask: 0.1113  d5.loss_dice: 0.9023  d6.loss_cls: 0.3221  d6.loss_mask: 0.1012  d6.loss_dice: 0.8516  d7.loss_cls: 0.3404  d7.loss_mask: 0.1023  d7.loss_dice: 0.8067  d8.loss_cls: 0.3480  d8.loss_mask: 0.0973  d8.loss_dice: 0.8196  d9.loss_cls: 0.3250  d9.loss_mask: 0.0989  d9.loss_dice: 0.7912
+2025/06/30 12:05:19 - mmengine - INFO - Exp name: gcp_r50_kazgisa-kostanai_20250630_114409
+2025/06/30 12:05:20 - mmengine - INFO - Saving checkpoint at 2 epochs
+2025/06/30 12:10:38 - mmengine - INFO - Epoch(val) [2][50/53]    eta: 0:00:18  time: 5.4268  data_time: 0.5559  memory: 5807  
+2025/06/30 12:10:51 - mmengine - INFO - Evaluating segm...
+2025/06/30 12:10:58 - mmengine - INFO - segm_mAP_copypaste: 0.519 0.786 0.573 0.298 0.677 0.828
+2025/06/30 12:11:09 - mmengine - INFO - mta: 39.466596079901024
+2025/06/30 12:11:14 - mmengine - INFO - iou: 0.7931926256651083, c_iou: 0.6778653934608747, N_ratio: 0.8303558172910378
+2025/06/30 12:11:14 - mmengine - INFO - Epoch(val) [2][53/53]    coco/segm_mAP: 0.5190  coco/segm_mAP_50: 0.7860  coco/segm_mAP_75: 0.5730  coco/segm_mAP_s: 0.2980  coco/segm_mAP_m: 0.6770  coco/segm_mAP_l: 0.8280  coco/mta: 39.4666  coco/iou: 0.7932  coco/c_iou: 0.6779  coco/N_ratio: 0.8304  data_time: 0.6716  time: 6.1305
+2025/06/30 12:12:31 - mmengine - INFO - Epoch(train) [3][ 50/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:05:00  time: 1.8239  data_time: 0.0027  memory: 6812  grad_norm: 2.5284  loss: 14.9291  loss_cls: 0.2076  loss_mask: 0.0572  loss_dice: 0.6970  loss_poly_reg: 1.1166  loss_poly_ang: 0.9716  loss_dp: 0.3811  d0.loss_cls: 1.1063  d0.loss_mask: 0.0738  d0.loss_dice: 0.7736  d1.loss_cls: 0.3876  d1.loss_mask: 0.0650  d1.loss_dice: 0.7881  d2.loss_cls: 0.3649  d2.loss_mask: 0.0618  d2.loss_dice: 0.7651  d3.loss_cls: 0.2955  d3.loss_mask: 0.0623  d3.loss_dice: 0.7702  d4.loss_cls: 0.2836  d4.loss_mask: 0.0599  d4.loss_dice: 0.7305  d5.loss_cls: 0.2765  d5.loss_mask: 0.0599  d5.loss_dice: 0.7651  d6.loss_cls: 0.2046  d6.loss_mask: 0.0592  d6.loss_dice: 0.7253  d7.loss_cls: 0.2231  d7.loss_mask: 0.0673  d7.loss_dice: 0.7055  d8.loss_cls: 0.2449  d8.loss_mask: 0.0581  d8.loss_dice: 0.7032  d9.loss_cls: 0.2076  d9.loss_mask: 0.0572  d9.loss_dice: 0.6970
+2025/06/30 12:14:05 - mmengine - INFO - Epoch(train) [3][100/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:06:21  time: 1.6315  data_time: 0.0032  memory: 7807  grad_norm: 2.4036  loss: 18.1201  loss_cls: 0.3121  loss_mask: 0.0701  loss_dice: 0.8469  loss_poly_reg: 1.1793  loss_poly_ang: 0.9424  loss_dp: 0.3959  d0.loss_cls: 1.3180  d0.loss_mask: 0.1014  d0.loss_dice: 1.0105  d1.loss_cls: 0.5130  d1.loss_mask: 0.0925  d1.loss_dice: 0.9928  d2.loss_cls: 0.4746  d2.loss_mask: 0.0895  d2.loss_dice: 0.9283  d3.loss_cls: 0.4052  d3.loss_mask: 0.0776  d3.loss_dice: 0.9119  d4.loss_cls: 0.3508  d4.loss_mask: 0.0786  d4.loss_dice: 0.8983  d5.loss_cls: 0.2913  d5.loss_mask: 0.0735  d5.loss_dice: 0.8586  d6.loss_cls: 0.2933  d6.loss_mask: 0.0774  d6.loss_dice: 0.8353  d7.loss_cls: 0.3093  d7.loss_mask: 0.0688  d7.loss_dice: 0.8483  d8.loss_cls: 0.3366  d8.loss_mask: 0.0682  d8.loss_dice: 0.8413  d9.loss_cls: 0.3121  d9.loss_mask: 0.0701  d9.loss_dice: 0.8469
+2025/06/30 12:14:35 - mmengine - INFO - Exp name: gcp_r50_kazgisa-kostanai_20250630_114409
+2025/06/30 12:15:21 - mmengine - INFO - Epoch(train) [3][150/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:05:51  time: 2.3016  data_time: 0.0018  memory: 8137  grad_norm: 2.7867  loss: 18.1343  loss_cls: 0.2377  loss_mask: 0.0752  loss_dice: 0.9555  loss_poly_reg: 1.1906  loss_poly_ang: 0.9631  loss_dp: 0.3664  d0.loss_cls: 1.2074  d0.loss_mask: 0.0956  d0.loss_dice: 1.0542  d1.loss_cls: 0.4197  d1.loss_mask: 0.0759  d1.loss_dice: 0.9714  d2.loss_cls: 0.4022  d2.loss_mask: 0.0837  d2.loss_dice: 0.9610  d3.loss_cls: 0.3488  d3.loss_mask: 0.0846  d3.loss_dice: 0.9579  d4.loss_cls: 0.3085  d4.loss_mask: 0.0766  d4.loss_dice: 0.9752  d5.loss_cls: 0.2789  d5.loss_mask: 0.0807  d5.loss_dice: 0.9304  d6.loss_cls: 0.2400  d6.loss_mask: 0.0783  d6.loss_dice: 0.9248  d7.loss_cls: 0.2608  d7.loss_mask: 0.0741  d7.loss_dice: 0.9063  d8.loss_cls: 0.2683  d8.loss_mask: 0.0743  d8.loss_dice: 0.9377  d9.loss_cls: 0.2377  d9.loss_mask: 0.0752  d9.loss_dice: 0.9555
+2025/06/30 12:16:27 - mmengine - INFO - Epoch(train) [3][200/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:04:31  time: 1.5659  data_time: 0.0022  memory: 7018  grad_norm: 2.4213  loss: 16.1109  loss_cls: 0.1960  loss_mask: 0.0735  loss_dice: 0.8227  loss_poly_reg: 1.1993  loss_poly_ang: 0.8660  loss_dp: 0.3911  d0.loss_cls: 0.8978  d0.loss_mask: 0.1165  d0.loss_dice: 0.9620  d1.loss_cls: 0.4264  d1.loss_mask: 0.0900  d1.loss_dice: 0.8890  d2.loss_cls: 0.3570  d2.loss_mask: 0.0854  d2.loss_dice: 0.8394  d3.loss_cls: 0.2857  d3.loss_mask: 0.0837  d3.loss_dice: 0.8680  d4.loss_cls: 0.2633  d4.loss_mask: 0.0841  d4.loss_dice: 0.8406  d5.loss_cls: 0.2432  d5.loss_mask: 0.0763  d5.loss_dice: 0.8075  d6.loss_cls: 0.2169  d6.loss_mask: 0.0771  d6.loss_dice: 0.8101  d7.loss_cls: 0.2167  d7.loss_mask: 0.0745  d7.loss_dice: 0.7740  d8.loss_cls: 0.1791  d8.loss_mask: 0.0759  d8.loss_dice: 0.8301  d9.loss_cls: 0.1960  d9.loss_mask: 0.0735  d9.loss_dice: 0.8227
+2025/06/30 12:17:40 - mmengine - INFO - Epoch(train) [3][250/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:03:42  time: 1.7557  data_time: 0.0012  memory: 8603  grad_norm: 3.0005  loss: 16.1268  loss_cls: 0.1851  loss_mask: 0.0670  loss_dice: 0.8096  loss_poly_reg: 1.2215  loss_poly_ang: 0.9146  loss_dp: 0.3814  d0.loss_cls: 0.9926  d0.loss_mask: 0.1032  d0.loss_dice: 0.9358  d1.loss_cls: 0.3734  d1.loss_mask: 0.0753  d1.loss_dice: 0.8850  d2.loss_cls: 0.3260  d2.loss_mask: 0.0760  d2.loss_dice: 0.8752  d3.loss_cls: 0.3086  d3.loss_mask: 0.0720  d3.loss_dice: 0.8603  d4.loss_cls: 0.2335  d4.loss_mask: 0.0728  d4.loss_dice: 0.8517  d5.loss_cls: 0.2210  d5.loss_mask: 0.0727  d5.loss_dice: 0.8703  d6.loss_cls: 0.2267  d6.loss_mask: 0.0681  d6.loss_dice: 0.7752  d7.loss_cls: 0.1931  d7.loss_mask: 0.0698  d7.loss_dice: 0.8308  d8.loss_cls: 0.1932  d8.loss_mask: 0.0708  d8.loss_dice: 0.8528  d9.loss_cls: 0.1851  d9.loss_mask: 0.0670  d9.loss_dice: 0.8096
+2025/06/30 12:18:36 - mmengine - INFO - Epoch(train) [3][300/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:01:38  time: 1.0266  data_time: 0.0027  memory: 5337  grad_norm: 2.8835  loss: 15.2666  loss_cls: 0.1776  loss_mask: 0.0820  loss_dice: 0.7276  loss_poly_reg: 1.2991  loss_poly_ang: 0.9762  loss_dp: 0.3963  d0.loss_cls: 0.8402  d0.loss_mask: 0.1196  d0.loss_dice: 0.9302  d1.loss_cls: 0.3345  d1.loss_mask: 0.0944  d1.loss_dice: 0.8044  d2.loss_cls: 0.2930  d2.loss_mask: 0.1001  d2.loss_dice: 0.8200  d3.loss_cls: 0.2919  d3.loss_mask: 0.0897  d3.loss_dice: 0.7635  d4.loss_cls: 0.2659  d4.loss_mask: 0.0855  d4.loss_dice: 0.7377  d5.loss_cls: 0.1831  d5.loss_mask: 0.0846  d5.loss_dice: 0.7468  d6.loss_cls: 0.2112  d6.loss_mask: 0.0847  d6.loss_dice: 0.7253  d7.loss_cls: 0.2154  d7.loss_mask: 0.0820  d7.loss_dice: 0.7208  d8.loss_cls: 0.1959  d8.loss_mask: 0.0845  d8.loss_dice: 0.7159  d9.loss_cls: 0.1776  d9.loss_mask: 0.0820  d9.loss_dice: 0.7276
+2025/06/30 12:19:48 - mmengine - INFO - Epoch(train) [3][350/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 2:00:43  time: 1.1035  data_time: 0.0022  memory: 8469  grad_norm: 2.7193  loss: 15.4578  loss_cls: 0.2336  loss_mask: 0.1062  loss_dice: 0.7204  loss_poly_reg: 1.1661  loss_poly_ang: 0.8317  loss_dp: 0.4075  d0.loss_cls: 0.9289  d0.loss_mask: 0.1200  d0.loss_dice: 0.8692  d1.loss_cls: 0.3711  d1.loss_mask: 0.0928  d1.loss_dice: 0.7603  d2.loss_cls: 0.3539  d2.loss_mask: 0.1193  d2.loss_dice: 0.7528  d3.loss_cls: 0.2684  d3.loss_mask: 0.1234  d3.loss_dice: 0.7770  d4.loss_cls: 0.2679  d4.loss_mask: 0.0991  d4.loss_dice: 0.7504  d5.loss_cls: 0.2124  d5.loss_mask: 0.1182  d5.loss_dice: 0.7274  d6.loss_cls: 0.2212  d6.loss_mask: 0.1297  d6.loss_dice: 0.7056  d7.loss_cls: 0.2459  d7.loss_mask: 0.1257  d7.loss_dice: 0.7416  d8.loss_cls: 0.2163  d8.loss_mask: 0.1263  d8.loss_dice: 0.7070  d9.loss_cls: 0.2336  d9.loss_mask: 0.1062  d9.loss_dice: 0.7204
+2025/06/30 12:20:55 - mmengine - INFO - Epoch(train) [3][400/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 1:59:33  time: 1.2614  data_time: 0.0027  memory: 5507  grad_norm: 2.8638  loss: 19.0846  loss_cls: 0.2708  loss_mask: 0.1081  loss_dice: 0.9313  loss_poly_reg: 1.1374  loss_poly_ang: 0.9114  loss_dp: 0.3664  d0.loss_cls: 0.9904  d0.loss_mask: 0.1595  d0.loss_dice: 1.0781  d1.loss_cls: 0.4209  d1.loss_mask: 0.1287  d1.loss_dice: 1.0636  d2.loss_cls: 0.4246  d2.loss_mask: 0.1288  d2.loss_dice: 1.0613  d3.loss_cls: 0.4162  d3.loss_mask: 0.1307  d3.loss_dice: 1.0439  d4.loss_cls: 0.3363  d4.loss_mask: 0.1237  d4.loss_dice: 1.0550  d5.loss_cls: 0.3339  d5.loss_mask: 0.1175  d5.loss_dice: 1.0047  d6.loss_cls: 0.2705  d6.loss_mask: 0.1149  d6.loss_dice: 0.9522  d7.loss_cls: 0.2566  d7.loss_mask: 0.1196  d7.loss_dice: 1.0233  d8.loss_cls: 0.2828  d8.loss_mask: 0.1115  d8.loss_dice: 0.8999  d9.loss_cls: 0.2708  d9.loss_mask: 0.1081  d9.loss_dice: 0.9313
+2025/06/30 12:21:59 - mmengine - INFO - Epoch(train) [3][450/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 1:58:05  time: 1.4703  data_time: 0.0020  memory: 7123  grad_norm: 2.9979  loss: 17.4303  loss_cls: 0.2759  loss_mask: 0.0857  loss_dice: 0.7996  loss_poly_reg: 1.1473  loss_poly_ang: 0.7127  loss_dp: 0.3680  d0.loss_cls: 1.0297  d0.loss_mask: 0.1454  d0.loss_dice: 1.0512  d1.loss_cls: 0.4313  d1.loss_mask: 0.1197  d1.loss_dice: 0.9803  d2.loss_cls: 0.3927  d2.loss_mask: 0.1342  d2.loss_dice: 0.8509  d3.loss_cls: 0.3955  d3.loss_mask: 0.1041  d3.loss_dice: 0.8877  d4.loss_cls: 0.3553  d4.loss_mask: 0.1158  d4.loss_dice: 0.8783  d5.loss_cls: 0.3098  d5.loss_mask: 0.1002  d5.loss_dice: 0.8676  d6.loss_cls: 0.2918  d6.loss_mask: 0.0937  d6.loss_dice: 0.9162  d7.loss_cls: 0.2927  d7.loss_mask: 0.0869  d7.loss_dice: 0.8540  d8.loss_cls: 0.2916  d8.loss_mask: 0.0916  d8.loss_dice: 0.8116  d9.loss_cls: 0.2759  d9.loss_mask: 0.0857  d9.loss_dice: 0.7996
+2025/06/30 12:23:12 - mmengine - INFO - Epoch(train) [3][500/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 1:57:17  time: 1.4159  data_time: 0.0018  memory: 8768  grad_norm: 2.9509  loss: 15.8359  loss_cls: 0.1982  loss_mask: 0.0645  loss_dice: 0.7431  loss_poly_reg: 0.9670  loss_poly_ang: 0.6452  loss_dp: 0.3736  d0.loss_cls: 0.9746  d0.loss_mask: 0.0896  d0.loss_dice: 0.9506  d1.loss_cls: 0.3991  d1.loss_mask: 0.0809  d1.loss_dice: 1.0586  d2.loss_cls: 0.3304  d2.loss_mask: 0.0776  d2.loss_dice: 0.9580  d3.loss_cls: 0.3363  d3.loss_mask: 0.0726  d3.loss_dice: 0.8422  d4.loss_cls: 0.2860  d4.loss_mask: 0.0760  d4.loss_dice: 0.8639  d5.loss_cls: 0.2629  d5.loss_mask: 0.0693  d5.loss_dice: 0.7664  d6.loss_cls: 0.2462  d6.loss_mask: 0.0676  d6.loss_dice: 0.7806  d7.loss_cls: 0.2161  d7.loss_mask: 0.0692  d7.loss_dice: 0.8413  d8.loss_cls: 0.2205  d8.loss_mask: 0.0695  d8.loss_dice: 0.8323  d9.loss_cls: 0.1982  d9.loss_mask: 0.0645  d9.loss_dice: 0.7431
+2025/06/30 12:24:13 - mmengine - INFO - Epoch(train) [3][550/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 1:55:44  time: 0.9530  data_time: 0.0021  memory: 6210  grad_norm: 2.8786  loss: 15.5077  loss_cls: 0.2223  loss_mask: 0.0825  loss_dice: 0.7145  loss_poly_reg: 1.2790  loss_poly_ang: 1.0043  loss_dp: 0.4216  d0.loss_cls: 0.7910  d0.loss_mask: 0.0999  d0.loss_dice: 0.9263  d1.loss_cls: 0.3611  d1.loss_mask: 0.0952  d1.loss_dice: 0.8160  d2.loss_cls: 0.3046  d2.loss_mask: 0.0923  d2.loss_dice: 0.7909  d3.loss_cls: 0.2956  d3.loss_mask: 0.0858  d3.loss_dice: 0.7944  d4.loss_cls: 0.2669  d4.loss_mask: 0.0847  d4.loss_dice: 0.7698  d5.loss_cls: 0.2847  d5.loss_mask: 0.0859  d5.loss_dice: 0.7897  d6.loss_cls: 0.2363  d6.loss_mask: 0.0824  d6.loss_dice: 0.7185  d7.loss_cls: 0.2670  d7.loss_mask: 0.0799  d7.loss_dice: 0.7211  d8.loss_cls: 0.1953  d8.loss_mask: 0.0849  d8.loss_dice: 0.7992  d9.loss_cls: 0.2223  d9.loss_mask: 0.0825  d9.loss_dice: 0.7145
+2025/06/30 12:25:20 - mmengine - INFO - Epoch(train) [3][600/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 1:54:30  time: 1.3775  data_time: 0.0023  memory: 7494  grad_norm: 2.6888  loss: 18.8915  loss_cls: 0.2852  loss_mask: 0.0980  loss_dice: 0.9144  loss_poly_reg: 1.2478  loss_poly_ang: 0.8504  loss_dp: 0.3715  d0.loss_cls: 1.0851  d0.loss_mask: 0.1600  d0.loss_dice: 1.0564  d1.loss_cls: 0.4931  d1.loss_mask: 0.1133  d1.loss_dice: 1.0099  d2.loss_cls: 0.4387  d2.loss_mask: 0.1124  d2.loss_dice: 0.9962  d3.loss_cls: 0.4124  d3.loss_mask: 0.1067  d3.loss_dice: 0.9655  d4.loss_cls: 0.3535  d4.loss_mask: 0.1050  d4.loss_dice: 1.0272  d5.loss_cls: 0.3137  d5.loss_mask: 0.1030  d5.loss_dice: 0.9627  d6.loss_cls: 0.3159  d6.loss_mask: 0.1012  d6.loss_dice: 0.9460  d7.loss_cls: 0.2560  d7.loss_mask: 0.1064  d7.loss_dice: 0.9699  d8.loss_cls: 0.2717  d8.loss_mask: 0.1021  d8.loss_dice: 0.9426  d9.loss_cls: 0.2852  d9.loss_mask: 0.0980  d9.loss_dice: 0.9144
+2025/06/30 12:26:30 - mmengine - INFO - Epoch(train) [3][650/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 1:53:30  time: 1.2888  data_time: 0.0022  memory: 9200  grad_norm: 3.0571  loss: 14.4471  loss_cls: 0.1935  loss_mask: 0.0770  loss_dice: 0.7417  loss_poly_reg: 0.9865  loss_poly_ang: 0.6368  loss_dp: 0.3733  d0.loss_cls: 0.7960  d0.loss_mask: 0.0892  d0.loss_dice: 0.8371  d1.loss_cls: 0.3569  d1.loss_mask: 0.0809  d1.loss_dice: 0.7850  d2.loss_cls: 0.3107  d2.loss_mask: 0.0856  d2.loss_dice: 0.7654  d3.loss_cls: 0.2561  d3.loss_mask: 0.0924  d3.loss_dice: 0.7551  d4.loss_cls: 0.2237  d4.loss_mask: 0.0847  d4.loss_dice: 0.8069  d5.loss_cls: 0.2124  d5.loss_mask: 0.0768  d5.loss_dice: 0.7871  d6.loss_cls: 0.1975  d6.loss_mask: 0.0800  d6.loss_dice: 0.7340  d7.loss_cls: 0.1998  d7.loss_mask: 0.0738  d7.loss_dice: 0.7383  d8.loss_cls: 0.1718  d8.loss_mask: 0.0792  d8.loss_dice: 0.7492  d9.loss_cls: 0.1935  d9.loss_mask: 0.0770  d9.loss_dice: 0.7417
+2025/06/30 12:27:44 - mmengine - INFO - Epoch(train) [3][700/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 1:52:41  time: 1.5468  data_time: 0.0021  memory: 7396  grad_norm: 2.9668  loss: 17.8331  loss_cls: 0.2778  loss_mask: 0.0827  loss_dice: 0.8095  loss_poly_reg: 1.2681  loss_poly_ang: 0.8831  loss_dp: 0.3783  d0.loss_cls: 1.0492  d0.loss_mask: 0.1286  d0.loss_dice: 1.0170  d1.loss_cls: 0.4339  d1.loss_mask: 0.1033  d1.loss_dice: 0.9937  d2.loss_cls: 0.3708  d2.loss_mask: 0.0977  d2.loss_dice: 0.9524  d3.loss_cls: 0.3863  d3.loss_mask: 0.0994  d3.loss_dice: 0.9143  d4.loss_cls: 0.3257  d4.loss_mask: 0.0926  d4.loss_dice: 0.9479  d5.loss_cls: 0.2831  d5.loss_mask: 0.0911  d5.loss_dice: 0.9316  d6.loss_cls: 0.2783  d6.loss_mask: 0.0918  d6.loss_dice: 0.9300  d7.loss_cls: 0.2714  d7.loss_mask: 0.0845  d7.loss_dice: 0.9032  d8.loss_cls: 0.2852  d8.loss_mask: 0.0857  d8.loss_dice: 0.8151  d9.loss_cls: 0.2778  d9.loss_mask: 0.0827  d9.loss_dice: 0.8095
+2025/06/30 12:28:42 - mmengine - INFO - Epoch(train) [3][750/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 1:51:02  time: 0.9889  data_time: 0.0020  memory: 6379  grad_norm: 2.5209  loss: 14.9563  loss_cls: 0.2219  loss_mask: 0.0705  loss_dice: 0.6863  loss_poly_reg: 1.2987  loss_poly_ang: 0.9352  loss_dp: 0.3888  d0.loss_cls: 0.6485  d0.loss_mask: 0.0948  d0.loss_dice: 0.7965  d1.loss_cls: 0.3873  d1.loss_mask: 0.0712  d1.loss_dice: 0.7725  d2.loss_cls: 0.3136  d2.loss_mask: 0.0732  d2.loss_dice: 0.7622  d3.loss_cls: 0.3103  d3.loss_mask: 0.0707  d3.loss_dice: 0.8229  d4.loss_cls: 0.2552  d4.loss_mask: 0.0734  d4.loss_dice: 0.7996  d5.loss_cls: 0.2384  d5.loss_mask: 0.0713  d5.loss_dice: 0.7607  d6.loss_cls: 0.2068  d6.loss_mask: 0.0742  d6.loss_dice: 0.7688  d7.loss_cls: 0.2164  d7.loss_mask: 0.0712  d7.loss_dice: 0.7086  d8.loss_cls: 0.2256  d8.loss_mask: 0.0686  d8.loss_dice: 0.7138  d9.loss_cls: 0.2219  d9.loss_mask: 0.0705  d9.loss_dice: 0.6863
+2025/06/30 12:29:50 - mmengine - INFO - Epoch(train) [3][800/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 1:49:54  time: 1.8900  data_time: 0.0024  memory: 8162  grad_norm: 2.8094  loss: 16.4214  loss_cls: 0.2419  loss_mask: 0.0766  loss_dice: 0.7422  loss_poly_reg: 1.2484  loss_poly_ang: 0.8553  loss_dp: 0.3694  d0.loss_cls: 1.1448  d0.loss_mask: 0.1129  d0.loss_dice: 0.9086  d1.loss_cls: 0.4266  d1.loss_mask: 0.0961  d1.loss_dice: 0.8636  d2.loss_cls: 0.4018  d2.loss_mask: 0.1248  d2.loss_dice: 0.8943  d3.loss_cls: 0.3649  d3.loss_mask: 0.0886  d3.loss_dice: 0.8384  d4.loss_cls: 0.3165  d4.loss_mask: 0.0854  d4.loss_dice: 0.7785  d5.loss_cls: 0.2672  d5.loss_mask: 0.0816  d5.loss_dice: 0.8000  d6.loss_cls: 0.2659  d6.loss_mask: 0.0796  d6.loss_dice: 0.7208  d7.loss_cls: 0.2430  d7.loss_mask: 0.0782  d7.loss_dice: 0.7520  d8.loss_cls: 0.2614  d8.loss_mask: 0.0804  d8.loss_dice: 0.7511  d9.loss_cls: 0.2419  d9.loss_mask: 0.0766  d9.loss_dice: 0.7422
+2025/06/30 12:30:51 - mmengine - INFO - Epoch(train) [3][850/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 1:48:27  time: 1.1506  data_time: 0.0021  memory: 5382  grad_norm: 2.7184  loss: 18.0069  loss_cls: 0.3103  loss_mask: 0.0797  loss_dice: 0.8524  loss_poly_reg: 1.0940  loss_poly_ang: 0.8318  loss_dp: 0.3874  d0.loss_cls: 0.9807  d0.loss_mask: 0.1209  d0.loss_dice: 1.0549  d1.loss_cls: 0.5504  d1.loss_mask: 0.1223  d1.loss_dice: 0.9860  d2.loss_cls: 0.4745  d2.loss_mask: 0.1233  d2.loss_dice: 0.9796  d3.loss_cls: 0.4169  d3.loss_mask: 0.0874  d3.loss_dice: 0.9058  d4.loss_cls: 0.3898  d4.loss_mask: 0.0940  d4.loss_dice: 0.8855  d5.loss_cls: 0.3092  d5.loss_mask: 0.0941  d5.loss_dice: 0.8648  d6.loss_cls: 0.3296  d6.loss_mask: 0.0810  d6.loss_dice: 0.8104  d7.loss_cls: 0.3213  d7.loss_mask: 0.0833  d7.loss_dice: 0.8802  d8.loss_cls: 0.3281  d8.loss_mask: 0.0819  d8.loss_dice: 0.8529  d9.loss_cls: 0.3103  d9.loss_mask: 0.0797  d9.loss_dice: 0.8524
+2025/06/30 12:32:29 - mmengine - INFO - Epoch(train) [3][900/942]  base_lr: 1.0000e-04 lr: 1.0000e-05  eta: 1:48:38  time: 2.0857  data_time: 0.0025  memory: 9168  grad_norm: 2.4224  loss: 14.7754  loss_cls: 0.2083  loss_mask: 0.0579  loss_dice: 0.6590  loss_poly_reg: 1.1213  loss_poly_ang: 0.9851  loss_dp: 0.3904  d0.loss_cls: 1.1380  d0.loss_mask: 0.0949  d0.loss_dice: 0.8635  d1.loss_cls: 0.4214  d1.loss_mask: 0.0698  d1.loss_dice: 0.7488  d2.loss_cls: 0.3579  d2.loss_mask: 0.0671  d2.loss_dice: 0.7231  d3.loss_cls: 0.2927  d3.loss_mask: 0.0604  d3.loss_dice: 0.7057  d4.loss_cls: 0.2638  d4.loss_mask: 0.0620  d4.loss_dice: 0.6962  d5.loss_cls: 0.2658  d5.loss_mask: 0.0607  d5.loss_dice: 0.6802  d6.loss_cls: 0.2355  d6.loss_mask: 0.0589  d6.loss_dice: 0.6606  d7.loss_cls: 0.2185  d7.loss_mask: 0.0581  d7.loss_dice: 0.6697  d8.loss_cls: 0.2204  d8.loss_mask: 0.0598  d8.loss_dice: 0.6749  d9.loss_cls: 0.2083  d9.loss_mask: 0.0579  d9.loss_dice: 0.6590

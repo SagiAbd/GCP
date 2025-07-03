@@ -42,24 +42,6 @@ venv.bak/
 .ipynb_checkpoints
 *.ipynb
 
-# Training outputs
-work_dirs/
-*.log
-*.pth
-*.ckpt
-*.pt
-*.onnx
-*.pb
-*.tflite
-*.mlmodel
-*.h5
-*.hdf5
-*.whl
-wandb/
-runs/
-logs/
-tensorboard/
-
 # Dataset
 data/
 *.zip
@@ -201,7 +183,6 @@ data
 *.log.json
 docs/modelzoo_statistics.md
 mmdet/.mim
-work_dirs/
 
 # Pytorch
 *.pth

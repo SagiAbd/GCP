@@ -1,0 +1,228 @@
+_base_ = [
+    '../_base_/datasets/whu_mix_vector_swin-l.py', '../_base_/default_runtime.py',
+]
+data_preprocessor = dict(
+    type='DetDataPreprocessor',
+    mean=[123.675, 116.28, 103.53],
+    std=[58.395, 57.12, 57.375],
+    bgr_to_rgb=True,
+    pad_size_divisor=32,
+    pad_mask=True,
+    mask_pad_value=0,
+    pad_seg=True,
+    seg_pad_value=255,
+    # batch_augments=batch_augments
+)
+
+
+num_things_classes = 1
+num_stuff_classes = 0
+num_classes = num_things_classes + num_stuff_classes
+model = dict(
+    type='Mask2Former',
+    data_preprocessor=data_preprocessor,
+    backbone=dict(
+        type='SwinTransformer',
+        frozen_stages=-1,
+        pretrain_img_size=384,
+        embed_dims=192,
+        patch_size=4,
+        window_size=12,
+        mlp_ratio=4,
+        depths=[2, 2, 18, 2],
+        num_heads=[6, 12, 24, 48],
+        qkv_bias=True,
+        qk_scale=None,
+        drop_rate=0.,
+        attn_drop_rate=0.,
+        drop_path_rate=0.3,
+        patch_norm=True,
+        out_indices=(0, 1, 2, 3),
+        with_cp=False,
+        convert_weights=True,
+        init_cfg=dict(type='Pretrained', checkpoint='https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_large_patch4_window12_384_22k.pth')
+    ),
+    panoptic_head=dict(
+        type='Mask2FormerHead',
+        in_channels=[192, 384, 768, 1536],  # Swin-L output channels
+        strides=[4, 8, 16, 32],
+        feat_channels=256,
+        out_channels=256,
+        num_things_classes=num_things_classes,
+        num_stuff_classes=num_stuff_classes,
+        num_queries=300,
+        num_transformer_feat_level=3,
+        pixel_decoder=dict(
+            type='MSDeformAttnPixelDecoder',
+            num_outs=3,
+            norm_cfg=dict(type='GN', num_groups=32),
+            act_cfg=dict(type='ReLU'),
+            encoder=dict(  # DeformableDetrTransformerEncoder
+                num_layers=6,
+                layer_cfg=dict(  # DeformableDetrTransformerEncoderLayer
+                    self_attn_cfg=dict(  # MultiScaleDeformableAttention
+                        embed_dims=256,
+                        num_heads=8,
+                        num_levels=3,
+                        num_points=4,
+                        dropout=0.0,
+                        batch_first=True),
+                    ffn_cfg=dict(
+                        embed_dims=256,
+                        feedforward_channels=1024,
+                        num_fcs=2,
+                        ffn_drop=0.0,
+                        act_cfg=dict(type='ReLU', inplace=True)))),
+            positional_encoding=dict(num_feats=128, normalize=True)),
+        enforce_decoder_input_project=False,
+        positional_encoding=dict(num_feats=128, normalize=True),
+        transformer_decoder=dict(  # Mask2FormerTransformerDecoder
+            return_intermediate=True,
+            num_layers=9,
+            layer_cfg=dict(  # Mask2FormerTransformerDecoderLayer
+                self_attn_cfg=dict(  # MultiheadAttention
+                    embed_dims=256,
+                    num_heads=8,
+                    dropout=0.0,
+                    batch_first=True),
+                cross_attn_cfg=dict(  # MultiheadAttention
+                    embed_dims=256,
+                    num_heads=8,
+                    dropout=0.0,
+                    batch_first=True),
+                ffn_cfg=dict(
+                    embed_dims=256,
+                    feedforward_channels=2048,
+                    num_fcs=2,
+                    ffn_drop=0.0,
+                    act_cfg=dict(type='ReLU', inplace=True))),
+            init_cfg=None),
+        loss_cls=dict(
+            type='CrossEntropyLoss',
+            use_sigmoid=False,
+            loss_weight=2.0,
+            reduction='mean',
+            class_weight=[1.0] * num_classes + [0.1]),
+        loss_mask=dict(
+            type='CrossEntropyLoss',
+            use_sigmoid=True,
+            reduction='mean',
+            loss_weight=5.0),
+        loss_dice=dict(
+            type='DiceLoss',
+            use_sigmoid=True,
+            activate=True,
+            reduction='mean',
+            naive_dice=True,
+            eps=1.0,
+            loss_weight=5.0)),
+    panoptic_fusion_head=dict(
+        type='MaskFormerFusionHead',
+        num_things_classes=num_things_classes,
+        num_stuff_classes=num_stuff_classes,
+        loss_panoptic=None,
+        init_cfg=None),
+    train_cfg=dict(
+        num_points=12544,
+        oversample_ratio=3.0,
+        importance_sample_ratio=0.75,
+        assigner=dict(
+            type='HungarianAssigner',
+            match_costs=[
+                dict(type='ClassificationCost', weight=2.0),
+                dict(
+                    type='CrossEntropyLossCost', weight=5.0, use_sigmoid=True),
+                dict(type='DiceCost', weight=5.0, pred_act=True, eps=1.0)
+            ]),
+        sampler=dict(type='MaskPseudoSampler')),
+    test_cfg=dict(
+        panoptic_on=False,
+        semantic_on=False,
+        instance_on=True,
+        max_per_image=200,
+        iou_thr=0.8,
+        filter_low_score=True,
+        score_thr=0.6    
+    ),
+    init_cfg=None)
+
+val_evaluator = [
+    dict(
+        type='CocoMetric',
+        ann_file='/kaggle/input/whu-mix-vector-dataset-val/val.json',
+        # ann_file='../../Datasets/Dataset4EO/WHU-Mix/test1/test.json',
+        # ann_file='../../Datasets/Dataset4EO/WHU-Mix/test2/test.json',
+        metric=['segm'],
+        backend_args={{_base_.backend_args}})
+]
+
+test_evaluator = [
+    dict(
+        type='CocoMetric',
+        ann_file='/kaggle/input/whu-mix-vector-test1/test.json',
+        metric=['segm'],
+        backend_args={{_base_.backend_args}},
+    )
+]
+
+# optimizer
+embed_multi = dict(lr_mult=1.0, decay_mult=0.0)
+optim_wrapper = dict(
+    type='AmpOptimWrapper',
+    optimizer=dict(
+        type='AdamW',
+        lr=0.0001,
+        weight_decay=0.05,
+        eps=1e-8,
+        betas=(0.9, 0.999)),
+    paramwise_cfg=dict(
+        custom_keys={
+            'backbone': dict(lr_mult=0.1, decay_mult=1.0),
+            'query_embed': embed_multi,
+            'query_feat': embed_multi,
+            'level_embed': embed_multi,
+        },
+        norm_decay_mult=0.0),
+    clip_grad=dict(max_norm=0.01, norm_type=2))
+
+max_epochs=50
+param_scheduler = [
+    dict(
+        type='LinearLR', start_factor=0.001, by_epoch=False, begin=0,
+        end=1000),
+    dict(
+        type='MultiStepLR',
+        begin=0,
+        end=max_epochs,
+        by_epoch=True,
+        milestones=[40],
+        gamma=0.1)
+]
+
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=max_epochs, val_interval=1)
+val_cfg = dict(type='ValLoop')
+test_cfg = dict(type='TestLoop')
+log_processor = dict(type='LogProcessor', window_size=50, by_epoch=True)
+
+#
+
+
+auto_scale_lr = dict(enable=True, base_batch_size=4)
+
+default_hooks = dict(
+    checkpoint=dict(
+        type='CheckpointHook',
+        by_epoch=True,
+        save_last=True,
+        max_keep_ckpts=10,
+        interval=1
+    ),
+    logger=dict(type='LoggerHook', interval=50),
+    visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=3, score_thr=0.6)
+)
+
+log_config = dict(
+    hooks=[
+        dict(type='TextLoggerHook'),
+    ]
+)

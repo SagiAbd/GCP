@@ -1,0 +1,15 @@
+{"time":"2025-06-24T15:59:36.6510881+05:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"work_dir\\mask2former_training\\mask2former_e10_lre-5_kostanai_afs_frozen2_batch2\\wandb\\wandb\\run-20250624_155936-b2izs1o6\\logs\\debug-core.log"}
+{"time":"2025-06-24T15:59:37.101093+05:00","level":"INFO","msg":"stream: created new stream","id":"b2izs1o6"}
+{"time":"2025-06-24T15:59:37.101093+05:00","level":"INFO","msg":"stream: started","id":"b2izs1o6"}
+{"time":"2025-06-24T15:59:37.101093+05:00","level":"INFO","msg":"writer: Do: started","stream_id":"b2izs1o6"}
+{"time":"2025-06-24T15:59:37.101093+05:00","level":"INFO","msg":"sender: started","stream_id":"b2izs1o6"}
+{"time":"2025-06-24T15:59:37.101093+05:00","level":"INFO","msg":"handler: started","stream_id":"b2izs1o6"}
+{"time":"2025-06-24T15:59:37.6828816+05:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-24T18:48:31.7328578+05:00","level":"INFO","msg":"stream: closing","id":"b2izs1o6"}
+{"time":"2025-06-24T18:48:31.7328578+05:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-24T18:48:31.7328578+05:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-24T18:48:33.2535603+05:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-24T18:48:33.6413923+05:00","level":"INFO","msg":"handler: closed","stream_id":"b2izs1o6"}
+{"time":"2025-06-24T18:48:33.6413923+05:00","level":"INFO","msg":"writer: Close: closed","stream_id":"b2izs1o6"}
+{"time":"2025-06-24T18:48:33.6413923+05:00","level":"INFO","msg":"sender: closed","stream_id":"b2izs1o6"}
+{"time":"2025-06-24T18:48:33.6413923+05:00","level":"INFO","msg":"stream: closed","id":"b2izs1o6"}

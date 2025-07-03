@@ -1,0 +1,667 @@
+_wandb:
+    value:
+        cli_version: 0.20.1
+        code_path: source-building-segmentation-gcp-tools_train.py
+        m: []
+        python_version: 3.10.18
+        t:
+            "1":
+                - 1
+                - 5
+                - 37
+                - 38
+                - 41
+                - 53
+                - 82
+            "2":
+                - 1
+                - 5
+                - 37
+                - 38
+                - 41
+                - 53
+                - 82
+            "3":
+                - 5
+                - 13
+                - 14
+                - 55
+                - 62
+            "4": 3.10.18
+            "5": 0.20.1
+            "8":
+                - 3
+            "12": 0.20.1
+            "13": windows-amd64
+auto_scale_lr:
+    value:
+        base_batch_size: 4
+        enable: false
+backend_args:
+    value: null
+batch_augments:
+    value:
+        - img_pad_value: 0
+          mask_pad_value: 0
+          pad_mask: true
+          pad_seg: true
+          seg_pad_value: 255
+          size:
+            - 512
+            - 512
+          type: BatchFixedSizePad
+crop_size:
+    value:
+        - 512
+        - 512
+data_preprocessor:
+    value:
+        batch_augments:
+            - img_pad_value: 0
+              mask_pad_value: 0
+              pad_mask: true
+              pad_seg: true
+              seg_pad_value: 255
+              size:
+                - 512
+                - 512
+              type: BatchFixedSizePad
+        bgr_to_rgb: true
+        mask_pad_value: 0
+        mean:
+            - 123.675
+            - 116.28
+            - 103.53
+        pad_mask: true
+        pad_seg: true
+        pad_size_divisor: 32
+        seg_pad_value: 255
+        std:
+            - 58.395
+            - 57.12
+            - 57.375
+        type: DetDataPreprocessor
+data_root:
+    value: data/kostanai
+dataset_type:
+    value: WHUMixVectorDataset
+default_hooks:
+    value:
+        checkpoint:
+            by_epoch: true
+            interval: 1
+            max_keep_ckpts: 3
+            save_last: true
+            type: CheckpointHook
+        logger:
+            interval: 50
+            type: LoggerHook
+        param_scheduler:
+            type: ParamSchedulerHook
+        sampler_seed:
+            type: DistSamplerSeedHook
+        timer:
+            type: IterTimerHook
+        visualization:
+            draw: true
+            interval: 3
+            score_thr: 0.6
+            type: TanmlhVisualizationHook
+default_scope:
+    value: mmdet
+embed_multi:
+    value:
+        decay_mult: 0
+        lr_mult: 1
+env_cfg:
+    value:
+        cudnn_benchmark: false
+        dist_cfg:
+            backend: nccl
+        mp_cfg:
+            mp_start_method: fork
+            opencv_num_threads: 0
+img_norm_cfg:
+    value:
+        mean:
+            - 123.675
+            - 116.28
+            - 103.53
+        std:
+            - 58.395
+            - 57.12
+            - 57.375
+        to_rgb: true
+launcher:
+    value: none
+load_from:
+    value: checkpoints/mask2former_e10_lre-5_kostanai-afs_v1.pth
+log_level:
+    value: INFO
+log_processor:
+    value:
+        by_epoch: true
+        type: LogProcessor
+        window_size: 10
+max_epochs:
+    value: 8
+model:
+    value:
+        backbone:
+            depth: 50
+            frozen_stages: -1
+            init_cfg:
+                checkpoint: torchvision://resnet50
+                type: Pretrained
+            norm_cfg:
+                requires_grad: false
+                type: BN
+            norm_eval: true
+            num_stages: 4
+            out_indices:
+                - 0
+                - 1
+                - 2
+                - 3
+            style: pytorch
+            type: ResNet
+        data_preprocessor:
+            bgr_to_rgb: true
+            mask_pad_value: 0
+            mean:
+                - 123.675
+                - 116.28
+                - 103.53
+            pad_mask: true
+            pad_seg: true
+            pad_size_divisor: 32
+            seg_pad_value: 255
+            std:
+                - 58.395
+                - 57.12
+                - 57.375
+            type: DetDataPreprocessor
+        frozen_parameters:
+            - backbone
+            - panoptic_head.pixel_decoder
+            - panoptic_head.transformer_decoder
+            - panoptic_head.decoder_input_projs
+            - panoptic_head.query_embed
+            - panoptic_head.query_feat
+            - panoptic_head.level_embed
+            - panoptic_head.cls_embed
+            - panoptic_head.mask_embed
+        init_cfg: null
+        panoptic_fusion_head:
+            init_cfg: null
+            loss_panoptic: null
+            num_stuff_classes: 0
+            num_things_classes: 1
+            type: PolyFormerFusionHeadV2
+        panoptic_head:
+            dp_polygonize_head:
+                init_cfg: null
+                layer_cfg:
+                    cross_attn_cfg:
+                        batch_first: true
+                        dropout: 0
+                        embed_dims: 256
+                        num_heads: 8
+                    ffn_cfg:
+                        act_cfg:
+                            inplace: true
+                            type: ReLU
+                        embed_dims: 256
+                        feedforward_channels: 2048
+                        ffn_drop: 0
+                        num_fcs: 2
+                    self_attn_cfg:
+                        batch_first: true
+                        dropout: 0
+                        embed_dims: 256
+                        num_heads: 8
+                num_layers: 3
+                return_intermediate: true
+            enforce_decoder_input_project: false
+            feat_channels: 256
+            in_channels:
+                - 256
+                - 512
+                - 1024
+                - 2048
+            loss_cls:
+                class_weight:
+                    - 1
+                    - 0.1
+                loss_weight: 2
+                reduction: mean
+                type: CrossEntropyLoss
+                use_sigmoid: false
+            loss_dice:
+                activate: true
+                eps: 1
+                loss_weight: 5
+                naive_dice: true
+                reduction: mean
+                type: DiceLoss
+                use_sigmoid: true
+            loss_mask:
+                loss_weight: 5
+                reduction: mean
+                type: CrossEntropyLoss
+                use_sigmoid: true
+            loss_poly_ang:
+                loss_weight: 1
+                reduction: mean
+                type: SmoothL1Loss
+            loss_poly_reg:
+                loss_weight: 1
+                reduction: mean
+                type: SmoothL1Loss
+            num_queries: 300
+            num_stuff_classes: 0
+            num_things_classes: 1
+            num_transformer_feat_level: 3
+            out_channels: 256
+            pixel_decoder:
+                act_cfg:
+                    type: ReLU
+                encoder:
+                    layer_cfg:
+                        ffn_cfg:
+                            act_cfg:
+                                inplace: true
+                                type: ReLU
+                            embed_dims: 256
+                            feedforward_channels: 1024
+                            ffn_drop: 0
+                            num_fcs: 2
+                        self_attn_cfg:
+                            batch_first: true
+                            dropout: 0
+                            embed_dims: 256
+                            num_heads: 8
+                            num_levels: 3
+                            num_points: 4
+                    num_layers: 6
+                norm_cfg:
+                    num_groups: 32
+                    type: GN
+                num_outs: 3
+                positional_encoding:
+                    normalize: true
+                    num_feats: 128
+                type: MSDeformAttnPixelDecoder
+            poly_cfg:
+                align_iou_thre: 0.5
+                apply_angle_loss: true
+                apply_prim_pred: true
+                lam: 4
+                loss_weight_dp: 0.01
+                map_features: true
+                mask_cls_thre: 0
+                max_align_dis: 15
+                max_match_dis: 10
+                max_offsets: 5
+                max_step_size: 128
+                num_cls_channels: 2
+                num_inter_points: 64
+                num_min_bins: 32
+                point_as_prim: true
+                poly_decode_type: dp
+                polygonize_mode: cv2_single_mask
+                polygonized_scale: 4
+                pred_angle: false
+                prim_cls_thre: 0.1
+                proj_gt: false
+                reg_targets_type: vertice
+                return_poly_json: false
+                sample_points: true
+                step_size: 4
+                stride_size: 64
+                use_coords_in_poly_feat: true
+                use_decoded_feat_in_poly_feat: true
+                use_gt_jsons: false
+                use_ind_offset: true
+                use_point_feat_in_poly_feat: true
+                use_ref_rings: false
+            positional_encoding:
+                normalize: true
+                num_feats: 128
+            strides:
+                - 4
+                - 8
+                - 16
+                - 32
+            transformer_decoder:
+                init_cfg: null
+                layer_cfg:
+                    cross_attn_cfg:
+                        batch_first: true
+                        dropout: 0
+                        embed_dims: 256
+                        num_heads: 8
+                    ffn_cfg:
+                        act_cfg:
+                            inplace: true
+                            type: ReLU
+                        embed_dims: 256
+                        feedforward_channels: 2048
+                        ffn_drop: 0
+                        num_fcs: 2
+                    self_attn_cfg:
+                        batch_first: true
+                        dropout: 0
+                        embed_dims: 256
+                        num_heads: 8
+                num_layers: 9
+                return_intermediate: true
+            type: PolygonizerHead
+        test_cfg:
+            filter_low_score: true
+            instance_on: true
+            iou_thr: 0.8
+            max_per_image: 300
+            panoptic_on: false
+            score_thr: 0.6
+            semantic_on: false
+        train_cfg:
+            add_target_to_data_samples: true
+            assigner:
+                match_costs:
+                    - type: ClassificationCost
+                      weight: 2
+                    - type: CrossEntropyLossCost
+                      use_sigmoid: true
+                      weight: 5
+                    - eps: 1
+                      pred_act: true
+                      type: DiceCost
+                      weight: 5
+                type: HungarianAssigner
+            importance_sample_ratio: 0.75
+            num_points: 12544
+            oversample_ratio: 3
+            prim_assigner:
+                match_costs:
+                    - type: PointL1Cost
+                      weight: 0.1
+                type: HungarianAssigner
+            sampler:
+                type: MaskPseudoSampler
+        type: PolyFormerV2
+num_classes:
+    value: 1
+num_stuff_classes:
+    value: 0
+num_things_classes:
+    value: 1
+optim_wrapper:
+    value:
+        clip_grad:
+            max_norm: 0.01
+            norm_type: 2
+        optimizer:
+            betas:
+                - 0.9
+                - 0.999
+            eps: 1e-08
+            lr: 0.0001
+            type: AdamW
+            weight_decay: 0.05
+        paramwise_cfg:
+            custom_keys:
+                backbone:
+                    decay_mult: 1
+                    lr_mult: 0.1
+                level_embed:
+                    decay_mult: 0
+                    lr_mult: 1
+                query_embed:
+                    decay_mult: 0
+                    lr_mult: 1
+                query_feat:
+                    decay_mult: 0
+                    lr_mult: 1
+            norm_decay_mult: 0
+        type: OptimWrapper
+param_scheduler:
+    value:
+        - begin: 0
+          by_epoch: true
+          end: 8
+          gamma: 0.1
+          milestones:
+            - 9
+          type: MultiStepLR
+resume:
+    value: false
+test_cfg:
+    value:
+        type: TestLoop
+test_dataloader:
+    value:
+        batch_size: 1
+        dataset:
+            ann_file: test/test.json
+            backend_args: null
+            data_prefix:
+                img: test/images
+            data_root: data/kostanai
+            pipeline:
+                - backend_args: null
+                  type: LoadImageFromFile
+                - keep_ratio: true
+                  scale:
+                    - 512
+                    - 512
+                  type: Resize
+                - poly2mask: false
+                  type: LoadAnnotations
+                  with_bbox: false
+                  with_mask: true
+                  with_poly_json: false
+                - meta_keys:
+                    - img_id
+                    - img_path
+                    - ori_shape
+                    - img_shape
+                    - scale_factor
+                  type: PackDetInputs
+            test_mode: true
+            type: WHUMixVectorDataset
+        drop_last: false
+        num_workers: 1
+        persistent_workers: false
+        sampler:
+            shuffle: false
+            type: DefaultSampler
+test_evaluator:
+    value:
+        - ann_file: data/kostanai/test/test.json
+          backend_args: null
+          calculate_iou_ciou: true
+          calculate_mta: true
+          mask_type: polygon
+          metric:
+            - segm
+          score_thre: 0.5
+          type: CocoMetric
+test_pipeline:
+    value:
+        - backend_args: null
+          type: LoadImageFromFile
+        - keep_ratio: true
+          scale:
+            - 512
+            - 512
+          type: Resize
+        - poly2mask: false
+          type: LoadAnnotations
+          with_bbox: false
+          with_mask: true
+          with_poly_json: false
+        - meta_keys:
+            - img_id
+            - img_path
+            - ori_shape
+            - img_shape
+            - scale_factor
+          type: PackDetInputs
+train_cfg:
+    value:
+        max_epochs: 8
+        type: EpochBasedTrainLoop
+        val_interval: 1
+train_dataloader:
+    value:
+        batch_sampler:
+            type: AspectRatioBatchSampler
+        batch_size: 2
+        dataset:
+            ann_file: train/train.json
+            backend_args: null
+            data_prefix:
+                img: train/images
+            data_root: data/kostanai
+            pipeline:
+                - backend_args: null
+                  type: LoadImageFromFile
+                - poly2mask: false
+                  type: LoadAnnotations
+                  with_bbox: true
+                  with_mask: true
+                  with_poly_json: false
+                - keep_ratio: true
+                  scale:
+                    - 512
+                    - 512
+                  type: Resize
+                - direction:
+                    - horizontal
+                    - vertical
+                    - diagonal
+                  prob: 0.75
+                  type: RandomFlip
+                - prob: 0.75
+                  type: Rotate90
+                - meta_keys:
+                    - img_id
+                    - img_path
+                    - ori_shape
+                    - img_shape
+                    - scale_factor
+                  type: PackDetInputs
+            type: WHUMixVectorDataset
+        num_workers: 2
+        persistent_workers: false
+        sampler:
+            shuffle: true
+            type: DefaultSampler
+train_pipeline:
+    value:
+        - backend_args: null
+          type: LoadImageFromFile
+        - poly2mask: false
+          type: LoadAnnotations
+          with_bbox: true
+          with_mask: true
+          with_poly_json: false
+        - keep_ratio: true
+          scale:
+            - 512
+            - 512
+          type: Resize
+        - direction:
+            - horizontal
+            - vertical
+            - diagonal
+          prob: 0.75
+          type: RandomFlip
+        - prob: 0.75
+          type: Rotate90
+        - meta_keys:
+            - img_id
+            - img_path
+            - ori_shape
+            - img_shape
+            - scale_factor
+          type: PackDetInputs
+val_cfg:
+    value:
+        type: ValLoop
+val_dataloader:
+    value:
+        batch_size: 2
+        dataset:
+            ann_file: val/val.json
+            backend_args: null
+            data_prefix:
+                img: val/images
+            data_root: data/kostanai
+            pipeline:
+                - backend_args: null
+                  type: LoadImageFromFile
+                - keep_ratio: true
+                  scale:
+                    - 512
+                    - 512
+                  type: Resize
+                - poly2mask: false
+                  type: LoadAnnotations
+                  with_bbox: false
+                  with_mask: true
+                  with_poly_json: false
+                - meta_keys:
+                    - img_id
+                    - img_path
+                    - ori_shape
+                    - img_shape
+                    - scale_factor
+                  type: PackDetInputs
+            test_mode: true
+            type: WHUMixVectorDataset
+        drop_last: false
+        num_workers: 2
+        persistent_workers: false
+        sampler:
+            shuffle: false
+            type: DefaultSampler
+val_evaluator:
+    value:
+        - ann_file: data/kostanai/val/val.json
+          backend_args: null
+          calculate_iou_ciou: true
+          calculate_mta: true
+          mask_type: polygon
+          metric:
+            - segm
+          score_thre: 0.5
+          type: CocoMetric
+vis_backends:
+    value:
+        - init_kwargs:
+            allow_val_change: true
+            group: gcp_training
+            id: uyfqo770
+            name: gcp_e5_lre-4_kostanai_afs_v2
+            project: building-segmentation-gcp
+            resume: must
+          save_dir: work_dir\gcp_training\gcp_e5_lre-4_kostanai_afs_v2\wandb
+          type: WandbVisBackend
+visualizer:
+    value:
+        name: visualizer
+        type: TanmlhVisualizer
+        vis_backends:
+            - init_kwargs:
+                allow_val_change: true
+                group: gcp_training
+                id: uyfqo770
+                name: gcp_e5_lre-4_kostanai_afs_v2
+                project: building-segmentation-gcp
+                resume: must
+              save_dir: work_dir\gcp_training\gcp_e5_lre-4_kostanai_afs_v2\wandb
+              type: WandbVisBackend
+work_dir:
+    value: work_dir\gcp_training\gcp_e5_lre-4_kostanai_afs_v2

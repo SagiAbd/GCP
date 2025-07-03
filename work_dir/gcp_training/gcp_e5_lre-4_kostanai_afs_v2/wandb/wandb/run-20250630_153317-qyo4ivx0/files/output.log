@@ -1,0 +1,38 @@
+Traceback (most recent call last):
+  File "D:\Sagi\GCP\GCP\tools\train.py", line 170, in <module>
+    main()
+  File "D:\Sagi\GCP\GCP\tools\train.py", line 159, in main
+    runner = Runner.from_cfg(cfg)
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\runner\runner.py", line 462, in from_cfg
+    runner = cls(
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\runner\runner.py", line 418, in __init__
+    self.visualizer.add_config(self.cfg)
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\dist\utils.py", line 427, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\visualizer.py", line 1071, in add_config
+    vis_backend.add_config(config, **kwargs)
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\vis_backend.py", line 60, in wrapper
+    return old_func(obj, *args, **kwargs)
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\mmengine\visualization\vis_backend.py", line 442, in add_config
+    self._wandb.run.log_code(name=self._log_code_name)
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\wandb\sdk\wandb_run.py", line 449, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\wandb\sdk\wandb_run.py", line 391, in wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\wandb\sdk\wandb_run.py", line 436, in wrapper
+    return func(self, *args, **kwargs)
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\wandb\sdk\wandb_run.py", line 1131, in log_code
+    for file_path in filenames.filtered_dir(root, include_fn, exclude_fn):
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\wandb\sdk\lib\filenames.py", line 56, in filtered_dir
+    if _include_fn(file_path, root) and not _exclude_fn(file_path, root):
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\wandb\sdk\lib\filenames.py", line 48, in _exclude_fn
+    exclude_fn(path, root)  # type: ignore
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\wandb\sdk\lib\filenames.py", line 61, in exclude_wandb_fn
+    return any(
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\site-packages\wandb\sdk\lib\filenames.py", line 62, in <genexpr>
+    os.path.relpath(path, root).startswith(wandb_dir + os.sep)
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\ntpath.py", line 754, in relpath
+    path_abs = abspath(normpath(path))
+  File "C:\Users\Sagi\Miniconda3\envs\gcp-env\lib\ntpath.py", line 513, in normpath
+    prefix, path = splitdrive(path)
+KeyboardInterrupt

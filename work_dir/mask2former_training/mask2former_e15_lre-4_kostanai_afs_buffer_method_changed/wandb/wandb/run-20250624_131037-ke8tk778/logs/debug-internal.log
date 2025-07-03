@@ -1,0 +1,15 @@
+{"time":"2025-06-24T13:10:38.1810948+05:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"work_dir\\mask2former_training\\mask2former_e15_lre-4_kostanai_afs_buffer_method_changed\\wandb\\wandb\\run-20250624_131037-ke8tk778\\logs\\debug-core.log"}
+{"time":"2025-06-24T13:10:38.6375107+05:00","level":"INFO","msg":"stream: created new stream","id":"ke8tk778"}
+{"time":"2025-06-24T13:10:38.6375107+05:00","level":"INFO","msg":"stream: started","id":"ke8tk778"}
+{"time":"2025-06-24T13:10:38.638015+05:00","level":"INFO","msg":"writer: Do: started","stream_id":"ke8tk778"}
+{"time":"2025-06-24T13:10:38.6380565+05:00","level":"INFO","msg":"sender: started","stream_id":"ke8tk778"}
+{"time":"2025-06-24T13:10:38.6380565+05:00","level":"INFO","msg":"handler: started","stream_id":"ke8tk778"}
+{"time":"2025-06-24T13:10:39.2147266+05:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-24T13:12:51.6781174+05:00","level":"INFO","msg":"stream: closing","id":"ke8tk778"}
+{"time":"2025-06-24T13:12:51.6781174+05:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-24T13:12:51.6781174+05:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-24T13:12:53.0011431+05:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-24T13:12:53.3922221+05:00","level":"INFO","msg":"handler: closed","stream_id":"ke8tk778"}
+{"time":"2025-06-24T13:12:53.3922221+05:00","level":"INFO","msg":"sender: closed","stream_id":"ke8tk778"}
+{"time":"2025-06-24T13:12:53.3922221+05:00","level":"INFO","msg":"writer: Close: closed","stream_id":"ke8tk778"}
+{"time":"2025-06-24T13:12:53.3925316+05:00","level":"INFO","msg":"stream: closed","id":"ke8tk778"}
