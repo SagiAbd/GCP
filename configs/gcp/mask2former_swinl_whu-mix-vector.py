@@ -180,7 +180,7 @@ test_evaluator = [
 # optimizer
 embed_multi = dict(lr_mult=1.0, decay_mult=0.0)
 optim_wrapper = dict(
-    type='AmpOptimWrapper',
+    type='OptimWrapper',
     optimizer=dict(
         type='AdamW',
         lr=0.0001,
