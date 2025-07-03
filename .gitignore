@@ -188,3 +188,7 @@ mmdet/.mim
 *.pth
 *.py~
 *.sh~
+
+# Ignore all content in work_dir and work_dirs
+work_dir/
+work_dirs/
