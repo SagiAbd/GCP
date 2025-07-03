@@ -180,7 +180,7 @@ test_evaluator = [
 # optimizer
 embed_multi = dict(lr_mult=1.0, decay_mult=0.0)
 optim_wrapper = dict(
-    type='AmpOptimWrapper',
+    type='OptimWrapper',
     optimizer=dict(
         type='AdamW',
         lr=0.0001,
@@ -200,7 +200,7 @@ optim_wrapper = dict(
 max_epochs=50
 param_scheduler = [
     dict(
-        type='LinearLR', start_factor=0.001, by_epoch=False, begin=0,
+        type='LinearLR', start_factor=1e-6, by_epoch=False, begin=0,
         end=1000),
     dict(
         type='MultiStepLR',
