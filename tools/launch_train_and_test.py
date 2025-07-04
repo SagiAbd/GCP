@@ -23,7 +23,8 @@ CONFIG = {
     "gpus": 2,
     "comparison_limit": 30,
     "show_image_width": 10,
-    "max_epochs": 50
+    "max_epochs": 50,
+    "visualize_val_each_epoch": False  # New option
 }
 
 def run_command(cmd):
@@ -55,6 +56,9 @@ def main():
         train_cmd += ['--cfg-options', f'load_from={CONFIG["load_from"]}']
     elif CONFIG.get("resume"):
          train_cmd += ['--resume']
+    # Add visualization interval override if requested
+    if CONFIG.get("visualize_val_each_epoch", False):
+        train_cmd += ['--visualize-val-each-epoch']
     run_command(train_cmd)
 
     # 2. Dynamically set test1_checkpoint to the last epoch checkpoint

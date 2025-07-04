@@ -58,6 +58,11 @@ def parse_args():
     parser.add_argument('--wandb-project', type=str, default=None, help='wandb project name')
     parser.add_argument('--wandb-name', type=str, required=True, help='wandb run name')
     parser.add_argument('--wandb-group', type=str, required=True, help='wandb group name')
+    # Add visualize-val-each-epoch CLI argument
+    parser.add_argument(
+        '--visualize-val-each-epoch',
+        action='store_true',
+        help='Show validation visualizations after every epoch')
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -115,9 +120,13 @@ def main():
                     num_eval_images=10
                 )
             )
-            
-        
-        
+    # Set visualization interval if requested
+    if args.visualize_val_each_epoch:
+        if not hasattr(cfg, 'default_hooks'):
+            cfg.default_hooks = dict()
+        if 'visualization' not in cfg.default_hooks:
+            cfg.default_hooks['visualization'] = dict()
+        cfg.default_hooks['visualization']['interval'] = 1
 
     # work_dir is determined in this priority: CLI > segment in file > filename
     if args.work_dir is not None:
