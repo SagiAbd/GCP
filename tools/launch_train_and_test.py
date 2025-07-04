@@ -41,11 +41,12 @@ def main():
     # 1. Train
     train_cmd = [
         'python', 'tools/train.py',
+        'torch.distributed.launch', '--nproc_per_node=2',
         CONFIG["train_config"],
         '--wandb-group', CONFIG["wandb_group"],
         '--wandb-name', CONFIG["wandb_name"],
         '--wandb-project', CONFIG["wandb_project"],
-        # '--amp'
+        '--launcher', 'pytorch'
     ]
     if CONFIG.get("resume_from"):
         train_cmd += ['--resume', CONFIG["resume_from"]]
