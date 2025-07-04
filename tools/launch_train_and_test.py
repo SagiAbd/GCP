@@ -40,8 +40,8 @@ def main():
 
     # 1. Train
     train_cmd = [
-        'python', 'tools/train.py',
-        'torch.distributed.launch', '--nproc_per_node=2',
+        'python', '-m', 'torch.distributed.launch', '--nproc_per_node=2',
+        'tools/train.py',
         CONFIG["train_config"],
         '--wandb-group', CONFIG["wandb_group"],
         '--wandb-name', CONFIG["wandb_name"],
