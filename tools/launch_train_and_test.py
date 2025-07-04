@@ -33,7 +33,8 @@ def run_command(cmd):
         raise RuntimeError(f"Command failed: {' '.join(cmd)}")
 
 def main():
-    run_dir = os.path.join('work_dir', CONFIG["wandb_group"], CONFIG["wandb_name"])
+    output_root = os.getcwd()  # Ensures outputs go to the current working directory (Kaggle or local)
+    run_dir = os.path.join(output_root, 'work_dir', CONFIG["wandb_group"], CONFIG["wandb_name"])
     os.makedirs(run_dir, exist_ok=True)
     comparison_dir = os.path.join(run_dir, 'comparison')
     os.makedirs(comparison_dir, exist_ok=True)
