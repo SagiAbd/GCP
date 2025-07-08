@@ -10,7 +10,7 @@ python tools/launch_train_and_test.py
 
 CONFIG = {
     "wandb_group": "mask2former_swin-l_training",
-    "wandb_name": "mask2former_swin-l_e50_lre-4_whu-mix",
+    "wandb_name": "mask2former_swin-l_e50_lre-4_whu-mix_v1",
     "wandb_project": "building-segmentation-gcp",
     "train_config": "configs/gcp/mask2former_swinl_whu-mix-vector.py",
     # "load_from": "checkpoints/mask2former_r50_pretrained_50e_whu-mix-vector.pth",
