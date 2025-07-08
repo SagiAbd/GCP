@@ -23,7 +23,7 @@ CONFIG = {
     "gpus": 2,
     "comparison_limit": 30,
     "show_image_width": 10,
-    "max_epochs": 1,
+    "max_epochs": 50,
     "visualize_val_each_epoch": False  # New option
 }
 
