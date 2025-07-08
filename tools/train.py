@@ -97,9 +97,9 @@ def main():
                 'project': args.wandb_project or 'default-project',
                 'name': args.wandb_name,
                 'group': args.wandb_group,
-                'resume': 'never',
+                'resume': 'allow',
                 'allow_val_change': True,
-                # 'id': "uyfqo770"git
+                'id': "5okwd6xn"
             },
             'save_dir': cfg.work_dir
         }
