@@ -83,10 +83,11 @@ def main():
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)
 
-    # Compute run_dir and wandb_dir
-    # run_dir = os.path.join('work_dir', args.wandb_group, args.wandb_name)
-    
-    # cfg.work_dir = run_dir
+    # Set work_dir as early as possible, before any code that uses it
+    if args.work_dir is not None:
+        cfg.work_dir = args.work_dir
+    elif cfg.get('work_dir', None) is None:
+        cfg.work_dir = osp.join('./work_dir', osp.splitext(osp.basename(args.config))[0])
 
     # Dynamically inject wandb config if provided
     if args.wandb_project or args.wandb_name or args.wandb_group:
@@ -128,14 +129,7 @@ def main():
             cfg.default_hooks['visualization'] = dict()
         cfg.default_hooks['visualization']['interval'] = 1
 
-    # work_dir is determined in this priority: CLI > segment in file > filename
-    if args.work_dir is not None:
-        # update configs according to CLI args if args.work_dir is not None
-        cfg.work_dir = args.work_dir
-    elif cfg.get('work_dir', None) is None:
-        # use config filename as default work_dir if cfg.work_dir is None
-        cfg.work_dir = osp.join('./work_dir',
-                                osp.splitext(osp.basename(args.config))[0])
+
 
     # enable automatic-mixed-precision training
     if args.amp is True:
