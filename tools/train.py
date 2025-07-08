@@ -84,9 +84,9 @@ def main():
         cfg.merge_from_dict(args.cfg_options)
 
     # Compute run_dir and wandb_dir
-    run_dir = os.path.join('work_dir', args.wandb_group, args.wandb_name)
-    wandb_dir = os.path.join(run_dir, 'wandb')
-    cfg.work_dir = run_dir
+    # run_dir = os.path.join('work_dir', args.wandb_group, args.wandb_name)
+    
+    # cfg.work_dir = run_dir
 
     # Dynamically inject wandb config if provided
     if args.wandb_project or args.wandb_name or args.wandb_group:
@@ -100,7 +100,7 @@ def main():
                 'allow_val_change': True,
                 # 'id': "uyfqo770"git
             },
-            'save_dir': wandb_dir
+            'save_dir': cfg.work_dir
         }
         cfg.vis_backends = [wandb_backend]
         cfg.visualizer = dict(

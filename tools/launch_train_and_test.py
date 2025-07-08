@@ -65,6 +65,8 @@ def main():
     # Add visualization interval override if requested
     if CONFIG.get("visualize_val_each_epoch", False):
         train_cmd += ['--visualize-val-each-epoch']
+    else:
+        train_cmd += ['--cfg-options', 'default_hooks.visualization.draw=False']
     run_command(train_cmd)
 
     # 2. Dynamically set test1_checkpoint to the last epoch checkpoint
