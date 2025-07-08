@@ -34,7 +34,12 @@ def run_command(cmd):
         raise RuntimeError(f"Command failed: {' '.join(cmd)}")
 
 def main():
-    output_root = os.getcwd()  # Ensures outputs go to the current working directory (Kaggle or local)
+    # Always resolve GCP root directory (the directory containing this script)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    gcp_root = script_dir  # This script is inside GCP/tools/, so GCP root is one level up
+    if os.path.basename(gcp_root) == 'tools':
+        gcp_root = os.path.dirname(gcp_root)
+    output_root = gcp_root
     run_dir = os.path.join(output_root, 'work_dir', CONFIG["wandb_group"], CONFIG["wandb_name"])
     os.makedirs(run_dir, exist_ok=True)
     comparison_dir = os.path.join(run_dir, 'comparison')
@@ -48,7 +53,8 @@ def main():
         '--wandb-group', CONFIG["wandb_group"],
         '--wandb-name', CONFIG["wandb_name"],
         '--wandb-project', CONFIG["wandb_project"],
-        '--launcher', 'pytorch'
+        '--launcher', 'pytorch',
+        '--work-dir', run_dir
     ]
     if CONFIG.get("resume_from"):
         train_cmd += ['--resume', CONFIG["resume_from"]]
