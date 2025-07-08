@@ -197,7 +197,7 @@ optim_wrapper = dict(
         norm_decay_mult=0.0),
     clip_grad=dict(max_norm=0.1, norm_type=2))
 
-max_epochs=50
+max_epochs=1
 param_scheduler = [
     dict(
         type='LinearLR', start_factor=1e-5, by_epoch=False, begin=0,
