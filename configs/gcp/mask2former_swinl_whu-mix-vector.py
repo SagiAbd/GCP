@@ -199,16 +199,24 @@ optim_wrapper = dict(
 
 max_epochs=50
 param_scheduler = [
+    # 1. Warmup: linear LR from very small up to base LR in 1000 steps
     dict(
-        type='LinearLR', start_factor=1e-5, by_epoch=False, begin=0,
-        end=1000),
-    dict(
-        type='MultiStepLR',
+        type='LinearLR',
+        start_factor=0.001,
+        by_epoch=False,     # Step-based warmup
         begin=0,
+        end=1000            # 1000 iterations
+    ),
+    
+    # 2. CosineAnnealing: starts from epoch 5 until epoch 50
+    dict(
+        type='CosineAnnealingLR',
+        begin=5,
         end=max_epochs,
-        by_epoch=True,
-        milestones=[40],
-        gamma=0.1)
+        T_max=max_epochs - 5,   # decay from epoch 5 to 50 → 45 epochs
+        eta_min=1e-6,
+        by_epoch=True
+    )
 ]
 
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=max_epochs, val_interval=1)
@@ -216,10 +224,8 @@ val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
 log_processor = dict(type='LogProcessor', window_size=50, by_epoch=True)
 
-#
 
-
-auto_scale_lr = dict(enable=True, base_batch_size=4)
+# auto_scale_lr = dict(enable=True, base_batch_size=4)
 
 default_hooks = dict(
     checkpoint=dict(
