@@ -14,7 +14,7 @@ CONFIG = {
     "wandb_project": "building-segmentation-gcp",
     "train_config": "configs/gcp/mask2former_swinl_whu-mix-vector.py",
     # "load_from": "checkpoints/mask2former_r50_pretrained_50e_whu-mix-vector.pth",
-    "resume_from": '/kaggle/input/mask2former_swinl/pytorch/default/1/epoch_2.pth',
+    "resume_from": '/kaggle/input/mask2former_swinl/pytorch/default/2/epoch_4.pth',
     "resume": True,  # Automatically resume from last available epoch if no resume_from/load_from specified
     "test1_config": "configs/gcp/mask2former_swinl_whu-mix-vector.py",
     # "test1_checkpoint": "D:\Sagi\GCP\GCP\checkpoints\gcp_e5_lre-4_kostanai-afs_v1.pth",
