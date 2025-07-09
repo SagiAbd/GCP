@@ -7,12 +7,6 @@ import argparse
 import os
 import os.path as osp
 
-from torch.serialization import add_safe_globals
-from mmengine.logging import HistoryBuffer
-
-# Allow MMEngine to unpickle HistoryBuffer
-add_safe_globals({'mmengine.logging.history_buffer.HistoryBuffer': HistoryBuffer})
-
 from mmengine.config import Config, DictAction
 from mmengine.registry import RUNNERS
 from mmengine.runner import Runner
