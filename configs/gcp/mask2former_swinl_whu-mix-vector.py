@@ -161,7 +161,7 @@ model = dict(
 val_evaluator = [
     dict(
         type='CocoMetric',
-        ann_file='/kaggle/input/whu-mix-vector-dataset-val/val.json',
+        ann_file='/kaggle/input/whu-mix-vector-val/val.json',
         # ann_file='../../Datasets/Dataset4EO/WHU-Mix/test1/test.json',
         # ann_file='../../Datasets/Dataset4EO/WHU-Mix/test2/test.json',
         metric=['segm'],
@@ -199,13 +199,13 @@ optim_wrapper = dict(
 
 max_epochs=50
 param_scheduler = [
-    # 1. Warmup: linear LR from very small up to base LR in 1000 steps
+    # 1. Warmup: linear LR from very small up to base LR in first 5 epochs
     dict(
         type='LinearLR',
         start_factor=0.001,
-        by_epoch=False,     # Step-based warmup
+        by_epoch=True,      # Epoch-based warmup for better resume handling
         begin=0,
-        end=1000            # 1000 iterations
+        end=5               # 5 epochs warmup
     ),
     
     # 2. CosineAnnealing: starts from epoch 5 until epoch 50
