@@ -199,23 +199,20 @@ optim_wrapper = dict(
 
 max_epochs=50
 param_scheduler = [
-    # 1. Warmup: linear LR from very small up to base LR in first 5 epochs
     dict(
         type='LinearLR',
         start_factor=0.01,
-        by_epoch=True,      # Epoch-based warmup for better resume handling
+        by_epoch=False,
         begin=0,
-        end=1               # 5 epochs warmup
+        end=5000  # 5000 steps warmup
     ),
-    
-    # 2. CosineAnnealing: starts from epoch 5 until epoch 50
     dict(
         type='CosineAnnealingLR',
-        begin=1,
-        end=max_epochs,
-        T_max=max_epochs - 1,   # decay from epoch 5 to 50 → 45 epochs
+        begin=5000,
+        end=547250,         # total steps
+        T_max=547250 - 5000,  # cosine annealing after warmup
         eta_min=1e-6,
-        by_epoch=True
+        by_epoch=False
     )
 ]
 
