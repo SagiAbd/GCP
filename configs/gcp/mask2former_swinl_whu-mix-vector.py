@@ -33,8 +33,8 @@ model = dict(
         num_heads=[6, 12, 24, 48],
         qkv_bias=True,
         qk_scale=None,
-        drop_rate=0.,
-        attn_drop_rate=0.,
+        drop_rate=0.1,
+        attn_drop_rate=0.1,
         drop_path_rate=0.3,
         patch_norm=True,
         out_indices=(0, 1, 2, 3),
@@ -202,18 +202,18 @@ param_scheduler = [
     # 1. Warmup: linear LR from very small up to base LR in first 5 epochs
     dict(
         type='LinearLR',
-        start_factor=0.001,
+        start_factor=0.01,
         by_epoch=True,      # Epoch-based warmup for better resume handling
         begin=0,
-        end=5               # 5 epochs warmup
+        end=1               # 5 epochs warmup
     ),
     
     # 2. CosineAnnealing: starts from epoch 5 until epoch 50
     dict(
         type='CosineAnnealingLR',
-        begin=5,
+        begin=1,
         end=max_epochs,
-        T_max=max_epochs - 5,   # decay from epoch 5 to 50 → 45 epochs
+        T_max=max_epochs - 1,   # decay from epoch 5 to 50 → 45 epochs
         eta_min=1e-6,
         by_epoch=True
     )
