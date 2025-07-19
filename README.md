@@ -1,3 +1,11 @@
+vastai algorithm:
+1) git clone GCP
+2) install datasets
+3) change config for dataset paths
+4) change train/launch_train scripts as needed
+
+
+
 # Building Instance Segmentation Project
 
 ## Project Overview
