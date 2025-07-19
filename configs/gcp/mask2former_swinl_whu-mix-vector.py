@@ -229,7 +229,7 @@ default_hooks = dict(
         type='CheckpointHook',
         by_epoch=True,
         save_last=True,
-        max_keep_ckpts=15,
+        max_keep_ckpts=10,
         interval=3
     ),
     logger=dict(type='LoggerHook', interval=50),

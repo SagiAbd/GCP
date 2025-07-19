@@ -1,8 +1,12 @@
 vastai algorithm:
 1) git clone GCP
 2) install datasets
-3) change config for dataset paths
+3) change config for dataset paths (for dataset and model separately). Batch size too
 4) change train/launch_train scripts as needed
+
+GPU Configuration	Total Batch Size	Estimated Training Time
+2x RTX 4090	            6	                    ~1.8 days (44 hours)
+2x RTX 5090	            10	                    ~1 day (25 hours)
 
 
 
