@@ -33,8 +33,8 @@ model = dict(
         num_heads=[6, 12, 24, 48],
         qkv_bias=True,
         qk_scale=None,
-        drop_rate=0.1,
-        attn_drop_rate=0.1,
+        drop_rate=0.0,
+        attn_drop_rate=0.0,
         drop_path_rate=0.3,
         patch_norm=True,
         out_indices=(0, 1, 2, 3),
@@ -204,13 +204,13 @@ param_scheduler = [
         start_factor=0.01,
         by_epoch=False,
         begin=0,
-        end=5000  # 5000 steps warmup
+        end=1000 # 1000 steps warmup
     ),
     dict(
         type='CosineAnnealingLR',
-        begin=5000,
+        begin=1000,
         end=547250,         # total steps
-        T_max=547250 - 5000,  # cosine annealing after warmup
+        T_max=547250 - 1000,  # cosine annealing after warmup
         eta_min=1e-6,
         by_epoch=False
     )
@@ -229,8 +229,8 @@ default_hooks = dict(
         type='CheckpointHook',
         by_epoch=True,
         save_last=True,
-        max_keep_ckpts=10,
-        interval=1
+        max_keep_ckpts=15,
+        interval=3
     ),
     logger=dict(type='LoggerHook', interval=50),
     visualization=dict(type='TanmlhVisualizationHook', draw=True, interval=3, score_thr=0.6)
